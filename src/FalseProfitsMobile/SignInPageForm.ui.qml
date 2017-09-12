@@ -19,6 +19,7 @@ Pane {
             id: emailField
             Layout.fillWidth: true
             placeholderText: qsTr("Email address")
+            inputMethodHints: Qt.ImhEmailCharactersOnly
 
             Label {
                 text: qsTr("Email")
