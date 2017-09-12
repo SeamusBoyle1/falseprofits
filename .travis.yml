@@ -45,13 +45,11 @@ install:
 script:
     - gcc --version
     - export BOOST_ROOT=$PWD/boost_1_65_1
-    - export PATH=$PWD/Qt/5.9.1/gcc_64/bin:$PATH;
-      mkdir ../build &&
-      cd ../build
-    - qmake -r ../falseprofits "CONFIG+=with_gcov"
+    - export PATH=$PWD/Qt/5.9.1/gcc_64/bin:$PATH
+    - qmake -r "CONFIG+=with_gcov"
     - make
     - make check
-    - ../falseprofits/get_code_cov.sh
+    - ./get_code_cov.sh
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
