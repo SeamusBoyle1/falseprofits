@@ -18,11 +18,21 @@ Pane {
             id: displayNameField
             Layout.fillWidth: true
             placeholderText: qsTr("Name")
+            validator: RegExpValidator {
+                regExp: /^.{5,30}$/
+            }
 
             Label {
                 text: qsTr("Name")
                 visible: parent.text
                 anchors.bottom: parent.top
+            }
+
+            Label {
+                text: qsTr("Name must be between 5 and 30 characters")
+                wrapMode: Text.WordWrap
+                visible: parent.text.length > 0 && !parent.acceptableInput
+                anchors.top: parent.bottom
             }
         }
 
@@ -30,11 +40,23 @@ Pane {
             id: emailField
             Layout.fillWidth: true
             placeholderText: qsTr("Email address")
+            maximumLength: 100
+            validator: RegExpValidator {
+                // RegExp source: https://stackoverflow.com/a/16148388
+                regExp: /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/
+            }
 
             Label {
                 text: qsTr("Email")
                 visible: parent.text
                 anchors.bottom: parent.top
+            }
+
+            Label {
+                text: qsTr("Email must be valid and not already used")
+                wrapMode: Text.WordWrap
+                visible: parent.text.length > 0 && !parent.acceptableInput
+                anchors.top: parent.bottom
             }
         }
 
@@ -43,17 +65,30 @@ Pane {
             Layout.fillWidth: true
             placeholderText: qsTr("Password")
             echoMode: TextInput.PasswordEchoOnEdit
+            validator: RegExpValidator {
+                regExp: /^.{8,30}$/
+            }
 
             Label {
                 text: qsTr("Password")
                 visible: parent.text
                 anchors.bottom: parent.top
             }
+
+            Label {
+                text: qsTr("Password must be between 8 and 30 characters")
+                wrapMode: Text.WordWrap
+                visible: parent.text.length > 0 && !parent.acceptableInput
+                anchors.top: parent.bottom
+            }
         }
 
         Button {
             id: signupButton
             text: qsTr("Create account")
+            enabled: displayNameField.acceptableInput
+                     && emailField.acceptableInput
+                     && passwordField.acceptableInput
             Layout.fillWidth: true
         }
 
