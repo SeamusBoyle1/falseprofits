@@ -1,0 +1,9 @@
+isEmpty( BOOST_ROOT ): BOOST_ROOT = $$(BOOST_ROOT)
+isEmpty( BOOST_ROOT ) {
+    error(You need to set the BOOST_ROOT environment variable.)
+}
+
+INCLUDEPATH += $$BOOST_ROOT
+DEPENDPATH += $$BOOST_ROOT
+
+gcc:QMAKE_CXXFLAGS += $$QMAKE_CFLAGS_ISYSTEM $$BOOST_ROOT
