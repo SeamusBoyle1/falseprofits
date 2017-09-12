@@ -36,6 +36,8 @@ before_install:
           cd .. ;
           tar -xjf downloads/boost_1_65_1.tar.bz2 ;
       fi
+      # Codecov
+    - sudo pip install codecov
 
 install:
     - sudo apt-get install -qq g++-4.9
@@ -50,6 +52,7 @@ script:
     - make
     - make check
     - ./get_code_cov.sh
+    - codecov
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
