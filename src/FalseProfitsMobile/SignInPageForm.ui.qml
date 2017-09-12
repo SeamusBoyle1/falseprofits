@@ -20,6 +20,10 @@ Pane {
             Layout.fillWidth: true
             placeholderText: qsTr("Email address")
             inputMethodHints: Qt.ImhEmailCharactersOnly
+            validator: RegExpValidator {
+                // RegExp source: https://stackoverflow.com/a/16148388
+                regExp: /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/
+            }
 
             Label {
                 text: qsTr("Email")
@@ -44,6 +48,8 @@ Pane {
         Button {
             id: signInButton
             text: qsTr("Sign in")
+            enabled: emailField.text.length > 0 && emailField.acceptableInput
+                     && passwordField.text.length > 0
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         }
