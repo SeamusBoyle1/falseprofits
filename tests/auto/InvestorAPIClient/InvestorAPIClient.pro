@@ -2,4 +2,5 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     InvestorAPIClient \
-    RequestFactory
+    RequestFactory \
+    RequestQueue

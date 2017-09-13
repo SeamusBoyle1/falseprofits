@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2017-09-12T14:21:57
+# Project created by QtCreator 2017-09-13T10:39:06
 #
 #-------------------------------------------------
 
@@ -10,7 +10,7 @@ QT       += network testlib
 
 QT       -= gui
 
-TARGET = tst_requestfactorytest
+TARGET = tst_requestqueuetest
 CONFIG   += console
 CONFIG   -= app_bundle
 
@@ -29,7 +29,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
-        tst_requestfactorytest.cpp
+        tst_requestqueuetest.cpp 
 
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
@@ -37,8 +37,9 @@ INCLUDEPATH += $$PWD/../../../../src/InvestorAPIClient \
     $$PWD/../../../../src
 
 SOURCES += \
-    $$PWD/../../../../src/InvestorAPIClient/investorapiclient.cpp
+    $$PWD/../../../../src/InvestorAPIClient/requestqueue.cpp
 
 HEADERS += \
     $$PWD/../../../../src/InvestorAPIClient/iinvestorapiclient.h \
-    $$PWD/../../../../src/InvestorAPIClient/investorapiclient.h
+    $$PWD/../../../../src/InvestorAPIClient/requestqueue.h
+
