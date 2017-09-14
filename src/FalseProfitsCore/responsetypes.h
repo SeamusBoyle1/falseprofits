@@ -33,7 +33,7 @@ public:
     QString httpStatusReason() { return getHttpStatusReason(m_httpStatusCode); }
     // TODO(seamus): Extract reason text
     Q_INVOKABLE
-    virtual QString getHttpStatusReason(int httpStatusCode) = 0;
+    virtual QString getHttpStatusReason(int httpStatusCode) const = 0;
 
 Q_SIGNALS:
     void finished();
@@ -61,7 +61,7 @@ public:
     NewUserResponse() {}
     virtual ~NewUserResponse() {}
 
-    virtual QString getHttpStatusReason(int httpStatusCode) override
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
     {
         // TODO(seamus): Define enums for errors
         switch (httpStatusCode) {
@@ -83,7 +83,7 @@ public:
     AuthenticateResponse() {}
     virtual ~AuthenticateResponse() {}
 
-    virtual QString getHttpStatusReason(int httpStatusCode) override
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
     {
         // TODO(seamus): Define enums for errors
         switch (httpStatusCode) {
@@ -105,7 +105,7 @@ public:
     DeleteUserResponse() {}
     virtual ~DeleteUserResponse() {}
 
-    virtual QString getHttpStatusReason(int httpStatusCode) override
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
     {
         // TODO(seamus): Define enums for errors
         switch (httpStatusCode) {
@@ -127,7 +127,7 @@ public:
     GetUserProfileResponse() {}
     virtual ~GetUserProfileResponse() {}
 
-    virtual QString getHttpStatusReason(int httpStatusCode) override
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
     {
         // TODO(seamus): Define enums for errors
         switch (httpStatusCode) {
