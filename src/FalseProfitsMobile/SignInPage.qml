@@ -44,16 +44,21 @@ SignInPageForm {
         }
     }
 
+    function clearUserProfileDisplay()
+    {
+        userDetails.userIdText = ""
+        userDetails.userEmailText = ""
+        userDetails.userDisplayNameText = ""
+        userDetails.userLevelText = ""
+    }
+
     function updateAuthenticationDisplay()
     {
         signInStatusField.text = fpCore.authState === Fpx.AuthenticatedState
                 ? "You're signed in" : "Your're not signed in"
 
         if (fpCore.authState === Fpx.NotAuthenticatedState) {
-            userDetails.userIdText = ""
-            userDetails.userEmailText = ""
-            userDetails.userDisplayNameText = ""
-            userDetails.userLevelText = ""
+            clearUserProfileDisplay()
         }
     }
 }
