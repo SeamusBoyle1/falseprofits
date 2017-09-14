@@ -28,11 +28,17 @@ SignInPageForm {
             var userProfileResp = fpCore.getUserProfile()
             userProfileResp.onFinished.connect(function() {
                 busyIndicator.visible = false
-                var userDetailsDat = fpType.makeJsonUserDetails(userProfileResp.payload())
-                userDetails.userIdText = userDetailsDat.id
-                userDetails.userEmailText = userDetailsDat.email
-                userDetails.userDisplayNameText = userDetailsDat.displayName
-                userDetails.userLevelText = userDetailsDat.level
+                if (!userProfileResp.hasError()) {
+                    var userDetailsDat = fpType.makeJsonUserDetails(userProfileResp.payload())
+                    userDetails.userIdText = userDetailsDat.id
+                    userDetails.userEmailText = userDetailsDat.email
+                    userDetails.userDisplayNameText = userDetailsDat.displayName
+                    userDetails.userLevelText = userDetailsDat.level
+                } else {
+                    clearUserProfileDisplay()
+                    errorDialogText.text = userProfileResp.httpStatusReason()
+                    errorDialog.open()
+                }
             })
         }
     }
