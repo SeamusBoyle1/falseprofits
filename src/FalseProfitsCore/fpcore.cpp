@@ -48,7 +48,7 @@ NewUserResponse *FpCore::createNewUser(const NewUserDetails &newUser)
     v.insert(UserRecordField::Password, newUser.password());
 
     auto rep = m_client->createNewUser(v);
-    connect(rep, &QNetworkReply::finished, this, [newUser, resp, rep, this]() {
+    connect(rep, &bsmi::INetworkReply::finished, this, [newUser, resp, rep, this]() {
         if (!resp) {
             rep->deleteLater();
             return;
@@ -75,7 +75,7 @@ AuthenticateResponse *FpCore::authenticate(const QString &email, const QString &
     QPointer<AuthenticateResponse> resp(new AuthenticateResponse);
 
     auto rep = m_client->authenticate(email, password);
-    connect(rep, &QNetworkReply::finished, this, [resp, rep, this]() {
+    connect(rep, &bsmi::INetworkReply::finished, this, [resp, rep, this]() {
         if (!resp) {
             rep->deleteLater();
             return;
@@ -111,7 +111,7 @@ DeleteUserResponse *FpCore::deleteUser()
     QPointer<DeleteUserResponse> resp(new DeleteUserResponse);
 
     auto rep = m_client->deleteUser();
-    connect(rep, &QNetworkReply::finished, this, [resp, rep, this]() {
+    connect(rep, &bsmi::INetworkReply::finished, this, [resp, rep, this]() {
         if (!resp) {
             rep->deleteLater();
             return;
@@ -135,7 +135,7 @@ GetUserProfileResponse *FpCore::getUserProfile()
     QPointer<GetUserProfileResponse> resp(new GetUserProfileResponse);
 
     auto rep = m_client->getUserProfile();
-    connect(rep, &QNetworkReply::finished, this, [resp, rep, this]() {
+    connect(rep, &bsmi::INetworkReply::finished, this, [resp, rep, this]() {
         if (!resp) {
             rep->deleteLater();
             return;
@@ -215,7 +215,7 @@ void FpCore::signInAsNewUser(const NewUserDetails &newUser)
     });
 }
 
-int FpCore::readHttpStatusCode(QNetworkReply *reply)
+int FpCore::readHttpStatusCode(bsmi::INetworkReply *reply)
 {
     return reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
 }

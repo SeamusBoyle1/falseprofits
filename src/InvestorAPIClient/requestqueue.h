@@ -13,15 +13,17 @@ class QNetworkRequest;
 
 namespace bsmi {
 
+using NetworkReply = INetworkReply;
+
 class RequestQueue : public IRequestQueue
 {
     Q_OBJECT
 public:
     explicit RequestQueue(QNetworkAccessManager *network, QObject *parent = nullptr);
 
-    QNetworkReply *get(const QNetworkRequest &request) override;
-    QNetworkReply *post(const QNetworkRequest &request, const QJsonObject &jsonObject) override;
-    QNetworkReply *deleteResource(const QNetworkRequest &request) override;
+    INetworkReply *get(const QNetworkRequest &request) override;
+    INetworkReply *post(const QNetworkRequest &request, const QJsonObject &jsonObject) override;
+    INetworkReply *deleteResource(const QNetworkRequest &request) override;
 
 signals:
 

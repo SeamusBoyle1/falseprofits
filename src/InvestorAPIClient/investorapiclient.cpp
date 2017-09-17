@@ -40,24 +40,24 @@ void InvestorAPIClient::setAuthToken(const QString &token, const QDateTime &expi
     emit authTokenChanged();
 }
 
-QNetworkReply *InvestorAPIClient::createNewUser(const QHash<UserRecordField, QVariant> &params)
+INetworkReply *InvestorAPIClient::createNewUser(const QHash<UserRecordField, QVariant> &params)
 {
     auto r = createCreateNewUserRequest(params);
     return m_requestQueue->post(r.first, r.second);
 }
 
-QNetworkReply *InvestorAPIClient::authenticate(const QString &email, const QString &password)
+INetworkReply *InvestorAPIClient::authenticate(const QString &email, const QString &password)
 {
     auto r = createAuthenticateRequest(email, password);
     return m_requestQueue->post(r.first, r.second);
 }
 
-QNetworkReply *InvestorAPIClient::deleteUser()
+INetworkReply *InvestorAPIClient::deleteUser()
 {
     return m_requestQueue->deleteResource(createDeleteUserRequest());
 }
 
-QNetworkReply *InvestorAPIClient::getUserProfile()
+INetworkReply *InvestorAPIClient::getUserProfile()
 {
     return m_requestQueue->get(createGetUserProfileRequest());
 }

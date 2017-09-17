@@ -25,13 +25,13 @@ public:
     QDateTime expiry() override;
     void setAuthToken(const QString &token, const QDateTime &expiry) override;
 
-    QNetworkReply *createNewUser(const QHash<UserRecordField, QVariant> &params) override;
+    INetworkReply *createNewUser(const QHash<UserRecordField, QVariant> &params) override;
 
-    QNetworkReply *authenticate(const QString &email, const QString &password) override;
+    INetworkReply *authenticate(const QString &email, const QString &password) override;
 
-    QNetworkReply *deleteUser() override;
+    INetworkReply *deleteUser() override;
 
-    QNetworkReply *getUserProfile() override;
+    INetworkReply *getUserProfile() override;
 
     // TODO(seamus): Extract a request factory
     QPair<QNetworkRequest, QJsonObject>

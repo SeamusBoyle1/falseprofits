@@ -8,10 +8,9 @@
 #include "fpdeclarativetypes.h"
 #include "responsetypes.h" // TODO(seamus): Replace with forward decl
 
-class QNetworkReply;
-
 namespace bsmi {
 class IInvestorAPIClient;
+class INetworkReply;
 } // namespace bsmi
 
 class IFpSettings;
@@ -74,7 +73,7 @@ private:
 
     void signInAsNewUser(const NewUserDetails &newUser);
 
-    static int readHttpStatusCode(QNetworkReply *reply);
+    static int readHttpStatusCode(bsmi::INetworkReply *reply);
 };
 
 #endif // FPCORE_H
