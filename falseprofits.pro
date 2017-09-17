@@ -5,4 +5,5 @@ SUBDIRS += \
     tests
 
 OTHER_FILES += \
-    README.md
+    README.md \
+    .travis.yml
