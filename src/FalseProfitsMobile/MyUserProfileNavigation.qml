@@ -26,7 +26,7 @@ Page {
                 ToolButton {
                     text: qsTr("...")
                     onClicked: {
-                        drawer.open()
+                        appDrawer.open()
                     }
                 }
                 Label {

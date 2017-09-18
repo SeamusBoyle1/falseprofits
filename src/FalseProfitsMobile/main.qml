@@ -14,7 +14,7 @@ ApplicationWindow {
     }
 
     Drawer {
-        id: drawer
+        id: appDrawer
         width: Math.min(appWindow.width, appWindow.height) / 3 * 2
         height: appWindow.height
     }
