@@ -3,7 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 ApplicationWindow {
-    id: window
+    id: appWindow
     visible: true
     width: 360
     height: 520
@@ -15,8 +15,8 @@ ApplicationWindow {
 
     Drawer {
         id: drawer
-        width: Math.min(window.width, window.height) / 3 * 2
-        height: window.height
+        width: Math.min(appWindow.width, appWindow.height) / 3 * 2
+        height: appWindow.height
     }
 
     Dialog {
