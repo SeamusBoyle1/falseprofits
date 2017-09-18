@@ -6,5 +6,6 @@
         <file>SignupPageForm.ui.qml</file>
         <file>SignInPage.qml</file>
         <file>SignInPageForm.ui.qml</file>
+        <file>SignOutPage.qml</file>
     </qresource>
 </RCC>
