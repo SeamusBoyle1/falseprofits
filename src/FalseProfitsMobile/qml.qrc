@@ -8,5 +8,7 @@
         <file>SignInPageForm.ui.qml</file>
         <file>SignOutPage.qml</file>
         <file>MyUserProfileNavigation.qml</file>
+        <file>MyUserProfile.qml</file>
+        <file>MyUserProfileForm.ui.qml</file>
     </qresource>
 </RCC>

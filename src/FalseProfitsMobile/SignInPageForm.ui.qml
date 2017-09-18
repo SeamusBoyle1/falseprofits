@@ -73,42 +73,10 @@ Pane {
         GroupBox {
             title: qsTr("Your user details")
             Layout.fillWidth: true
-            GridLayout {
-                columns: 2
+
+            MyUserProfile {
                 id: userDetails
-                Layout.fillWidth: true
-
-                property alias userIdText: userIdField.text
-                property alias userEmailText: userEmailField.text
-                property alias userDisplayNameText: userDisplayNameField.text
-                property alias userLevelText: userLevelField.text
-
-                Label {
-                    text: "ID"
-                }
-                Label {
-                    id: userIdField
-                    Layout.fillWidth: true
-                    wrapMode: Text.WrapAnywhere
-                }
-                Label {
-                    text: "email"
-                }
-                Label {
-                    id: userEmailField
-                }
-                Label {
-                    text: "displayName"
-                }
-                Label {
-                    id: userDisplayNameField
-                }
-                Label {
-                    text: "Level"
-                }
-                Label {
-                    id: userLevelField
-                }
+                anchors.fill: parent
             }
         }
     }
