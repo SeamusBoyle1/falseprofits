@@ -28,6 +28,32 @@ ApplicationWindow {
             // Drawer doesn't have an enable property, fake one
             dragMargin = !enableDrawer ? 0 : Qt.styleHints.startDragDistance
         }
+
+        ListView {
+            id: listView
+
+            focus: true
+            currentIndex: -1
+            anchors.fill: parent
+
+            delegate: ItemDelegate {
+                width: parent.width
+                text: model.title
+                highlighted: ListView.isCurrentItem
+                onClicked: {
+                    listView.currentIndex = index
+                    appNavStack.clear() // limit depth
+                    appNavStack.push(model.source)
+                    appDrawer.close()
+                }
+            }
+
+            model: ListModel {
+                ListElement{ title: qsTr("My Profile"); source: "qrc:/MyUserProfileNavigation.qml" }
+            }
+
+            ScrollIndicator.vertical: ScrollIndicator { }
+        }
     }
 
     Dialog {
@@ -63,6 +89,7 @@ ApplicationWindow {
     }
 
     function showSignInScreen() {
+        listView.currentIndex = -1
         appNavStack.push("qrc:/SignInNavigation.qml", {"objectName": "SignInNavigation"})
         appDrawer.close()
         appDrawer.enableDrawer = false
@@ -83,6 +110,7 @@ ApplicationWindow {
             if (appNavStack.depth > 1) {
                 appNavStack.pop()
             } else {
+                listView.currentIndex = 0
                 appNavStack.clear() // limit depth
                 appNavStack.push("qrc:/MyUserProfileNavigation.qml")
             }
