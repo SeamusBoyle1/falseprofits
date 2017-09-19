@@ -171,6 +171,8 @@ void FpCore::loadLaunchSettings()
             setAccessToken(*launchSettings.accessToken, *launchSettings.expiry);
         }
     }
+
+    emit launchSettingsLoaded();
 }
 
 void FpCore::signOut()

@@ -54,6 +54,7 @@ public:
     void loadLaunchSettings();
 
 Q_SIGNALS:
+    void launchSettingsLoaded();
     void authStateChanged(Fpx::AuthenticationState);
 
 public Q_SLOTS:
