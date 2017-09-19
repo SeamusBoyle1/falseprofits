@@ -70,6 +70,8 @@ private:
     };
     IFpSettings *m_settings;
 
+    void clearAccessToken();
+
     void setAuthenticationStateImpl(Fpx::AuthenticationState state);
 
     void signInAsNewUser(const NewUserDetails &newUser);

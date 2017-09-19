@@ -119,6 +119,8 @@ DeleteUserResponse *FpCore::deleteUser()
         resp->setHttpStatusCode(readHttpStatusCode(rep));
         if (rep->error() == QNetworkReply::NoError) {
             resp->setPayload(rep->readAll());
+
+            clearAccessToken();
         } else {
             resp->setError(rep->errorString());
         }
@@ -177,8 +179,7 @@ void FpCore::loadLaunchSettings()
 
 void FpCore::signOut()
 {
-    m_client->setAuthToken(QString(), QDateTime());
-    m_settings->clearAccessToken();
+    clearAccessToken();
 }
 
 void FpCore::onClientAuthenticated()
@@ -192,6 +193,12 @@ void FpCore::onClientAuthenticated()
     } else {
         setAuthenticationStateImpl(Fpx::AuthenticationState::NotAuthenticatedState);
     }
+}
+
+void FpCore::clearAccessToken()
+{
+    m_client->setAuthToken(QString(), QDateTime());
+    m_settings->clearAccessToken();
 }
 
 void FpCore::setAuthenticationStateImpl(Fpx::AuthenticationState state)
