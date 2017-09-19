@@ -50,6 +50,7 @@ ApplicationWindow {
 
             model: ListModel {
                 ListElement{ title: qsTr("My Profile"); source: "qrc:/MyUserProfileNavigation.qml" }
+                ListElement{ title: qsTr("Sign Out"); source: "qrc:/SignOutNavigation.qml" }
             }
 
             ScrollIndicator.vertical: ScrollIndicator { }

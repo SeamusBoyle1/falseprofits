@@ -11,6 +11,7 @@
         <file>MyUserProfile.qml</file>
         <file>MyUserProfileForm.ui.qml</file>
         <file>SignInNavigation.qml</file>
+        <file>SignOutNavigation.qml</file>
         <file>MyUserProfilePage.qml</file>
         <file>MyUserProfilePageForm.ui.qml</file>
     </qresource>

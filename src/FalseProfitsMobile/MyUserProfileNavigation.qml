@@ -8,9 +8,6 @@ Page {
         anchors.fill: parent
         currentIndex: tabBar.currentIndex
 
-        SignOutPage {
-        }
-
         MyUserProfilePage {
         }
     }
@@ -40,9 +37,6 @@ Page {
             id: tabBar
             currentIndex: swipeView.currentIndex
             Layout.fillWidth: true
-            TabButton {
-                text: qsTr("Sign out")
-            }
             TabButton {
                 text: qsTr("Profile")
             }
