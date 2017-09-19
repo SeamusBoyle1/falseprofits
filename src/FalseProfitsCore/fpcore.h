@@ -49,6 +49,9 @@ public:
     Q_INVOKABLE
     GetUserProfileResponse *getUserProfile();
 
+    Q_INVOKABLE
+    GetQuotesResponse *getQuotes(const QStringList &symbols);
+
     Fpx::AuthenticationState authState() const;
 
     void loadLaunchSettings();

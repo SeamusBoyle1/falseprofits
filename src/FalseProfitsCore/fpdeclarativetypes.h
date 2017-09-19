@@ -5,6 +5,7 @@
 
 #include <QObject>
 
+#include <QJsonArray>
 #include <QJsonObject>
 #include <QVariant>
 #include <QJsonDocument>
@@ -50,8 +51,78 @@ public:
     QVariant level() const { return m_d.value(QLatin1String("level")).toVariant(); }
 };
 
+class JsonQuotesQuote
+{
+    Q_GADGET
+    Q_PROPERTY(bool isValid READ isValid)
+    Q_PROPERTY(QVariant symbol READ symbol)
+    Q_PROPERTY(QVariant ask READ ask)
+    Q_PROPERTY(QVariant askSize READ askSize)
+    Q_PROPERTY(QVariant bid READ bid)
+    Q_PROPERTY(QVariant bidSize READ bidSize)
+    Q_PROPERTY(QVariant last READ last)
+    Q_PROPERTY(QVariant lastSize READ lastSize)
+    Q_PROPERTY(QVariant dayLow READ dayLow)
+    Q_PROPERTY(QVariant dayHigh READ dayHigh)
+public:
+    QJsonObject m_d;
+
+    bool isValid() const { return !m_d.isEmpty() && m_d.contains(QLatin1String("symbol")); }
+
+    QVariant symbol() const { return m_d.value(QLatin1String("symbol")).toVariant(); }
+
+    QVariant ask() const { return m_d.value(QLatin1String("ask")).toVariant(); }
+
+    QVariant askSize() const { return m_d.value(QLatin1String("askSize")).toVariant(); }
+
+    QVariant bid() const { return m_d.value(QLatin1String("bid")).toVariant(); }
+
+    QVariant bidSize() const { return m_d.value(QLatin1String("bidSize")).toVariant(); }
+
+    QVariant last() const { return m_d.value(QLatin1String("last")).toVariant(); }
+
+    QVariant lastSize() const { return m_d.value(QLatin1String("lastSize")).toVariant(); }
+
+    QVariant dayLow() const { return m_d.value(QLatin1String("dayLow")).toVariant(); }
+
+    QVariant dayHigh() const { return m_d.value(QLatin1String("dayHigh")).toVariant(); }
+};
+
+class JsonQuotes
+{
+    Q_GADGET
+    Q_PROPERTY(bool isEmpty READ isEmpty)
+    Q_PROPERTY(int size READ size)
+public:
+    QJsonArray m_d;
+
+    bool isEmpty() const { return m_d.isEmpty(); }
+
+    int size() const { return m_d.size(); }
+
+    Q_INVOKABLE
+    JsonQuotesQuote at(int i) const { return { m_d.at(i).toObject() }; }
+
+    Q_INVOKABLE
+    JsonQuotesQuote find(const QString &symbol) const
+    {
+        auto const symbolJsonVal = QJsonValue(symbol);
+        auto it =
+            std::find_if(m_d.constBegin(), m_d.constEnd(), [symbolJsonVal](const QJsonValue &a) {
+                auto const obj = a.toObject();
+                return obj.value(QLatin1String("symbol")) == symbolJsonVal;
+            });
+        if (it != m_d.constEnd()) {
+            return { it->toObject() };
+        }
+        return JsonQuotesQuote();
+    }
+};
+
 Q_DECLARE_METATYPE(NewUserDetails)
 Q_DECLARE_METATYPE(JsonUserDetails)
+Q_DECLARE_METATYPE(JsonQuotesQuote)
+Q_DECLARE_METATYPE(JsonQuotes)
 
 class FalseProfitsDeclarativeTypes : public QObject
 {
@@ -62,6 +133,8 @@ public:
     {
         qRegisterMetaType<NewUserDetails>("NewUserDetails");
         qRegisterMetaType<JsonUserDetails>("JsonUserDetails");
+        qRegisterMetaType<JsonQuotesQuote>("JsonQuotesQuote");
+        qRegisterMetaType<JsonQuotes>("JsonQuotes");
     }
 
     Q_INVOKABLE
@@ -71,6 +144,12 @@ public:
     JsonUserDetails makeJsonUserDetails(const QByteArray &json)
     {
         return { QJsonDocument::fromJson(json).object() };
+    }
+
+    Q_INVOKABLE
+    JsonQuotes makeJsonQuotes(const QByteArray &json)
+    {
+        return { QJsonDocument::fromJson(json).array() };
     }
 };
 

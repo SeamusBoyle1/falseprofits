@@ -140,4 +140,24 @@ public:
     }
 };
 
+class GetQuotesResponse : public BaseResponse
+{
+    Q_OBJECT
+public:
+    GetQuotesResponse() {}
+    virtual ~GetQuotesResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 401:
+            return "User not authenticated.";
+        default:
+            break;
+        }
+        return errorMessage();
+    }
+};
+
 #endif // RESPONSETYPES_H

@@ -156,6 +156,30 @@ GetUserProfileResponse *FpCore::getUserProfile()
     return resp;
 }
 
+GetQuotesResponse *FpCore::getQuotes(const QStringList &symbols)
+{
+    QPointer<GetQuotesResponse> resp(new GetQuotesResponse);
+
+    auto rep = m_client->getQuotes(symbols);
+    connect(rep, &bsmi::INetworkReply::finished, this, [resp, rep, this]() {
+        if (!resp) {
+            rep->deleteLater();
+            return;
+        }
+        resp->setHttpStatusCode(readHttpStatusCode(rep));
+        if (rep->error() == QNetworkReply::NoError) {
+            resp->setPayload(rep->readAll());
+        } else {
+            resp->setError(rep->errorString());
+        }
+
+        rep->deleteLater();
+        resp->setFinished();
+    });
+
+    return resp;
+}
+
 Fpx::AuthenticationState FpCore::authState() const
 {
     return m_authenticationState;
