@@ -10,5 +10,7 @@
         <file>MyUserProfileNavigation.qml</file>
         <file>MyUserProfile.qml</file>
         <file>MyUserProfileForm.ui.qml</file>
+        <file>MyUserProfilePage.qml</file>
+        <file>MyUserProfilePageForm.ui.qml</file>
     </qresource>
 </RCC>

@@ -16,6 +16,9 @@ Page {
 
         SignOutPage {
         }
+
+        MyUserProfilePage {
+        }
     }
 
     header: ColumnLayout {
@@ -51,6 +54,9 @@ Page {
             }
             TabButton {
                 text: qsTr("Sign out")
+            }
+            TabButton {
+                text: qsTr("Profile")
             }
         }
     }

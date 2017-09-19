@@ -7,8 +7,6 @@ Pane {
     height: 400
     property alias busyIndicator: busyIndicator
     property alias signupPageButton: signupPageButton
-    property alias getUserDetailsButton: getUserDetailsButton
-    property alias userDetails: userDetails
     property alias signInStatusField: signInStatusField
     property alias signInButton: signInButton
     property alias passwordField: passwordField
@@ -71,23 +69,6 @@ Pane {
         Label {
             id: signInStatusField
             text: qsTr("no status yet")
-        }
-
-        Button {
-            id: getUserDetailsButton
-            text: qsTr("Get my details")
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        }
-
-        GroupBox {
-            title: qsTr("Your user details")
-            Layout.fillWidth: true
-
-            MyUserProfile {
-                id: userDetails
-                anchors.fill: parent
-            }
         }
     }
 

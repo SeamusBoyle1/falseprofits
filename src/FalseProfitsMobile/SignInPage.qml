@@ -24,27 +24,6 @@ SignInPageForm {
         })
     }
 
-    getUserDetailsButton.onClicked: {
-        if (fpCore.authState === Fpx.AuthenticatedState) {
-            busyIndicator.visible = true
-            var userProfileResp = fpCore.getUserProfile()
-            userProfileResp.onFinished.connect(function() {
-                busyIndicator.visible = false
-                if (!userProfileResp.hasError()) {
-                    var userDetailsDat = fpType.makeJsonUserDetails(userProfileResp.payload())
-                    userDetails.userIdText = userDetailsDat.id
-                    userDetails.userEmailText = userDetailsDat.email
-                    userDetails.userDisplayNameText = userDetailsDat.displayName
-                    userDetails.userLevelText = userDetailsDat.level
-                } else {
-                    clearUserProfileDisplay()
-                    errorDialogText.text = userProfileResp.httpStatusReason()
-                    errorDialog.open()
-                }
-            })
-        }
-    }
-
     signupPageButton.onClicked: {
         showSignupScreenRequested()
     }
@@ -56,21 +35,9 @@ SignInPageForm {
         }
     }
 
-    function clearUserProfileDisplay()
-    {
-        userDetails.userIdText = ""
-        userDetails.userEmailText = ""
-        userDetails.userDisplayNameText = ""
-        userDetails.userLevelText = ""
-    }
-
     function updateAuthenticationDisplay()
     {
         signInStatusField.text = fpCore.authState === Fpx.AuthenticatedState
                 ? "You're signed in" : "Your're not signed in"
-
-        if (fpCore.authState === Fpx.NotAuthenticatedState) {
-            clearUserProfileDisplay()
-        }
     }
 }
