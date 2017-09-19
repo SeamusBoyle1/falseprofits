@@ -8,12 +8,6 @@ Page {
         anchors.fill: parent
         currentIndex: tabBar.currentIndex
 
-        SignupPage {
-        }
-
-        SignInPage {
-        }
-
         SignOutPage {
         }
 
@@ -47,24 +41,11 @@ Page {
             currentIndex: swipeView.currentIndex
             Layout.fillWidth: true
             TabButton {
-                text: qsTr("Signup")
-            }
-            TabButton {
-                text: qsTr("Sign in")
-            }
-            TabButton {
                 text: qsTr("Sign out")
             }
             TabButton {
                 text: qsTr("Profile")
             }
-        }
-    }
-
-    Connections {
-        target: fpCore
-        onAuthStateChanged: {
-            tabBar.setCurrentIndex(1 /* index of sign in page, demo testing only */)
         }
     }
 }
