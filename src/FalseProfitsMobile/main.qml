@@ -58,23 +58,6 @@ ApplicationWindow {
     }
 
     Dialog {
-        id: errorDialog
-        title: qsTr("Error")
-        standardButtons: Dialog.Ok
-        modal: true
-        x: (parent.width - width) / 2
-        y: (parent.height - height) / 2
-
-        implicitHeight: 160
-        implicitWidth: parent.width * 0.9
-
-        Label {
-            id: errorDialogText
-            wrapMode: Text.WordWrap
-        }
-    }
-
-    Dialog {
         id: signedOutDialog
         title: "Signed Out"
         standardButtons: Dialog.Ok
