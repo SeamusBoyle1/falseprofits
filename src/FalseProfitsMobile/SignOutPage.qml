@@ -23,6 +23,22 @@ Page {
         }
     }
 
+    Dialog {
+        id: signedOutDialog
+        parent: appNavStack
+        title: qsTr("Signed Out")
+        standardButtons: Dialog.Ok
+        modal: true
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
+        Label {
+            wrapMode: Text.WordWrap
+            text: qsTr("You're now signed out")
+        }
+    }
+
     BusyIndicator {
         id: busyIndicator
         anchors.centerIn: parent

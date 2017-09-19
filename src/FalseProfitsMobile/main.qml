@@ -57,21 +57,6 @@ ApplicationWindow {
         }
     }
 
-    Dialog {
-        id: signedOutDialog
-        title: "Signed Out"
-        standardButtons: Dialog.Ok
-        modal: true
-        x: (parent.width - width) / 2
-        y: (parent.height - height) / 2
-        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
-
-        Label {
-            wrapMode: Text.WordWrap
-            text: "You're now signed out"
-        }
-    }
-
     function showSignInScreen() {
         listView.currentIndex = -1
         appNavStack.push("qrc:/SignInNavigation.qml", {"objectName": "SignInNavigation"})
