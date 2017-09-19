@@ -6,6 +6,7 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QUrlQuery>
 
 namespace bsmi {
 
@@ -62,6 +63,11 @@ INetworkReply *InvestorAPIClient::getUserProfile()
     return m_requestQueue->get(createGetUserProfileRequest());
 }
 
+INetworkReply *InvestorAPIClient::getQuotes(const QStringList &symbols)
+{
+    return m_requestQueue->get(createGetQuotesRequest(symbols));
+}
+
 QPair<QNetworkRequest, QJsonObject>
 InvestorAPIClient::createCreateNewUserRequest(const QHash<UserRecordField, QVariant> &params) const
 {
@@ -99,6 +105,18 @@ QNetworkRequest InvestorAPIClient::createDeleteUserRequest() const
 QNetworkRequest InvestorAPIClient::createGetUserProfileRequest() const
 {
     QUrl url(m_apiUrl + QStringLiteral("/api/1.0/users"));
+    return makeAuthenticatedRequest(url);
+}
+
+QNetworkRequest InvestorAPIClient::createGetQuotesRequest(const QStringList &symbols) const
+{
+    QUrl url(m_apiUrl + QStringLiteral("/api/1.0/shares/quotes"));
+
+    QUrlQuery urlQuery;
+    urlQuery.addQueryItem(QStringLiteral("symbols"), symbols.join(QLatin1Char(',')));
+
+    url.setQuery(urlQuery);
+
     return makeAuthenticatedRequest(url);
 }
 

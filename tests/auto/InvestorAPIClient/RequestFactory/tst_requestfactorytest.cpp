@@ -5,6 +5,8 @@
 
 #include <InvestorAPIClient/investorapiclient.h>
 
+#include <QUrlQuery>
+
 class RequestFactoryTest : public QObject
 {
     Q_OBJECT
@@ -17,6 +19,7 @@ private Q_SLOTS:
     void createAuthenticateRequestTest();
     void createDeleteUserRequestTest();
     void createGetUserProfileRequestTest();
+    void createGetQuotesRequestTest();
 };
 
 RequestFactoryTest::RequestFactoryTest()
@@ -91,6 +94,31 @@ void RequestFactoryTest::createGetUserProfileRequestTest()
         auto resp = c.createGetUserProfileRequest();
         QCOMPARE(resp.url(), QUrl(QLatin1String("http://example.com/api/1.0/users")));
         QCOMPARE(resp.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+    }
+}
+
+void RequestFactoryTest::createGetQuotesRequestTest()
+{
+    using namespace bsmi;
+
+    {
+        InvestorAPIClient c(nullptr, QStringLiteral("http://example.com"));
+
+        c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 20), QTime(6, 48)));
+
+        auto symbols = QStringList{ QLatin1String("ASYMBOL1"), QLatin1String("ASYMBOL2"),
+                                    QLatin1String("ASYMBOL3") };
+
+        auto resp = c.createGetQuotesRequest(symbols);
+        auto const respUrl = resp.url();
+        const QUrlQuery respUrlQuery(respUrl.query());
+        QCOMPARE(QUrl(respUrl.toString(QUrl::RemoveQuery)),
+                 QUrl(QLatin1String("http://example.com/api/1.0/shares/quotes")));
+        QCOMPARE(resp.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+        QCOMPARE(resp.rawHeader("Content-Type"), QByteArray("application/json"));
+        QVERIFY(respUrlQuery.hasQueryItem("symbols"));
+        auto respSymbols = respUrlQuery.queryItemValue("symbols").split(QLatin1Char(','));
+        QCOMPARE(respSymbols.size(), 3 /* the size if the input symbols, less empty parts */);
     }
 }
 

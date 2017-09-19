@@ -33,6 +33,8 @@ public:
 
     INetworkReply *getUserProfile() override;
 
+    INetworkReply *getQuotes(const QStringList &symbols) override;
+
     // TODO(seamus): Extract a request factory
     QPair<QNetworkRequest, QJsonObject>
     createCreateNewUserRequest(const QHash<UserRecordField, QVariant> &params) const;
@@ -43,6 +45,8 @@ public:
     QNetworkRequest createDeleteUserRequest() const;
 
     QNetworkRequest createGetUserProfileRequest() const;
+
+    QNetworkRequest createGetQuotesRequest(const QStringList &symbols) const;
 
     QNetworkRequest makeRequest(const QUrl &url) const;
     QNetworkRequest makeAuthenticatedRequest(const QUrl &url) const;
