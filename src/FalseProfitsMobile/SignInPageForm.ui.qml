@@ -6,6 +6,7 @@ Pane {
     width: 400
     height: 400
     property alias busyIndicator: busyIndicator
+    property alias signupPageButton: signupPageButton
     property alias getUserDetailsButton: getUserDetailsButton
     property alias userDetails: userDetails
     property alias signInStatusField: signInStatusField
@@ -53,6 +54,14 @@ Pane {
                      && passwordField.text.length > 0
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+        }
+
+        Button {
+            id: signupPageButton
+            text: qsTr("Create an account")
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            flat: true
         }
 
         Label {

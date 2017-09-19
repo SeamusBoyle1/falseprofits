@@ -3,6 +3,8 @@ import QtQuick 2.4
 import com.example.fpx 1.0
 
 SignInPageForm {
+    signal showSignupScreenRequested
+
     Component.onCompleted: {
         updateAuthenticationDisplay()
     }
@@ -41,6 +43,10 @@ SignInPageForm {
                 }
             })
         }
+    }
+
+    signupPageButton.onClicked: {
+        showSignupScreenRequested()
     }
 
     Connections {

@@ -6,6 +6,7 @@ Pane {
     width: 400
     height: 400
     property alias busyIndicator: busyIndicator
+    property alias signInPageButton: signInPageButton
     property alias signupStatusField: signupStatusField
     property alias signupButton: signupButton
     property alias passwordField: passwordField
@@ -92,6 +93,14 @@ Pane {
                      && emailField.acceptableInput
                      && passwordField.acceptableInput
             Layout.fillWidth: true
+        }
+
+        Button {
+            id: signInPageButton
+            text: qsTr("Already a member? Sign in")
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            flat: true
         }
 
         Label {

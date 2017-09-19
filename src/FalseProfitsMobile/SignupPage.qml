@@ -2,6 +2,8 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 
 SignupPageForm {
+    signal showSignInScreenRequested
+
     signupButton.onClicked: {
         var newUser = fpType.makeNewUserDetails()
         newUser.displayName = displayNameField.text
@@ -20,6 +22,10 @@ SignupPageForm {
                 signupStatusField.text = resp.httpStatusReason()
             }
         })
+    }
+
+    signInPageButton.onClicked: {
+        showSignInScreenRequested()
     }
 
     Dialog {
