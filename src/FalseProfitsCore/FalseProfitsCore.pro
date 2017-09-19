@@ -24,14 +24,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     fpsettings.cpp \
-    fpcore.cpp
+    fpcore.cpp \
+    fpsymbolsearchresultsitemmodel.cpp \
+    fpsymbolsearchwrapper.cpp
 
 HEADERS += \
     responsetypes.h \
     fpsettings.h \
     fpcore.h \
     fpdeclarativetypes.h \
-    fpcore_interfaces.h
+    fpcore_interfaces.h \
+    fpsymbolsearchresultsitemmodel.h \
+    fpsymbolsearchwrapper.h
 
 unix {
     target.path = /usr/lib

@@ -6,6 +6,8 @@
 #include <FalseProfitsCore/fpcore.h>
 #include <FalseProfitsCore/responsetypes.h>
 #include <FalseProfitsCore/fpsettings.h>
+#include <FalseProfitsCore/fpsymbolsearchresultsitemmodel.h>
+#include <FalseProfitsCore/fpsymbolsearchwrapper.h>
 #include <InvestorAPIClient/iinvestorapiclient.h>
 
 #include <QDateTime>
@@ -22,12 +24,19 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
 
+    qmlRegisterUncreatableType<FpCore>("FpCore", 1, 0, "FpCore", "For setter injection only");
+
     qmlRegisterType<NewUserResponse>("FpResponses", 1, 0, "NewUserResponse");
     qmlRegisterType<AuthenticateResponse>("FpResponses", 1, 0, "AuthenticateResponse");
     qmlRegisterType<DeleteUserResponse>("FpResponses", 1, 0, "DeleteUserResponse");
     qmlRegisterType<GetUserProfileResponse>("FpResponses", 1, 0, "GetUserProfileResponse");
     qmlRegisterType<GetQuotesResponse>("FpResponses", 1, 0, "GetQuotesResponse");
     qmlRegisterType<SymbolSearchResponse>("FpResponses", 1, 0, "SymbolSearchResponse");
+
+    qmlRegisterType<FinishNotifier>("com.example.fpx", 1, 0, "FinishNotifier");
+    qmlRegisterType<FpSymbolSearchWrapper>("com.example.fpx", 1, 0, "FpSymbolSearchWrapper");
+    qmlRegisterType<FpSymbolSearchResultsItemModel>("com.example.fpx", 1, 0,
+                                                    "FpSymbolSearchResultsItemModel");
 
     qmlRegisterUncreatableMetaObject(Fpx::staticMetaObject, "com.example.fpx", 1, 0, "Fpx",
                                      "Access to enums & flags only");
