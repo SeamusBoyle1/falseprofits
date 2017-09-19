@@ -50,4 +50,10 @@ Page {
             text: qsTr("no status")
         }
     }
+
+    BusyIndicator {
+        id: busyIndicator
+        anchors.centerIn: parent
+        visible: false
+    }
 }

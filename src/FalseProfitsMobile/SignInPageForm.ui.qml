@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.3
 Pane {
     width: 400
     height: 400
+    property alias busyIndicator: busyIndicator
     property alias getUserDetailsButton: getUserDetailsButton
     property alias userDetails: userDetails
     property alias signInStatusField: signInStatusField
@@ -79,5 +80,11 @@ Pane {
                 anchors.fill: parent
             }
         }
+    }
+
+    BusyIndicator {
+        id: busyIndicator
+        anchors.centerIn: parent
+        visible: false
     }
 }

@@ -50,10 +50,4 @@ ApplicationWindow {
             text: "You're now signed out"
         }
     }
-
-    BusyIndicator {
-        id: busyIndicator
-        anchors.centerIn: parent
-        visible: false
-    }
 }

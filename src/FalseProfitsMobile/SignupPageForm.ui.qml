@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.3
 Pane {
     width: 400
     height: 400
+    property alias busyIndicator: busyIndicator
     property alias signupStatusField: signupStatusField
     property alias signupButton: signupButton
     property alias passwordField: passwordField
@@ -101,5 +102,11 @@ Pane {
             id: signupStatusField
             text: qsTr("no status yet")
         }
+    }
+
+    BusyIndicator {
+        id: busyIndicator
+        anchors.centerIn: parent
+        visible: false
     }
 }
