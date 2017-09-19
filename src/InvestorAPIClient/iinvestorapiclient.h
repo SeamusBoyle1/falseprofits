@@ -48,6 +48,14 @@ public:
 
     virtual INetworkReply *getQuotes(const QStringList &symbols) = 0;
 
+    struct SymbolSearchQuery
+    {
+        QString searchTerm;
+        int pageNumber{ -1 };
+        int pageSize{ -1 };
+    };
+    virtual INetworkReply *symbolSearch(const SymbolSearchQuery &query) = 0;
+
 Q_SIGNALS:
     void authTokenChanged();
 };

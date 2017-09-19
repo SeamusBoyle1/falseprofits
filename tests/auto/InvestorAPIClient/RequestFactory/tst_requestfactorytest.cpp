@@ -20,6 +20,7 @@ private Q_SLOTS:
     void createDeleteUserRequestTest();
     void createGetUserProfileRequestTest();
     void createGetQuotesRequestTest();
+    void createSymbolSearchRequestTest();
 };
 
 RequestFactoryTest::RequestFactoryTest()
@@ -119,6 +120,57 @@ void RequestFactoryTest::createGetQuotesRequestTest()
         QVERIFY(respUrlQuery.hasQueryItem("symbols"));
         auto respSymbols = respUrlQuery.queryItemValue("symbols").split(QLatin1Char(','));
         QCOMPARE(respSymbols.size(), 3 /* the size if the input symbols, less empty parts */);
+    }
+}
+
+void RequestFactoryTest::createSymbolSearchRequestTest()
+{
+    using namespace bsmi;
+
+    // Without paging
+    {
+        InvestorAPIClient c(nullptr, QStringLiteral("http://example.com"));
+
+        c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 20), QTime(7, 51)));
+
+        IInvestorAPIClient::SymbolSearchQuery query;
+        query.searchTerm = "Hello, World";
+
+        auto resp = c.createSymbolSearchRequest(query);
+        auto const respUrl = resp.url();
+        const QUrlQuery respUrlQuery(respUrl.query());
+        QCOMPARE(QUrl(respUrl.toString(QUrl::RemoveQuery)),
+                 QUrl(QLatin1String("http://example.com/api/1.0/shares")));
+        QCOMPARE(resp.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+        QCOMPARE(resp.rawHeader("Content-Type"), QByteArray("application/json"));
+        QVERIFY(respUrlQuery.hasQueryItem("searchTerm"));
+        QVERIFY(!respUrlQuery.hasQueryItem("pageNumber"));
+        QVERIFY(!respUrlQuery.hasQueryItem("pageSize"));
+    }
+
+    // With paging
+    {
+        InvestorAPIClient c(nullptr, QStringLiteral("http://example.com"));
+
+        c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 20), QTime(7, 51)));
+
+        IInvestorAPIClient::SymbolSearchQuery query;
+        query.searchTerm = "Hello, World";
+        query.pageNumber = 2;
+        query.pageSize = 20;
+
+        auto resp = c.createSymbolSearchRequest(query);
+        auto const respUrl = resp.url();
+        const QUrlQuery respUrlQuery(respUrl.query());
+        QCOMPARE(QUrl(respUrl.toString(QUrl::RemoveQuery)),
+                 QUrl(QLatin1String("http://example.com/api/1.0/shares")));
+        QCOMPARE(resp.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+        QCOMPARE(resp.rawHeader("Content-Type"), QByteArray("application/json"));
+        QVERIFY(respUrlQuery.hasQueryItem("searchTerm"));
+        QVERIFY(respUrlQuery.hasQueryItem("pageNumber"));
+        QVERIFY(respUrlQuery.queryItemValue("pageNumber") == QLatin1String("2"));
+        QVERIFY(respUrlQuery.hasQueryItem("pageSize"));
+        QVERIFY(respUrlQuery.queryItemValue("pageSize") == QLatin1String("20"));
     }
 }
 

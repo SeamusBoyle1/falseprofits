@@ -35,6 +35,8 @@ public:
 
     INetworkReply *getQuotes(const QStringList &symbols) override;
 
+    INetworkReply *symbolSearch(const SymbolSearchQuery &query) override;
+
     // TODO(seamus): Extract a request factory
     QPair<QNetworkRequest, QJsonObject>
     createCreateNewUserRequest(const QHash<UserRecordField, QVariant> &params) const;
@@ -47,6 +49,8 @@ public:
     QNetworkRequest createGetUserProfileRequest() const;
 
     QNetworkRequest createGetQuotesRequest(const QStringList &symbols) const;
+
+    QNetworkRequest createSymbolSearchRequest(const SymbolSearchQuery &query) const;
 
     QNetworkRequest makeRequest(const QUrl &url) const;
     QNetworkRequest makeAuthenticatedRequest(const QUrl &url) const;

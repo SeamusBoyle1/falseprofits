@@ -68,6 +68,11 @@ INetworkReply *InvestorAPIClient::getQuotes(const QStringList &symbols)
     return m_requestQueue->get(createGetQuotesRequest(symbols));
 }
 
+INetworkReply *InvestorAPIClient::symbolSearch(const SymbolSearchQuery &query)
+{
+    return m_requestQueue->get(createSymbolSearchRequest(query));
+}
+
 QPair<QNetworkRequest, QJsonObject>
 InvestorAPIClient::createCreateNewUserRequest(const QHash<UserRecordField, QVariant> &params) const
 {
@@ -114,6 +119,24 @@ QNetworkRequest InvestorAPIClient::createGetQuotesRequest(const QStringList &sym
 
     QUrlQuery urlQuery;
     urlQuery.addQueryItem(QStringLiteral("symbols"), symbols.join(QLatin1Char(',')));
+
+    url.setQuery(urlQuery);
+
+    return makeAuthenticatedRequest(url);
+}
+
+QNetworkRequest InvestorAPIClient::createSymbolSearchRequest(const SymbolSearchQuery &query) const
+{
+    QUrl url(m_apiUrl + QStringLiteral("/api/1.0/shares"));
+
+    QUrlQuery urlQuery;
+    urlQuery.addQueryItem(QStringLiteral("searchTerm"), query.searchTerm);
+    if (query.pageNumber > 0) {
+        urlQuery.addQueryItem(QStringLiteral("pageNumber"), QString::number(query.pageNumber));
+    }
+    if (query.pageSize > 0) {
+        urlQuery.addQueryItem(QStringLiteral("pageSize"), QString::number(query.pageSize));
+    }
 
     url.setQuery(urlQuery);
 
