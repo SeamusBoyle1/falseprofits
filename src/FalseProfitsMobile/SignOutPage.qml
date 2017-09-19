@@ -21,34 +21,6 @@ Page {
                 signedOutDialog.visible = true
             }
         }
-
-        DelayButton {
-            text: qsTr("Delete my account")
-
-            onActivated: {
-                busyIndicator.visible = true
-                var resp = fpCore.deleteUser()
-                resp.onFinished.connect(function() {
-                    busyIndicator.visible = false
-                    if (!resp.hasError()) {
-                        deleteUserStatusField.text = qsTr("User deleted")
-                    } else {
-                        errorDialogText.text = resp.httpStatusReason()
-                        errorDialog.open()
-                        deleteUserStatusField.text = resp.httpStatusReason()
-                    }
-                })
-            }
-        }
-
-        Label {
-            text: qsTr("delete user status:")
-        }
-
-        Label {
-            id: deleteUserStatusField
-            text: qsTr("no status")
-        }
     }
 
     BusyIndicator {

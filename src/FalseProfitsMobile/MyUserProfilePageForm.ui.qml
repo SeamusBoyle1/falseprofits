@@ -6,6 +6,7 @@ Page {
     id: page
     width: 400
     height: 400
+    property alias deleteMyAccountButton: deleteMyAccountButton
     property alias getUserDetailsButton: getUserDetailsButton
     property alias userDetails: userDetails
     property alias busyIndicator: busyIndicator
@@ -35,6 +36,12 @@ Page {
                     id: userDetails
                     anchors.fill: parent
                 }
+            }
+
+            DelayButton {
+                id: deleteMyAccountButton
+                text: qsTr("Delete my account")
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             }
         }
     }

@@ -1,4 +1,6 @@
 import QtQuick 2.4
+import QtQuick.Controls 2.2
+import QtQuick.Layouts 1.3
 
 import com.example.fpx 1.0
 
@@ -22,6 +24,57 @@ MyUserProfilePageForm {
                     errorDialog.open()
                 }
             })
+        }
+    }
+
+    deleteMyAccountButton.onActivated: {
+        busyIndicator.visible = true
+        var resp = fpCore.deleteUser()
+        resp.onFinished.connect(function() {
+            busyIndicator.visible = false
+            if (!resp.hasError()) {
+                infoDialog.title = qsTr("User Deleted")
+                infoDialogText.text = qsTr("Your user account has been annihilated.")
+                infoDialog.open()
+            } else {
+                errorDialogText.text = resp.httpStatusReason()
+                errorDialog.open()
+            }
+        })
+    }
+
+    Dialog {
+        id: errorDialog
+        parent: appNavStack
+        title: qsTr("Error")
+        standardButtons: Dialog.Ok
+        modal: true
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+
+        implicitHeight: 160
+        implicitWidth: parent.width * 0.9
+
+        Label {
+            id: errorDialogText
+            wrapMode: Text.WordWrap
+        }
+    }
+
+    Dialog {
+        id: infoDialog
+        parent: appNavStack
+        standardButtons: Dialog.Ok
+        modal: true
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+
+        implicitHeight: 160
+        implicitWidth: parent.width * 0.9
+
+        Label {
+            id: infoDialogText
+            wrapMode: Text.WordWrap
         }
     }
 
