@@ -39,6 +39,8 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
 
+    qmlRegisterSingletonType(QUrl("qrc:/FpStyle.qml"), "com.example.fpx", 1, 0, "FpStyle");
+
     qmlRegisterUncreatableType<FpCore>("FpCore", 1, 0, "FpCore", "For setter injection only");
 
     qmlRegisterType<NewUserResponse>("FpResponses", 1, 0, "NewUserResponse");

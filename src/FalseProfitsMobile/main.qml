@@ -7,8 +7,8 @@ import com.example.fpx 1.0
 ApplicationWindow {
     id: appWindow
     visible: true
-    width: 360
-    height: 520
+    width: FpStyle.appWindowWidth
+    height: FpStyle.appWindowHeight
     title: qsTr("Hello World")
 
     StackView {

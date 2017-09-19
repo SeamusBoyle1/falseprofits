@@ -21,5 +21,7 @@
         <file>DetailedQuotePageForm.ui.qml</file>
         <file>OrderTicketPage.qml</file>
         <file>OrderTicketPageForm.ui.qml</file>
+        <file>FpStyle.qml</file>
+        <file>+desktop/FpStyle.qml</file>
     </qresource>
 </RCC>
