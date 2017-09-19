@@ -15,8 +15,19 @@
 #include <InvestorAPIClient/iinvestorapiclient.h>
 
 #include <QDateTime>
+#include <QFileSelector>
 #include <QQmlContext>
+#include <QQmlFileSelector>
 #include <QSettings>
+
+constexpr bool isHostMobile()
+{
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
+    return true;
+#else
+    return false;
+#endif
+}
 
 int main(int argc, char *argv[])
 {
@@ -67,6 +78,9 @@ int main(int argc, char *argv[])
     FalseProfitsDeclarativeTypes fpTypes;
 
     QQmlApplicationEngine engine;
+    if (!(isHostMobile() || app.arguments().contains(QLatin1String("-touch")))) {
+        QQmlFileSelector::get(&engine)->setExtraSelectors({ QLatin1String("desktop") });
+    }
     engine.rootContext()->setContextProperty("fpCore", &fpCore);
     engine.rootContext()->setContextProperty("fpType", &fpTypes);
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
