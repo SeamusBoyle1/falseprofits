@@ -209,6 +209,61 @@ SymbolSearchResponse *FpCore::symbolSearch(const SymbolSearchQuery &query)
     return resp;
 }
 
+GetShareDetailsResponse *FpCore::getShareDetails(const QString &symbol)
+{
+    QPointer<GetShareDetailsResponse> resp(new GetShareDetailsResponse);
+    resp->setSymbol(symbol);
+
+    bsmi::IInvestorAPIClient::SymbolSearchQuery v;
+    v.searchTerm = symbol;
+
+    auto rep = m_client->symbolSearch(v);
+    connect(rep, &bsmi::INetworkReply::finished, this, [symbol, resp, rep, this]() {
+        if (!resp) {
+            rep->deleteLater();
+            return;
+        }
+        resp->setHttpStatusCode(readHttpStatusCode(rep));
+        if (rep->error() == QNetworkReply::NoError) {
+            resp->setPayload(rep->readAll());
+            auto doc = QJsonDocument::fromJson(resp->payload());
+            auto parser = bsmi::JsonObjectWrappers::SymbolSearchResponse(doc.object());
+            auto items = parser.items();
+
+            auto it = std::find_if(items.jsonItems.constBegin(), items.jsonItems.constEnd(),
+                                   [symbol](const QJsonValue &a) {
+                                       return a.toObject().value(QLatin1String("symbol")) == symbol;
+                                   });
+            auto itemFound = false;
+            if (it != items.jsonItems.constEnd()) {
+                bsmi::JsonObjectWrappers::SymbolSearchResponseItem item;
+                item.d = it->toObject();
+                if (item.isValid()) {
+                    itemFound = true;
+                    auto cn = item.name();
+                    if (cn) {
+                        resp->setCompanyName(*cn);
+                    }
+                    auto industry = item.industry();
+                    if (industry) {
+                        resp->setIndustry(*industry);
+                    }
+                }
+            }
+            if (!itemFound) {
+                resp->setHttpStatusCode(404);
+            }
+        } else {
+            resp->setError(rep->errorString());
+        }
+
+        rep->deleteLater();
+        resp->setFinished();
+    });
+
+    return resp;
+}
+
 Fpx::AuthenticationState FpCore::authState() const
 {
     return m_authenticationState;

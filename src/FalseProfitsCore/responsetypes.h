@@ -180,4 +180,77 @@ public:
     }
 };
 
+class GetShareDetailsResponse : public BaseResponse
+{
+    Q_OBJECT
+    Q_PROPERTY(QString symbol READ symbol WRITE setSymbol NOTIFY symbolChanged)
+    Q_PROPERTY(QString companyName READ companyName WRITE setCompanyName NOTIFY companyNameChanged)
+    Q_PROPERTY(QString industry READ industry WRITE setIndustry NOTIFY industryChanged)
+public:
+    GetShareDetailsResponse() {}
+    virtual ~GetShareDetailsResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 401:
+            return "User not authenticated.";
+        case 404:
+            // Custom error, set locally if the search
+            // results don't contain exact symbol match
+            return tr("Symbol not found: %1").arg(m_symbol);
+        default:
+            break;
+        }
+        return errorMessage();
+    }
+
+    QString symbol() const { return m_symbol; }
+
+    QString companyName() const { return m_companyName; }
+
+    QString industry() const { return m_industry; }
+
+public slots:
+    void setSymbol(QString symbol)
+    {
+        if (m_symbol == symbol)
+            return;
+
+        m_symbol = symbol;
+        emit symbolChanged(m_symbol);
+    }
+
+    void setCompanyName(QString companyName)
+    {
+        if (m_companyName == companyName)
+            return;
+
+        m_companyName = companyName;
+        emit companyNameChanged(m_companyName);
+    }
+
+    void setIndustry(QString industry)
+    {
+        if (m_industry == industry)
+            return;
+
+        m_industry = industry;
+        emit industryChanged(m_industry);
+    }
+
+signals:
+    void symbolChanged(QString symbol);
+
+    void companyNameChanged(QString companyName);
+
+    void industryChanged(QString industry);
+
+private:
+    QString m_symbol;
+    QString m_companyName;
+    QString m_industry;
+};
+
 #endif // RESPONSETYPES_H

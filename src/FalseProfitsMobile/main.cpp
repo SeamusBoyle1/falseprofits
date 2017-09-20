@@ -32,6 +32,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<GetUserProfileResponse>("FpResponses", 1, 0, "GetUserProfileResponse");
     qmlRegisterType<GetQuotesResponse>("FpResponses", 1, 0, "GetQuotesResponse");
     qmlRegisterType<SymbolSearchResponse>("FpResponses", 1, 0, "SymbolSearchResponse");
+    qmlRegisterType<GetShareDetailsResponse>("FpResponses", 1, 0, "GetShareDetailsResponse");
 
     qmlRegisterType<FinishNotifier>("com.example.fpx", 1, 0, "FinishNotifier");
     qmlRegisterType<FpSymbolSearchWrapper>("com.example.fpx", 1, 0, "FpSymbolSearchWrapper");

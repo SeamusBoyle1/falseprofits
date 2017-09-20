@@ -55,6 +55,9 @@ public:
     Q_INVOKABLE
     SymbolSearchResponse *symbolSearch(const SymbolSearchQuery &query);
 
+    Q_INVOKABLE
+    GetShareDetailsResponse *getShareDetails(const QString &symbol);
+
     Fpx::AuthenticationState authState() const;
 
     void loadLaunchSettings();
