@@ -56,6 +56,15 @@ public:
     };
     virtual INetworkReply *symbolSearch(const SymbolSearchQuery &query) = 0;
 
+    struct OrderParams
+    {
+        QString symbol;
+        QString side;
+        qint64 nonce{ 0 };
+        int quantity{ 0 };
+    };
+    virtual INetworkReply *sendOrder(const QString &accountId, const OrderParams &args) = 0;
+
 Q_SIGNALS:
     void authTokenChanged();
 };

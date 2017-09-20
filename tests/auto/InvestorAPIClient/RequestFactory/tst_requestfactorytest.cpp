@@ -21,6 +21,7 @@ private Q_SLOTS:
     void createGetUserProfileRequestTest();
     void createGetQuotesRequestTest();
     void createSymbolSearchRequestTest();
+    void createSendOrderRequestTest();
 };
 
 RequestFactoryTest::RequestFactoryTest()
@@ -171,6 +172,35 @@ void RequestFactoryTest::createSymbolSearchRequestTest()
         QVERIFY(respUrlQuery.queryItemValue("pageNumber") == QLatin1String("2"));
         QVERIFY(respUrlQuery.hasQueryItem("pageSize"));
         QVERIFY(respUrlQuery.queryItemValue("pageSize") == QLatin1String("20"));
+    }
+}
+
+void RequestFactoryTest::createSendOrderRequestTest()
+{
+    using namespace bsmi;
+
+    {
+        InvestorAPIClient c(nullptr, QStringLiteral("http://example.com"));
+
+        c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 20), QTime(1, 37)));
+
+        QString accountId("myFirstAccount");
+
+        IInvestorAPIClient::OrderParams args;
+        args.symbol = "BHP";
+        args.side = "Buy";
+        args.quantity = 111;
+        args.nonce = 1505878737000;
+
+        auto resp = c.createSendOrderRequest(accountId, args);
+        QCOMPARE(resp.first.url(),
+                 QUrl(QLatin1String("http://example.com/api/1.0/accounts/myFirstAccount/orders")));
+        QCOMPARE(resp.first.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+        QCOMPARE(resp.first.rawHeader("Content-Type"), QByteArray("application/json"));
+        QCOMPARE(resp.second.value("symbol").toString(), QString(QLatin1String("BHP")));
+        QCOMPARE(resp.second.value("side").toString(), QString(QLatin1String("Buy")));
+        QCOMPARE(resp.second.value("quantity").toInt(), 111);
+        QCOMPARE(resp.second.value("nonce").toDouble(), double(1505878737000));
     }
 }
 

@@ -73,6 +73,13 @@ INetworkReply *InvestorAPIClient::symbolSearch(const SymbolSearchQuery &query)
     return m_requestQueue->get(createSymbolSearchRequest(query));
 }
 
+INetworkReply *InvestorAPIClient::sendOrder(const QString &accountId,
+                                            const IInvestorAPIClient::OrderParams &args)
+{
+    auto r = createSendOrderRequest(accountId, args);
+    return m_requestQueue->post(r.first, r.second);
+}
+
 QPair<QNetworkRequest, QJsonObject>
 InvestorAPIClient::createCreateNewUserRequest(const QHash<UserRecordField, QVariant> &params) const
 {
@@ -141,6 +148,23 @@ QNetworkRequest InvestorAPIClient::createSymbolSearchRequest(const SymbolSearchQ
     url.setQuery(urlQuery);
 
     return makeAuthenticatedRequest(url);
+}
+
+QPair<QNetworkRequest, QJsonObject>
+InvestorAPIClient::createSendOrderRequest(const QString &accountId,
+                                          const IInvestorAPIClient::OrderParams &args)
+{
+    QUrl url(m_apiUrl + QStringLiteral("/api/1.0/accounts/") + accountId
+             + QStringLiteral("/orders"));
+    auto req = makeAuthenticatedRequest(url);
+
+    QJsonObject obj;
+    obj.insert(QStringLiteral("symbol"), args.symbol);
+    obj.insert(QStringLiteral("side"), args.side);
+    obj.insert(QStringLiteral("quantity"), args.quantity);
+    obj.insert(QStringLiteral("nonce"), args.nonce);
+
+    return qMakePair(req, obj);
 }
 
 QNetworkRequest InvestorAPIClient::makeRequest(const QUrl &url) const
