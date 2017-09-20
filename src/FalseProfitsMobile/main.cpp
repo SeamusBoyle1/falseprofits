@@ -3,11 +3,13 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
+#include <FalseProfitsCore/fpaccountslistmodel.h>
 #include <FalseProfitsCore/fpcore.h>
 #include <FalseProfitsCore/responsetypes.h>
 #include <FalseProfitsCore/fpsettings.h>
 #include <FalseProfitsCore/fpsymbolsearchresultsitemmodel.h>
 #include <FalseProfitsCore/fpsymbolsearchwrapper.h>
+#include <FalseProfitsCore/fptradingaccounts.h>
 #include <InvestorAPIClient/iinvestorapiclient.h>
 
 #include <QDateTime>
@@ -39,6 +41,8 @@ int main(int argc, char *argv[])
     qmlRegisterType<FpSymbolSearchWrapper>("com.example.fpx", 1, 0, "FpSymbolSearchWrapper");
     qmlRegisterType<FpSymbolSearchResultsItemModel>("com.example.fpx", 1, 0,
                                                     "FpSymbolSearchResultsItemModel");
+    qmlRegisterType<FpAccountsListModel>("com.example.fpx", 1, 0, "FpAccountsListModel");
+    qmlRegisterType<FpTradingAccounts>("com.example.fpx", 1, 0, "FpTradingAccounts");
 
     qmlRegisterUncreatableMetaObject(Fpx::staticMetaObject, "com.example.fpx", 1, 0, "Fpx",
                                      "Access to enums & flags only");

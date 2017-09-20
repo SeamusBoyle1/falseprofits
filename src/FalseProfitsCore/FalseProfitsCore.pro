@@ -25,8 +25,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     fpsettings.cpp \
     fpcore.cpp \
+    fpaccountslistmodel.cpp \
     fpsymbolsearchresultsitemmodel.cpp \
-    fpsymbolsearchwrapper.cpp
+    fpsymbolsearchwrapper.cpp \
+    fptradingaccounts.cpp
 
 HEADERS += \
     responsetypes.h \
@@ -34,8 +36,10 @@ HEADERS += \
     fpcore.h \
     fpdeclarativetypes.h \
     fpcore_interfaces.h \
+    fpaccountslistmodel.h \
     fpsymbolsearchresultsitemmodel.h \
-    fpsymbolsearchwrapper.h
+    fpsymbolsearchwrapper.h \
+    fptradingaccounts.h
 
 unix {
     target.path = /usr/lib
