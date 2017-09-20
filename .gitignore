@@ -75,3 +75,6 @@ Thumbs.db
 *.dll
 *.exe
 
+# gcov data files
+*.gcno
+*.gcda
