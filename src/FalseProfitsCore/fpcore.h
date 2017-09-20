@@ -61,6 +61,9 @@ public:
     Q_INVOKABLE
     GetShareDetailsResponse *getShareDetails(const QString &symbol);
 
+    Q_INVOKABLE
+    SendOrderResponse *sendOrder(const QString &accountId, const OrderParams &args);
+
     Fpx::AuthenticationState authState() const;
 
     void loadLaunchSettings();

@@ -57,6 +57,44 @@ private:
     int m_pageSize{ -1 };
 };
 
+class OrderParams
+{
+public:
+    enum Side : quint8;
+
+private:
+    Q_GADGET
+    Q_PROPERTY(QString symbol READ symbol WRITE setSymbol)
+    Q_PROPERTY(int quantity READ quantity WRITE setQuantity)
+    Q_PROPERTY(Side side READ side WRITE setSide)
+    Q_PROPERTY(qint64 nonce READ nonce WRITE setNonce)
+public:
+    enum Side : quint8 { BuySide, SellSide };
+    Q_ENUMS(Side)
+
+    QString symbol() const { return m_symbol; }
+
+    void setSymbol(QString symbol) { m_symbol = symbol; }
+
+    int quantity() const { return m_quantity; }
+
+    void setQuantity(int quantity) { m_quantity = quantity; }
+
+    Side side() const { return m_side; }
+
+    void setSide(Side side) { m_side = side; }
+
+    qint64 nonce() const { return m_nonce; }
+
+    void setNonce(qint64 nonce) { m_nonce = nonce; }
+
+private:
+    QString m_symbol;
+    qint64 m_nonce{ 0 };
+    int m_quantity{ 0 };
+    Side m_side{ BuySide };
+};
+
 class JsonUserDetails
 {
     Q_GADGET
@@ -202,6 +240,7 @@ private:
 
 Q_DECLARE_METATYPE(NewUserDetails)
 Q_DECLARE_METATYPE(SymbolSearchQuery)
+Q_DECLARE_METATYPE(OrderParams)
 Q_DECLARE_METATYPE(JsonUserDetails)
 Q_DECLARE_METATYPE(JsonQuotesQuote)
 Q_DECLARE_METATYPE(JsonQuotes)
@@ -217,6 +256,8 @@ public:
     {
         qRegisterMetaType<NewUserDetails>("NewUserDetails");
         qRegisterMetaType<SymbolSearchQuery>("SymbolSearchQuery");
+        qRegisterMetaType<OrderParams>("OrderParams");
+
         qRegisterMetaType<JsonUserDetails>("JsonUserDetails");
         qRegisterMetaType<JsonQuotesQuote>("JsonQuotesQuote");
         qRegisterMetaType<JsonQuotes>("JsonQuotes");
@@ -229,6 +270,9 @@ public:
 
     Q_INVOKABLE
     SymbolSearchQuery makeSymbolSearchQuery() { return SymbolSearchQuery{}; }
+
+    Q_INVOKABLE
+    OrderParams makeOrderParams() { return OrderParams{}; }
 
     Q_INVOKABLE
     JsonUserDetails makeJsonUserDetails(const QByteArray &json)

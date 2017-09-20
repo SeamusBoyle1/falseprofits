@@ -275,6 +275,36 @@ GetShareDetailsResponse *FpCore::getShareDetails(const QString &symbol)
     return resp;
 }
 
+SendOrderResponse *FpCore::sendOrder(const QString &accountId, const OrderParams &args)
+{
+    QPointer<SendOrderResponse> resp(new SendOrderResponse);
+
+    bsmi::IInvestorAPIClient::OrderParams v;
+    v.symbol = args.symbol();
+    v.quantity = args.quantity();
+    v.side = args.side() == OrderParams::SellSide ? QStringLiteral("Sell") : QStringLiteral("Buy");
+    v.nonce = args.nonce();
+
+    auto rep = m_client->sendOrder(accountId, v);
+    connect(rep, &bsmi::INetworkReply::finished, this, [resp, rep, this]() {
+        if (!resp) {
+            rep->deleteLater();
+            return;
+        }
+        resp->setHttpStatusCode(readHttpStatusCode(rep));
+        if (rep->error() == QNetworkReply::NoError) {
+            resp->setPayload(rep->readAll());
+        } else {
+            resp->setError(rep->errorString());
+        }
+
+        rep->deleteLater();
+        resp->setFinished();
+    });
+
+    return resp;
+}
+
 Fpx::AuthenticationState FpCore::authState() const
 {
     return m_authenticationState;

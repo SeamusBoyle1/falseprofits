@@ -253,4 +253,30 @@ private:
     QString m_industry;
 };
 
+class SendOrderResponse : public BaseResponse
+{
+    Q_OBJECT
+public:
+    SendOrderResponse() {}
+    virtual ~SendOrderResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 201:
+            return "Shares successfully bought.";
+        case 400:
+            return "Invalid order.";
+        case 401:
+            return "Authorization failed";
+        case 404:
+            return "Account or share not found";
+        default:
+            break;
+        }
+        return errorMessage();
+    }
+};
+
 #endif // RESPONSETYPES_H
