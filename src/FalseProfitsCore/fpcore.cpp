@@ -7,6 +7,7 @@
 #include <InvestorAPIClient/iinvestorapiclient.h>
 #include <InvestorAPIClient/jsonobjectwrappers.h>
 
+#include <QDateTime>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QNetworkReply>
@@ -34,6 +35,16 @@ QDateTime FpCore::expiry()
 void FpCore::setAccessToken(const QString &accessToken, const QDateTime &expiry)
 {
     m_client->setAuthToken(accessToken, expiry);
+}
+
+qint64 FpCore::getNonce() const
+{
+    auto now = QDateTime::currentMSecsSinceEpoch();
+    while (now <= m_lastNonce) {
+        ++now;
+    }
+    m_lastNonce = now;
+    return now;
 }
 
 NewUserResponse *FpCore::createNewUser(const NewUserDetails &newUser)

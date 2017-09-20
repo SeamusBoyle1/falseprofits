@@ -38,6 +38,9 @@ public:
     void setAccessToken(const QString &accessToken, const QDateTime &expiry);
 
     Q_INVOKABLE
+    qint64 getNonce() const;
+
+    Q_INVOKABLE
     NewUserResponse *createNewUser(const NewUserDetails &newUser);
 
     Q_INVOKABLE
@@ -78,6 +81,7 @@ private:
         Fpx::AuthenticationState::NotAuthenticatedState
     };
     IFpSettings *m_settings;
+    mutable qint64 m_lastNonce{ 0 };
 
     void clearAccessToken();
 
