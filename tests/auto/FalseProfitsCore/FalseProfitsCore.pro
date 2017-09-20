@@ -1,4 +1,5 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
-    FpCore
+    FpCore \
+    JsonResponseMetaTypeWrappers
