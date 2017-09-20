@@ -52,6 +52,9 @@ public:
     Q_INVOKABLE
     GetQuotesResponse *getQuotes(const QStringList &symbols);
 
+    Q_INVOKABLE
+    SymbolSearchResponse *symbolSearch(const SymbolSearchQuery &query);
+
     Fpx::AuthenticationState authState() const;
 
     void loadLaunchSettings();

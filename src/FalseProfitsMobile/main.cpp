@@ -27,6 +27,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<DeleteUserResponse>("FpResponses", 1, 0, "DeleteUserResponse");
     qmlRegisterType<GetUserProfileResponse>("FpResponses", 1, 0, "GetUserProfileResponse");
     qmlRegisterType<GetQuotesResponse>("FpResponses", 1, 0, "GetQuotesResponse");
+    qmlRegisterType<SymbolSearchResponse>("FpResponses", 1, 0, "SymbolSearchResponse");
 
     qmlRegisterUncreatableMetaObject(Fpx::staticMetaObject, "com.example.fpx", 1, 0, "Fpx",
                                      "Access to enums & flags only");

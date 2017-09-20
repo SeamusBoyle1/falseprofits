@@ -180,6 +180,35 @@ GetQuotesResponse *FpCore::getQuotes(const QStringList &symbols)
     return resp;
 }
 
+SymbolSearchResponse *FpCore::symbolSearch(const SymbolSearchQuery &query)
+{
+    QPointer<SymbolSearchResponse> resp(new SymbolSearchResponse);
+
+    bsmi::IInvestorAPIClient::SymbolSearchQuery v;
+    v.searchTerm = query.searchTerm();
+    v.pageNumber = query.pageNumber();
+    v.pageSize = query.pageSize();
+
+    auto rep = m_client->symbolSearch(v);
+    connect(rep, &bsmi::INetworkReply::finished, this, [resp, rep, this]() {
+        if (!resp) {
+            rep->deleteLater();
+            return;
+        }
+        resp->setHttpStatusCode(readHttpStatusCode(rep));
+        if (rep->error() == QNetworkReply::NoError) {
+            resp->setPayload(rep->readAll());
+        } else {
+            resp->setError(rep->errorString());
+        }
+
+        rep->deleteLater();
+        resp->setFinished();
+    });
+
+    return resp;
+}
+
 Fpx::AuthenticationState FpCore::authState() const
 {
     return m_authenticationState;

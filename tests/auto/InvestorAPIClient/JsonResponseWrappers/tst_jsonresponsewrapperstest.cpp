@@ -41,6 +41,7 @@ public:
 
 private Q_SLOTS:
     void userProfileResponseTest();
+    void symbolSearchTest();
 };
 
 JsonResponseWrappersTest::JsonResponseWrappersTest()
@@ -69,6 +70,46 @@ void JsonResponseWrappersTest::userProfileResponseTest()
         QCOMPARE(*parser.displayName(), QString("Seamus"));
         QVERIFY(parser.level());
         QCOMPARE(*parser.level(), QString("Investor"));
+    }
+}
+
+void JsonResponseWrappersTest::symbolSearchTest()
+{
+    using namespace bsmi;
+
+    {
+        QString testFile("symbolSearchBanks5.json");
+        auto doc = readFileContentsAsJson(srcDirFile(testFile));
+        if (doc.isNull()) {
+            QSKIP("Unable to open test file");
+        }
+
+        auto parser = JsonObjectWrappers::SymbolSearchResponse(doc.object());
+
+        QCOMPARE(parser.pageNumber(), 1);
+        QCOMPARE(parser.pageSize(), 5);
+        QCOMPARE(parser.totalPageCount(), 4);
+        QCOMPARE(parser.totalRowCount(), 16);
+
+        auto itemParser = parser.items();
+        QVERIFY(!itemParser.isEmpty());
+        QCOMPARE(itemParser.size(), 5);
+
+        auto foundBEN = false;
+        for (auto i = 0, total = 5; i < total; ++i) {
+            auto e = itemParser.at(i);
+            auto sym = e.symbol();
+            if (sym && *sym == QLatin1String("BEN")) {
+                foundBEN = true;
+                QVERIFY(e.isValid());
+                QVERIFY(e.name());
+                QCOMPARE(*e.name(), QLatin1String("BENDIGO AND ADELAIDE BANK LIMITED"));
+                QVERIFY(e.industry());
+                QCOMPARE(*e.industry(), QLatin1String("Banks"));
+                break;
+            }
+        }
+        QVERIFY(foundBEN);
     }
 }
 

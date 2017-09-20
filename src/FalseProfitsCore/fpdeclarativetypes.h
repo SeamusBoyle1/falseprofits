@@ -32,6 +32,31 @@ private:
     QString m_password;
 };
 
+class SymbolSearchQuery
+{
+    Q_GADGET
+    Q_PROPERTY(QString searchTerm READ searchTerm WRITE setSearchTerm)
+    Q_PROPERTY(int pageNumber READ pageNumber WRITE setPageNumber)
+    Q_PROPERTY(int pageSize READ pageSize WRITE setPageSize)
+public:
+    QString searchTerm() const { return m_searchTerm; }
+
+    void setSearchTerm(QString searchTerm) { m_searchTerm = searchTerm; }
+
+    int pageNumber() const { return m_pageNumber; }
+
+    void setPageNumber(int pageNumber) { m_pageNumber = pageNumber; }
+
+    int pageSize() const { return m_pageSize; }
+
+    void setPageSize(int pageSize) { m_pageSize = pageSize; }
+
+private:
+    QString m_searchTerm;
+    int m_pageNumber{ -1 };
+    int m_pageSize{ -1 };
+};
+
 class JsonUserDetails
 {
     Q_GADGET
@@ -119,10 +144,69 @@ public:
     }
 };
 
+class JsonSymbolSearchResult
+{
+    Q_GADGET
+    Q_PROPERTY(bool isValid READ isValid)
+    Q_PROPERTY(QVariant symbol READ symbol)
+    Q_PROPERTY(QVariant name READ name)
+    Q_PROPERTY(QVariant industry READ industry)
+public:
+    QJsonObject m_d;
+
+    bool isValid() const { return !m_d.isEmpty() && m_d.contains(QLatin1String("symbol")); }
+
+    QVariant symbol() const { return m_d.value(QLatin1String("symbol")).toVariant(); }
+
+    QVariant name() const { return m_d.value(QLatin1String("name")).toVariant(); }
+
+    QVariant industry() const { return m_d.value(QLatin1String("industry")).toVariant(); }
+};
+
+class JsonSymbolSearchResults
+{
+    Q_GADGET
+    Q_PROPERTY(bool isEmpty READ isEmpty)
+    Q_PROPERTY(int size READ size)
+    Q_PROPERTY(int pageNumber READ pageNumber)
+    Q_PROPERTY(int pageSize READ pageSize)
+    Q_PROPERTY(int totalPageCount READ totalPageCount)
+    Q_PROPERTY(int totalRowCount READ totalRowCount)
+public:
+    JsonSymbolSearchResults() {}
+    JsonSymbolSearchResults(QJsonObject o)
+        : m_d{ std::move(o) }
+    {
+        m_items = o.value(QLatin1String("items")).toArray();
+    }
+
+    bool isEmpty() const { return m_items.isEmpty(); }
+
+    int size() const { return m_items.size(); }
+
+    Q_INVOKABLE
+    JsonSymbolSearchResult at(int i) const { return { m_items.at(i).toObject() }; }
+
+    int pageNumber() const { return m_d.value(QLatin1String("pageNumber")).toInt(); }
+
+    int pageSize() const { return m_d.value(QLatin1String("pageSize")).toInt(); }
+
+    int totalPageCount() const { return m_d.value(QLatin1String("totalPageCount")).toInt(); }
+
+    int totalRowCount() const { return m_d.value(QLatin1String("totalRowCount")).toInt(); }
+
+private:
+    QJsonObject m_d;
+    QJsonArray m_items;
+};
+
 Q_DECLARE_METATYPE(NewUserDetails)
+Q_DECLARE_METATYPE(SymbolSearchQuery)
 Q_DECLARE_METATYPE(JsonUserDetails)
 Q_DECLARE_METATYPE(JsonQuotesQuote)
 Q_DECLARE_METATYPE(JsonQuotes)
+Q_DECLARE_METATYPE(JsonSymbolSearchResult)
+Q_DECLARE_METATYPE(JsonSymbolSearchResults)
 
 class FalseProfitsDeclarativeTypes : public QObject
 {
@@ -132,13 +216,19 @@ public:
         : QObject(parent)
     {
         qRegisterMetaType<NewUserDetails>("NewUserDetails");
+        qRegisterMetaType<SymbolSearchQuery>("SymbolSearchQuery");
         qRegisterMetaType<JsonUserDetails>("JsonUserDetails");
         qRegisterMetaType<JsonQuotesQuote>("JsonQuotesQuote");
         qRegisterMetaType<JsonQuotes>("JsonQuotes");
+        qRegisterMetaType<JsonSymbolSearchResult>("JsonSymbolSearchResult");
+        qRegisterMetaType<JsonSymbolSearchResults>("JsonSymbolSearchResults");
     }
 
     Q_INVOKABLE
     NewUserDetails makeNewUserDetails() { return NewUserDetails{}; }
+
+    Q_INVOKABLE
+    SymbolSearchQuery makeSymbolSearchQuery() { return SymbolSearchQuery{}; }
 
     Q_INVOKABLE
     JsonUserDetails makeJsonUserDetails(const QByteArray &json)
@@ -150,6 +240,12 @@ public:
     JsonQuotes makeJsonQuotes(const QByteArray &json)
     {
         return { QJsonDocument::fromJson(json).array() };
+    }
+
+    Q_INVOKABLE
+    JsonSymbolSearchResults makeJsonSymbolSearchResults(const QByteArray &json)
+    {
+        return { QJsonDocument::fromJson(json).object() };
     }
 };
 
