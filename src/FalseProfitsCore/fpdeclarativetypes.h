@@ -95,6 +95,53 @@ private:
     Side m_side{ BuySide };
 };
 
+class JsonUserTradingAccount
+{
+    Q_GADGET
+    Q_PROPERTY(QVariant id READ id)
+    Q_PROPERTY(QVariant name READ name)
+    Q_PROPERTY(QVariant balance READ balance)
+public:
+    QJsonObject m_d;
+
+    QVariant id() const { return m_d.value(QLatin1String("id")).toVariant(); }
+
+    QVariant name() const { return m_d.value(QLatin1String("name")).toVariant(); }
+
+    QVariant balance() const { return m_d.value(QLatin1String("balance")).toVariant(); }
+};
+
+class JsonUserTradingAccounts
+{
+    Q_GADGET
+    Q_PROPERTY(bool isEmpty READ isEmpty)
+    Q_PROPERTY(int size READ size)
+public:
+    QJsonArray m_d;
+
+    bool isEmpty() const { return m_d.isEmpty(); }
+
+    int size() const { return m_d.size(); }
+
+    Q_INVOKABLE
+    JsonUserTradingAccount at(int i) const { return { m_d.at(i).toObject() }; }
+
+    Q_INVOKABLE
+    JsonUserTradingAccount find(const QString &accountId) const
+    {
+        auto const idJsonVal = QJsonValue(accountId);
+        auto it =
+            std::find_if(m_d.constBegin(), m_d.constEnd(), [idJsonVal](const QJsonValue &a) {
+                auto const obj = a.toObject();
+                return obj.value(QLatin1String("id")) == idJsonVal;
+            });
+        if (it != m_d.constEnd()) {
+            return { it->toObject() };
+        }
+        return JsonUserTradingAccount();
+    }
+};
+
 class JsonUserDetails
 {
     Q_GADGET
@@ -102,6 +149,7 @@ class JsonUserDetails
     Q_PROPERTY(QVariant email READ email)
     Q_PROPERTY(QVariant displayName READ displayName)
     Q_PROPERTY(QVariant level READ level)
+    Q_PROPERTY(JsonUserTradingAccounts accounts READ accounts)
 public:
     QJsonObject m_d;
 
@@ -112,6 +160,11 @@ public:
     QVariant displayName() const { return m_d.value(QLatin1String("displayName")).toVariant(); }
 
     QVariant level() const { return m_d.value(QLatin1String("level")).toVariant(); }
+
+    JsonUserTradingAccounts accounts() const
+    {
+        return { m_d.value(QLatin1String("accounts")).toArray() };
+    }
 };
 
 class JsonQuotesQuote
@@ -241,6 +294,8 @@ private:
 Q_DECLARE_METATYPE(NewUserDetails)
 Q_DECLARE_METATYPE(SymbolSearchQuery)
 Q_DECLARE_METATYPE(OrderParams)
+Q_DECLARE_METATYPE(JsonUserTradingAccount)
+Q_DECLARE_METATYPE(JsonUserTradingAccounts)
 Q_DECLARE_METATYPE(JsonUserDetails)
 Q_DECLARE_METATYPE(JsonQuotesQuote)
 Q_DECLARE_METATYPE(JsonQuotes)
@@ -258,6 +313,8 @@ public:
         qRegisterMetaType<SymbolSearchQuery>("SymbolSearchQuery");
         qRegisterMetaType<OrderParams>("OrderParams");
 
+        qRegisterMetaType<JsonUserTradingAccount>("JsonUserTradingAccount");
+        qRegisterMetaType<JsonUserTradingAccounts>("JsonUserTradingAccounts");
         qRegisterMetaType<JsonUserDetails>("JsonUserDetails");
         qRegisterMetaType<JsonQuotesQuote>("JsonQuotesQuote");
         qRegisterMetaType<JsonQuotes>("JsonQuotes");

@@ -8,6 +8,8 @@
 
 #include <boost/optional.hpp>
 
+#include <limits>
+
 namespace bsmi {
 
 namespace JsonObjectWrappers {
@@ -19,6 +21,15 @@ inline boost::optional<QString> getOptionalString(const QJsonObject &o, const St
 {
     auto v = o.value(key);
     return boost::make_optional(v.isString(), v.toString());
+}
+
+template <typename String>
+inline boost::optional<double>
+getOptionalDouble(const QJsonObject &o, const String &key,
+                  double magic = std::numeric_limits<double>::quiet_NaN())
+{
+    auto v = o.value(key).toDouble(magic);
+    return boost::make_optional(!qIsNaN(v), v);
 }
 
 template <typename String>
@@ -46,6 +57,36 @@ public:
     }
 };
 
+class TradingAccount
+{
+public:
+    QJsonObject d;
+
+    boost::optional<QString> id() const { return util::getOptionalString(d, QLatin1String("id")); }
+
+    boost::optional<QString> name() const
+    {
+        return util::getOptionalString(d, QLatin1String("name"));
+    }
+
+    boost::optional<double> balance() const
+    {
+        return util::getOptionalDouble(d, QLatin1String("balance"));
+    }
+};
+
+class TradingAccounts
+{
+public:
+    QJsonArray d;
+
+    bool isEmpty() const { return d.isEmpty(); }
+
+    int size() const { return d.size(); }
+
+    TradingAccount at(int i) const { return { d.at(i).toObject() }; }
+};
+
 class UserProfileResponse
 {
 public:
@@ -66,6 +107,11 @@ public:
     boost::optional<QString> level() const
     {
         return util::getOptionalString(d, QLatin1String("level"));
+    }
+
+    TradingAccounts accounts() const
+    {
+        return { d.value(QLatin1String("accounts")).toArray() };
     }
 };
 
