@@ -1,5 +1,6 @@
 /android/gradle.properties
 /android/local.properties
+/doc/coverage/*
 
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------
