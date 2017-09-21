@@ -172,6 +172,22 @@ public:
     }
 };
 
+class InvestorAPIClientDeleteUserMock : public InvestorAPIClientMock
+{
+    Q_OBJECT
+public:
+    InvestorAPIClientDeleteUserMock() {}
+
+    NetworkReply *m_nextDeleteReply{ nullptr };
+    bool m_deleteUserWasCalled{ false };
+
+    INetworkReply *deleteUser() override
+    {
+        m_deleteUserWasCalled = true;
+        return m_nextDeleteReply;
+    }
+};
+
 static bsmi::IInvestorAPIClient *createMockFpCore(QObject *parent = 0)
 {
     return new InvestorAPIClientMock(parent);
@@ -188,6 +204,7 @@ private Q_SLOTS:
     void setAccessTokenTest();
     void createNewUserTest();
     void authenticateTest();
+    void deleteUserTest();
     void signOutTest();
 };
 
@@ -313,6 +330,45 @@ void FpCoreTest::authenticateTest()
         // On a successful authenticate response the auth token and expiry are persisted
         // TODO(seamus): Test expires is saved in settings
         QCOMPARE(fpCoreSettings->m_token, QString("i_am_very_token"));
+    }
+}
+
+void FpCoreTest::deleteUserTest()
+{
+    {
+        auto client = new InvestorAPIClientDeleteUserMock;
+        auto fpCoreSettings = new MockFpSettings;
+        auto fpCore = new FpCore(client, fpCoreSettings);
+        client->setParent(fpCore);
+
+        // in test token/expiry are in the saved settings, but loaded manually
+        fpCoreSettings->m_token = "i_am_a_valid_token";
+        fpCoreSettings->m_expiryDate = QDateTime::currentDateTimeUtc().addDays(7);
+
+        // mock success response
+        auto netAuthRep = new QNetworkReplyMock;
+        client->m_nextDeleteReply = new bsmi::INetworkReply(netAuthRep);
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::NotAuthenticatedState);
+        fpCore->setAccessToken(fpCoreSettings->m_token, fpCoreSettings->m_expiryDate);
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::AuthenticatedState);
+
+        auto resp = fpCore->deleteUser();
+        QVERIFY(resp);
+
+        // Test bsmi::IInvestorAPIClient::deleteUser was called
+        QVERIFY(client->m_deleteUserWasCalled);
+
+        netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 204);
+        client->m_nextDeleteReply->setFinished();
+
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::NotAuthenticatedState);
+        QVERIFY(fpCore->authToken().isEmpty());
+        QVERIFY(!fpCore->expiry().isValid());
+
+        // On a successful delete response the auth token and expiry
+        // are removed from settings
+        QVERIFY(fpCoreSettings->m_token.isEmpty());
+        QVERIFY(!fpCoreSettings->m_expiryDate.isValid());
     }
 }
 
