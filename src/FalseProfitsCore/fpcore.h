@@ -8,6 +8,8 @@
 #include "fpdeclarativetypes.h"
 #include "responsetypes.h" // TODO(seamus): Replace with forward decl
 
+#include <QMap>
+
 namespace bsmi {
 class IInvestorAPIClient;
 class INetworkReply;
@@ -68,6 +70,9 @@ public:
 
     void loadLaunchSettings();
 
+    enum CoreAttribute { AutoAuthenticateNewUserAttribute };
+    void setCoreAttribute(CoreAttribute a, QVariant v) { m_coreAttributes[a] = v; }
+
 Q_SIGNALS:
     void launchSettingsLoaded();
     void authStateChanged(Fpx::AuthenticationState);
@@ -84,6 +89,7 @@ private:
         Fpx::AuthenticationState::NotAuthenticatedState
     };
     IFpSettings *m_settings;
+    QMap<CoreAttribute, QVariant> m_coreAttributes;
     mutable qint64 m_lastNonce{ 0 };
 
     void clearAccessToken();

@@ -18,6 +18,8 @@ FpCore::FpCore(bsmi::IInvestorAPIClient *client, IFpSettings *settings, QObject 
     , m_client{ client }
     , m_settings{ settings }
 {
+    m_coreAttributes[AutoAuthenticateNewUserAttribute] = true;
+
     connect(m_client, &bsmi::IInvestorAPIClient::authTokenChanged, this,
             &FpCore::onClientAuthenticated);
 }
@@ -69,7 +71,9 @@ NewUserResponse *FpCore::createNewUser(const NewUserDetails &newUser)
             resp->setPayload(rep->readAll());
 
             // auto sign in as user that was just created
-            signInAsNewUser(newUser);
+            if (m_coreAttributes[AutoAuthenticateNewUserAttribute].toBool()) {
+                signInAsNewUser(newUser);
+            }
         } else {
             resp->setError(rep->errorString());
         }
