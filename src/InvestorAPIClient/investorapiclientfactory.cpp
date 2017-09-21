@@ -8,7 +8,7 @@
 
 namespace bsmi {
 
-IInvestorAPIClient *InvestorAPIClientFactory::create(QObject *parent)
+IInvestorAPIClient *InvestorAPIClientFactory::create(const QString &apiUrl, QObject *parent)
 {
     auto nam = new QNetworkAccessManager;
     // investor-api service expects redirects available
@@ -17,8 +17,7 @@ IInvestorAPIClient *InvestorAPIClientFactory::create(QObject *parent)
     auto requestQueue = new RequestQueue(nam);
     nam->setParent(requestQueue);
 
-    return new InvestorAPIClient(requestQueue, QStringLiteral("https://investor-api.herokuapp.com"),
-                                 parent);
+    return new InvestorAPIClient(requestQueue, apiUrl, parent);
 }
 
 } // namespace bsmi

@@ -150,7 +150,7 @@ public:
 class InvestorAPIClientFactory
 {
 public:
-    static IInvestorAPIClient *create(QObject *parent = nullptr);
+    static IInvestorAPIClient *create(const QString &apiUrl, QObject *parent = nullptr);
 };
 
 } // namespace bsmi

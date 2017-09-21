@@ -58,7 +58,8 @@ int main(int argc, char *argv[])
     QSettings::setDefaultFormat(QSettings::IniFormat);
 #endif
 
-    auto client = bsmi::InvestorAPIClientFactory::create();
+    auto client = bsmi::InvestorAPIClientFactory::create(
+        QStringLiteral("https://investor-api.herokuapp.com"));
     FpSettings fpCoreSettings;
     FpCore fpCore(client, &fpCoreSettings);
     client->setParent(&fpCore);
