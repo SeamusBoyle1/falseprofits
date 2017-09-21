@@ -120,6 +120,7 @@ public:
 
 private Q_SLOTS:
     void setAccessTokenTest();
+    void signOutTest();
 };
 
 FpCoreTest::FpCoreTest()
@@ -174,6 +175,47 @@ void FpCoreTest::setAccessTokenTest()
         signalArgs = spyAuthStateChanged.takeFirst();
         QCOMPARE(signalArgs.at(0).value<Fpx::AuthenticationState>(),
                  Fpx::AuthenticationState::NotAuthenticatedState);
+    }
+}
+
+void FpCoreTest::signOutTest()
+{
+    {
+        auto client = createMockFpCore();
+        auto fpCoreSettings = new MockFpSettings;
+        auto fpCore = new FpCore(client, fpCoreSettings);
+        client->setParent(fpCore);
+
+        QVERIFY(fpCore->authToken().isEmpty());
+        QVERIFY(!fpCore->expiry().isValid());
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::NotAuthenticatedState);
+
+        auto expiryDate = QDateTime::currentDateTime().addDays(7);
+        fpCore->setAccessToken("i_am_a_valid_token", expiryDate);
+
+        // Need to manually store token/expiry in settings as
+        // it is only automatically "persisted" on a a success
+        // response from POST /api/1.0/token
+        fpCoreSettings->m_token = "i_am_a_valid_token";
+        fpCoreSettings->m_expiryDate = expiryDate;
+
+        QVERIFY(!fpCore->authToken().isEmpty());
+        QVERIFY(fpCore->expiry().isValid());
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::AuthenticatedState);
+
+        // actually signout
+        // should emit authStateChanged
+        QSignalSpy spyAuthStateChanged(fpCore, &FpCore::authStateChanged);
+        fpCore->signOut();
+
+        QCOMPARE(spyAuthStateChanged.count(), 1);
+        auto signalArgs = spyAuthStateChanged.takeFirst();
+        QCOMPARE(signalArgs.at(0).value<Fpx::AuthenticationState>(),
+                 Fpx::AuthenticationState::NotAuthenticatedState);
+
+        QVERIFY(fpCore->authToken().isEmpty());
+        QVERIFY(!fpCore->expiry().isValid());
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::NotAuthenticatedState);
     }
 }
 
