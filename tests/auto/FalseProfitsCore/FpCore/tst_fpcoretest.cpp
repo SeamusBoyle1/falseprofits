@@ -43,6 +43,7 @@ class InvestorAPIClientMock : public bsmi::IInvestorAPIClient
     Q_OBJECT
 public:
     using INetworkReply = bsmi::INetworkReply;
+    using NetworkReply = INetworkReply;
 
     explicit InvestorAPIClientMock(QObject *parent = 0) : bsmi::IInvestorAPIClient(parent) {}
 
@@ -106,6 +107,53 @@ public:
     }
 };
 
+class QNetworkReplyMock : public QNetworkReply
+{
+    Q_OBJECT
+public:
+    QNetworkReplyMock() { setOpenMode(ReadOnly); }
+
+    qint64 m_readUpTo{ 0 };
+    QByteArray m_payload;
+
+    void overrideAttribute(QNetworkRequest::Attribute code, const QVariant &value)
+    {
+        setAttribute(code, value);
+    }
+
+    // QIODevice interface
+protected:
+    qint64 readData(char *data, qint64 maxlen) override
+    {
+        // TODO(seamus): This needs its own test
+        auto len = qMin(qint64(m_payload.size()) - m_readUpTo, maxlen);
+        Q_ASSERT(len >= 0);
+        qstrncpy(data, m_payload.constData() + m_readUpTo, uint(len) + 1);
+        m_readUpTo += len;
+        return len;
+    }
+
+    // QNetworkReply interface
+public slots:
+    void abort() override {}
+};
+
+class InvestorAPIClientCreateUserMock : public InvestorAPIClientMock
+{
+    Q_OBJECT
+public:
+    InvestorAPIClientCreateUserMock() {}
+
+    QHash<bsmi::UserRecordField, QVariant> m_lastParams;
+    NetworkReply *m_nextCreateUserReply{ nullptr };
+
+    INetworkReply *createNewUser(const QHash<bsmi::UserRecordField, QVariant> &params) override
+    {
+        m_lastParams = params;
+        return m_nextCreateUserReply;
+    }
+};
+
 static bsmi::IInvestorAPIClient *createMockFpCore(QObject *parent = 0)
 {
     return new InvestorAPIClientMock(parent);
@@ -120,6 +168,7 @@ public:
 
 private Q_SLOTS:
     void setAccessTokenTest();
+    void createNewUserTest();
     void signOutTest();
 };
 
@@ -175,6 +224,37 @@ void FpCoreTest::setAccessTokenTest()
         signalArgs = spyAuthStateChanged.takeFirst();
         QCOMPARE(signalArgs.at(0).value<Fpx::AuthenticationState>(),
                  Fpx::AuthenticationState::NotAuthenticatedState);
+    }
+}
+
+void FpCoreTest::createNewUserTest()
+{
+    {
+        auto client = new InvestorAPIClientCreateUserMock;
+        auto fpCoreSettings = new MockFpSettings;
+        auto fpCore = new FpCore(client, fpCoreSettings);
+        client->setParent(fpCore);
+        fpCore->setCoreAttribute(FpCore::CoreAttribute::AutoAuthenticateNewUserAttribute, false);
+
+        NewUserDetails newUserA;
+        newUserA.setDisplayName("Seamus");
+        newUserA.setEmail("seamus@example.com");
+        newUserA.setPassword("p@ssword42");
+        // mock success response
+        auto netCreateRep = new QNetworkReplyMock;
+        client->m_nextCreateUserReply = new bsmi::INetworkReply(netCreateRep);
+        auto resp = fpCore->createNewUser(newUserA);
+        QVERIFY(resp);
+
+        // Test bsmi::IInvestorAPIClient got args
+        auto receivedNewUserA = client->m_lastParams;
+        QCOMPARE(receivedNewUserA[bsmi::UserRecordField::DisplayName],
+                 QVariant(newUserA.displayName()));
+        QCOMPARE(receivedNewUserA[bsmi::UserRecordField::Email], QVariant(newUserA.email()));
+        QCOMPARE(receivedNewUserA[bsmi::UserRecordField::Password], QVariant(newUserA.password()));
+
+        netCreateRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 201);
+        client->m_nextCreateUserReply->setFinished();
     }
 }
 
