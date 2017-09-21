@@ -154,6 +154,24 @@ public:
     }
 };
 
+class InvestorAPIClientAuthenticateMock : public InvestorAPIClientMock
+{
+    Q_OBJECT
+public:
+    InvestorAPIClientAuthenticateMock() {}
+
+    QString m_email;
+    QString m_password;
+    NetworkReply *m_nextAuthReply{ nullptr };
+
+    INetworkReply *authenticate(const QString &email, const QString &password) override
+    {
+        m_email = email;
+        m_password = password;
+        return m_nextAuthReply;
+    }
+};
+
 static bsmi::IInvestorAPIClient *createMockFpCore(QObject *parent = 0)
 {
     return new InvestorAPIClientMock(parent);
@@ -169,6 +187,7 @@ public:
 private Q_SLOTS:
     void setAccessTokenTest();
     void createNewUserTest();
+    void authenticateTest();
     void signOutTest();
 };
 
@@ -255,6 +274,45 @@ void FpCoreTest::createNewUserTest()
 
         netCreateRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 201);
         client->m_nextCreateUserReply->setFinished();
+    }
+}
+
+void FpCoreTest::authenticateTest()
+{
+    {
+        auto client = new InvestorAPIClientAuthenticateMock;
+        auto fpCoreSettings = new MockFpSettings;
+        auto fpCore = new FpCore(client, fpCoreSettings);
+        client->setParent(fpCore);
+
+        const QString email("seamus@example.com");
+        const QString password("p@ssword42");
+
+        // mock success response
+        auto netAuthRep = new QNetworkReplyMock;
+        client->m_nextAuthReply = new bsmi::INetworkReply(netAuthRep);
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::NotAuthenticatedState);
+        auto resp = fpCore->authenticate(email, password);
+        QVERIFY(resp);
+
+        // Test bsmi::IInvestorAPIClient got args
+        QCOMPARE(client->m_email, email);
+        QCOMPARE(client->m_password, password);
+
+        netAuthRep->m_payload = "{"
+                                "\"accessToken\": \"i_am_very_token\","
+                                "\"expires\": 604800"
+                                "}";
+        netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
+        client->m_nextAuthReply->setFinished();
+
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::AuthenticatedState);
+        // TODO(seamus): Test expires is set
+        QCOMPARE(fpCore->authToken(), QString("i_am_very_token"));
+
+        // On a successful authenticate response the auth token and expiry are persisted
+        // TODO(seamus): Test expires is saved in settings
+        QCOMPARE(fpCoreSettings->m_token, QString("i_am_very_token"));
     }
 }
 
