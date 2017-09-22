@@ -14,4 +14,5 @@ install:
 
 build_script:
   - qmake -r "BOOST_ROOT=C:\Libraries\boost_1_62_0"
-  - nmake --build . --config "Debug"
+  - nmake
+  - nmake check
