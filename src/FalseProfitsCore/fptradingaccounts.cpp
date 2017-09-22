@@ -2,6 +2,7 @@
 
 #include "fptradingaccounts.h"
 
+#include "finishnotifier.h"
 #include "fpaccountslistmodel.h"
 #include "fpcore.h"
 
@@ -9,6 +10,7 @@
 
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QPointer>
 
 FpTradingAccounts::FpTradingAccounts(QObject *parent)
     : QObject(parent)
@@ -16,15 +18,22 @@ FpTradingAccounts::FpTradingAccounts(QObject *parent)
 {
 }
 
-void FpTradingAccounts::updateAccounts()
+FinishNotifier *FpTradingAccounts::updateAccounts()
 {
     Q_ASSERT(m_fpCore);
 
+    QPointer<FinishNotifier> notifier(new FinishNotifier);
+
     auto resp = m_fpCore->getUserProfile();
-    connect(resp, &GetUserProfileResponse::finished, this, [resp, this] {
+    connect(resp, &GetUserProfileResponse::finished, this, [notifier, resp, this] {
         onResponseReceived(resp, true);
         resp->deleteLater();
+        if (notifier) {
+            notifier->setFinished();
+        }
     });
+
+    return notifier;
 }
 
 void FpTradingAccounts::onResponseReceived(GetUserProfileResponse *reply, bool updateNotReplace)

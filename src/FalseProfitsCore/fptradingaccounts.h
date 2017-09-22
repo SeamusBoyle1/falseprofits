@@ -5,6 +5,7 @@
 
 #include <QObject>
 
+class FinishNotifier;
 class FpCore;
 class FpAccountsListModel;
 class GetUserProfileResponse;
@@ -22,10 +23,12 @@ public:
 
     FpAccountsListModel *model() const { return m_model; }
 
+    Q_INVOKABLE
+    FinishNotifier *updateAccounts();
+
 signals:
 
 public slots:
-    void updateAccounts();
 
 private:
     void onResponseReceived(GetUserProfileResponse *reply, bool updateNotReplace);

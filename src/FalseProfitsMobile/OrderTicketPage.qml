@@ -15,7 +15,7 @@ OrderTicketPageForm {
 
     Component.onCompleted: {
         accountsComboBox.model = myTradingAccounts.model
-        myTradingAccounts.updateAccounts()
+        updateAccounts()
     }
 
     placeOrderButton.onClicked: {
@@ -86,5 +86,16 @@ OrderTicketPageForm {
         if (busyIndicatorVisibility == 0) {
             busyIndicator.visible = false
         }
+    }
+
+    function updateAccounts() {
+        var notifier = myTradingAccounts.updateAccounts()
+        incrementBusyIndicatorVisibility()
+        notifier.onFinished.connect(function() {
+            decrementBusyIndicatorVisibility()
+            if (accountsComboBox.currentIndex == -1) {
+                accountsComboBox.incrementCurrentIndex()
+            }
+        })
     }
 }
