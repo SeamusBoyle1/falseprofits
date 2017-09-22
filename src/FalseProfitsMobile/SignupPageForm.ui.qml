@@ -19,6 +19,7 @@ Pane {
             id: displayNameField
             Layout.fillWidth: true
             placeholderText: qsTr("Name")
+            selectByMouse: true
             validator: RegExpValidator {
                 regExp: /^.{5,30}$/
             }
@@ -41,6 +42,7 @@ Pane {
             id: emailField
             Layout.fillWidth: true
             placeholderText: qsTr("Email address")
+            selectByMouse: true
             maximumLength: 100
             validator: RegExpValidator {
                 // RegExp source: https://stackoverflow.com/a/16148388
@@ -66,6 +68,7 @@ Pane {
             id: passwordField
             Layout.fillWidth: true
             placeholderText: qsTr("Password")
+            selectByMouse: true
             echoMode: TextInput.PasswordEchoOnEdit
             validator: RegExpValidator {
                 regExp: /^.{8,30}$/

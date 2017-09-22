@@ -18,6 +18,7 @@ Pane {
             id: emailField
             Layout.fillWidth: true
             placeholderText: qsTr("Email address")
+            selectByMouse: true
             inputMethodHints: Qt.ImhEmailCharactersOnly
             validator: RegExpValidator {
                 // RegExp source: https://stackoverflow.com/a/16148388
@@ -35,6 +36,7 @@ Pane {
             id: passwordField
             Layout.fillWidth: true
             placeholderText: qsTr("Password")
+            selectByMouse: true
             echoMode: TextInput.PasswordEchoOnEdit
 
             Label {
