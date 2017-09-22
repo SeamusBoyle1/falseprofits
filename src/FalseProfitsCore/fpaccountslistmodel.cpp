@@ -26,6 +26,13 @@ void FpAccountsListModel::updateOrRemoveData(QVector<TradingAccountItem> data)
     resetWithData(data);
 }
 
+QString FpAccountsListModel::getAccountId(int row) const
+{
+    if (row >= m_rows.size() || row < 0)
+        return QString();
+    return m_rows.at(row).id;
+}
+
 int FpAccountsListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)

@@ -31,6 +31,9 @@ public:
 
     void updateOrRemoveData(QVector<TradingAccountItem> data);
 
+    Q_INVOKABLE
+    QString getAccountId(int row) const;
+
 signals:
 
 public slots:
