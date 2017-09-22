@@ -3,6 +3,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
+#include <FalseProfitsCore/finishnotifier.h>
 #include <FalseProfitsCore/fpaccountslistmodel.h>
 #include <FalseProfitsCore/fpcore.h>
 #include <FalseProfitsCore/fpdeclarativetypes.h>

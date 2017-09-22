@@ -2,6 +2,7 @@
 
 #include "fpsymbolsearchwrapper.h"
 
+#include "finishnotifier.h"
 #include "fpsymbolsearchresultsitemmodel.h"
 #include "fpcore.h"
 

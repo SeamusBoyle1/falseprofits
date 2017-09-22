@@ -32,6 +32,7 @@ SOURCES += \
 
 HEADERS += \
     responsetypes.h \
+    finishnotifier.h \
     fpsettings.h \
     fpcore.h \
     fpdeclarativetypes.h \
