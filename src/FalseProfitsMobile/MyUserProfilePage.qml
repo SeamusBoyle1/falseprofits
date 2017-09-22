@@ -14,7 +14,6 @@ MyUserProfilePageForm {
                 busyIndicator.visible = false
                 if (!userProfileResp.hasError()) {
                     var userDetailsDat = fpType.makeJsonUserDetails(userProfileResp.payload())
-                    userDetails.userIdText = userDetailsDat.id
                     userDetails.userEmailText = userDetailsDat.email
                     userDetails.userDisplayNameText = userDetailsDat.displayName
                     userDetails.userLevelText = userDetailsDat.level
@@ -87,7 +86,6 @@ MyUserProfilePageForm {
 
     function clearUserProfileDisplay()
     {
-        userDetails.userIdText = ""
         userDetails.userEmailText = ""
         userDetails.userDisplayNameText = ""
         userDetails.userLevelText = ""
