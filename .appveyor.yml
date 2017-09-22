@@ -10,8 +10,10 @@ clone_folder: c:\projects\source
 
 install:
   - set QTDIR=C:\Qt\5.9.1\msvc2017_64
+  - set PATH=%PATH%;%QTDIR%\bin
 
 build_script:
   - qmake -r "BOOST_ROOT=C:\Libraries\boost_1_62_0"
-  - cmake --build .
+  - cmake --build . --config "Debug"
+
 
