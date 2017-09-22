@@ -74,6 +74,7 @@ Page {
                     id: quantityField
                     Layout.fillWidth: true
                     selectByMouse: true
+                    inputMethodHints: Qt.ImhDigitsOnly
                     validator: IntValidator {
                         bottom: 0
                     }
