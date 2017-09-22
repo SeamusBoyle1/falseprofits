@@ -220,6 +220,22 @@ public:
     }
 };
 
+class InvestorAPIClientSymbolSearchMock : public InvestorAPIClientMock
+{
+    Q_OBJECT
+public:
+    InvestorAPIClientSymbolSearchMock() {}
+
+    NetworkReply *m_nextSearchReply{ nullptr };
+    SymbolSearchQuery m_query;
+
+    INetworkReply *symbolSearch(const SymbolSearchQuery &query) override
+    {
+        m_query = query;
+        return m_nextSearchReply;
+    }
+};
+
 static bsmi::IInvestorAPIClient *createMockFpCore(QObject *parent = 0)
 {
     return new InvestorAPIClientMock(parent);
@@ -239,6 +255,7 @@ private Q_SLOTS:
     void deleteUserTest();
     void getUserProfileTest();
     void getQuotesTest();
+    void symbolSearchTest();
     void signOutTest();
 };
 
@@ -485,6 +502,56 @@ void FpCoreTest::getQuotesTest()
                                 "]";
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextQuotesReply->setFinished();
+
+        QVERIFY(!netAuthRep->m_payload.isEmpty());
+        QCOMPARE(QJsonDocument::fromJson(resp->payload()),
+                 QJsonDocument::fromJson(netAuthRep->m_payload));
+    }
+}
+
+void FpCoreTest::symbolSearchTest()
+{
+    {
+        auto client = new InvestorAPIClientSymbolSearchMock;
+        auto fpCoreSettings = new MockFpSettings;
+        auto fpCore = new FpCore(client, fpCoreSettings);
+        client->setParent(fpCore);
+
+        SymbolSearchQuery queryA;
+        queryA.setSearchTerm("Hello");
+        queryA.setPageSize(20);
+        queryA.setPageNumber(2);
+
+        // mock success response
+        auto netAuthRep = new QNetworkReplyMock;
+        client->m_nextSearchReply = new bsmi::INetworkReply(netAuthRep);
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::NotAuthenticatedState);
+        fpCore->setAccessToken("i_am_very_token", QDateTime::currentDateTimeUtc().addDays(7));
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::AuthenticatedState);
+
+        auto resp = fpCore->symbolSearch(queryA);
+        QVERIFY(resp);
+
+        // Test bsmi::IInvestorAPIClient got args
+        QCOMPARE(client->m_query.searchTerm, queryA.searchTerm());
+        QCOMPARE(client->m_query.pageSize, queryA.pageSize());
+        QCOMPARE(client->m_query.pageNumber, queryA.pageNumber());
+
+        netAuthRep->m_payload = "{"
+                                "  \"items\": ["
+                                "    {"
+                                "      \"industry\": \"string\","
+                                "      \"symbol\": \"string\","
+                                "      \"name\": \"string\""
+                                "    }"
+                                "  ],"
+                                "  \"pageNumber\": 0,"
+                                "  \"pageSize\": 0,"
+                                "  \"totalPageCount\": 0,"
+                                "  \"totalRowCount\": 0"
+                                "}";
+        netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
+        client->m_nextSearchReply->setFinished();
 
         QVERIFY(!netAuthRep->m_payload.isEmpty());
         QCOMPARE(QJsonDocument::fromJson(resp->payload()),
