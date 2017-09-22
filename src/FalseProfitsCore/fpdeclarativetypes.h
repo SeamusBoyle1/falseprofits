@@ -60,7 +60,8 @@ private:
 class OrderParams
 {
 public:
-    enum Side : quint8;
+    enum class Side { BuySide, SellSide };
+    Q_ENUM(Side)
 
 private:
     Q_GADGET
@@ -69,8 +70,6 @@ private:
     Q_PROPERTY(Side side READ side WRITE setSide)
     Q_PROPERTY(qint64 nonce READ nonce WRITE setNonce)
 public:
-    enum Side : quint8 { BuySide, SellSide };
-    Q_ENUMS(Side)
 
     QString symbol() const { return m_symbol; }
 
@@ -92,7 +91,7 @@ private:
     QString m_symbol;
     qint64 m_nonce{ 0 };
     int m_quantity{ 0 };
-    Side m_side{ BuySide };
+    Side m_side{ Side::BuySide };
 };
 
 class JsonUserTradingAccount
@@ -312,6 +311,7 @@ public:
         qRegisterMetaType<NewUserDetails>("NewUserDetails");
         qRegisterMetaType<SymbolSearchQuery>("SymbolSearchQuery");
         qRegisterMetaType<OrderParams>("OrderParams");
+        qRegisterMetaType<OrderParams::Side>("OrderParams::Side");
 
         qRegisterMetaType<JsonUserTradingAccount>("JsonUserTradingAccount");
         qRegisterMetaType<JsonUserTradingAccounts>("JsonUserTradingAccounts");

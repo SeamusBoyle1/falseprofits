@@ -7,7 +7,6 @@ Pane {
     height: 400
     property alias busyIndicator: busyIndicator
     property alias signInPageButton: signInPageButton
-    property alias signupStatusField: signupStatusField
     property alias signupButton: signupButton
     property alias passwordField: passwordField
     property alias emailField: emailField
@@ -20,6 +19,7 @@ Pane {
             id: displayNameField
             Layout.fillWidth: true
             placeholderText: qsTr("Name")
+            selectByMouse: true
             validator: RegExpValidator {
                 regExp: /^.{5,30}$/
             }
@@ -42,6 +42,7 @@ Pane {
             id: emailField
             Layout.fillWidth: true
             placeholderText: qsTr("Email address")
+            selectByMouse: true
             maximumLength: 100
             validator: RegExpValidator {
                 // RegExp source: https://stackoverflow.com/a/16148388
@@ -67,6 +68,7 @@ Pane {
             id: passwordField
             Layout.fillWidth: true
             placeholderText: qsTr("Password")
+            selectByMouse: true
             echoMode: TextInput.PasswordEchoOnEdit
             validator: RegExpValidator {
                 regExp: /^.{8,30}$/
@@ -101,15 +103,6 @@ Pane {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             flat: true
-        }
-
-        Label {
-            text: qsTr("sign up status:")
-        }
-
-        Label {
-            id: signupStatusField
-            text: qsTr("no status yet")
         }
     }
 

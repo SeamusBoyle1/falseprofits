@@ -14,7 +14,7 @@ ApplicationWindow {
     StackView {
         id: appNavStack
         anchors.fill: parent
-        initialItem: MyUserProfileNavigation{}
+        initialItem: QuotesNavigation{}
     }
 
     Drawer {
@@ -49,6 +49,7 @@ ApplicationWindow {
             }
 
             model: ListModel {
+                ListElement{ title: qsTr("Quotes"); source: "qrc:/QuotesNavigation.qml" }
                 ListElement{ title: qsTr("My Profile"); source: "qrc:/MyUserProfileNavigation.qml" }
                 ListElement{ title: qsTr("Sign Out"); source: "qrc:/SignOutNavigation.qml" }
             }
@@ -81,7 +82,7 @@ ApplicationWindow {
             } else {
                 listView.currentIndex = 0
                 appNavStack.clear() // limit depth
-                appNavStack.push("qrc:/MyUserProfileNavigation.qml")
+                appNavStack.push("qrc:/QuotesNavigation.qml")
             }
         }
     }

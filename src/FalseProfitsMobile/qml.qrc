@@ -14,5 +14,13 @@
         <file>SignOutNavigation.qml</file>
         <file>MyUserProfilePage.qml</file>
         <file>MyUserProfilePageForm.ui.qml</file>
+        <file>QuotesNavigation.qml</file>
+        <file>SymbolSearchListView.qml</file>
+        <file>SymbolSearchPage.qml</file>
+        <file>SymbolSearchPageForm.ui.qml</file>
+        <file>DetailedQuotePage.qml</file>
+        <file>DetailedQuotePageForm.ui.qml</file>
+        <file>OrderTicketPage.qml</file>
+        <file>OrderTicketPageForm.ui.qml</file>
     </qresource>
 </RCC>

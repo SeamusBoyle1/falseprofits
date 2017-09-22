@@ -7,7 +7,6 @@ Page {
     width: 400
     height: 400
     property alias deleteMyAccountButton: deleteMyAccountButton
-    property alias getUserDetailsButton: getUserDetailsButton
     property alias userDetails: userDetails
     property alias busyIndicator: busyIndicator
 
@@ -22,20 +21,20 @@ Page {
             id: mlay
             width: page.width
 
-            Button {
-                id: getUserDetailsButton
-                text: qsTr("Get my details")
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            Item {
+                Layout.preferredWidth: 20
+                Layout.preferredHeight: 20
             }
 
-            GroupBox {
-                title: qsTr("Your user details")
+            MyUserProfile {
+                id: userDetails
                 Layout.fillWidth: true
+                Layout.margins: 6
+            }
 
-                MyUserProfile {
-                    id: userDetails
-                    anchors.fill: parent
-                }
+            Item {
+                Layout.preferredWidth: 20
+                Layout.preferredHeight: 40
             }
 
             DelayButton {

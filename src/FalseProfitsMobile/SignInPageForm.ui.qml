@@ -7,7 +7,6 @@ Pane {
     height: 400
     property alias busyIndicator: busyIndicator
     property alias signupPageButton: signupPageButton
-    property alias signInStatusField: signInStatusField
     property alias signInButton: signInButton
     property alias passwordField: passwordField
     property alias emailField: emailField
@@ -19,6 +18,7 @@ Pane {
             id: emailField
             Layout.fillWidth: true
             placeholderText: qsTr("Email address")
+            selectByMouse: true
             inputMethodHints: Qt.ImhEmailCharactersOnly
             validator: RegExpValidator {
                 // RegExp source: https://stackoverflow.com/a/16148388
@@ -36,6 +36,7 @@ Pane {
             id: passwordField
             Layout.fillWidth: true
             placeholderText: qsTr("Password")
+            selectByMouse: true
             echoMode: TextInput.PasswordEchoOnEdit
 
             Label {
@@ -60,15 +61,6 @@ Pane {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             flat: true
-        }
-
-        Label {
-            text: qsTr("sign in status:")
-        }
-
-        Label {
-            id: signInStatusField
-            text: qsTr("no status yet")
         }
     }
 

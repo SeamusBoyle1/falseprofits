@@ -5,6 +5,7 @@
 
 #include <FalseProfitsCore/fpaccountslistmodel.h>
 #include <FalseProfitsCore/fpcore.h>
+#include <FalseProfitsCore/fpdeclarativetypes.h>
 #include <FalseProfitsCore/responsetypes.h>
 #include <FalseProfitsCore/fpsettings.h>
 #include <FalseProfitsCore/fpsymbolsearchresultsitemmodel.h>
@@ -44,6 +45,11 @@ int main(int argc, char *argv[])
     qmlRegisterType<FpAccountsListModel>("com.example.fpx", 1, 0, "FpAccountsListModel");
     qmlRegisterType<FpTradingAccounts>("com.example.fpx", 1, 0, "FpTradingAccounts");
 
+    // Q_ENUM inside a class using Q_GADGET
+    qmlRegisterUncreatableType<OrderParams>("com.example.fpx", 1, 0, "OrderParams",
+                                            "Access to enums only");
+
+    // Q_ENUM_NS inside a namespace using Q_NAMESPACE
     qmlRegisterUncreatableMetaObject(Fpx::staticMetaObject, "com.example.fpx", 1, 0, "Fpx",
                                      "Access to enums & flags only");
 
@@ -52,7 +58,8 @@ int main(int argc, char *argv[])
     QSettings::setDefaultFormat(QSettings::IniFormat);
 #endif
 
-    auto client = bsmi::InvestorAPIClientFactory::create();
+    auto client = bsmi::InvestorAPIClientFactory::create(
+        QStringLiteral("https://investor-api.herokuapp.com"));
     FpSettings fpCoreSettings;
     FpCore fpCore(client, &fpCoreSettings);
     client->setParent(&fpCore);

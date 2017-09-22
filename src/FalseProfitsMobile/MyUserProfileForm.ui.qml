@@ -5,27 +5,17 @@ import QtQuick.Layouts 1.3
 Page {
     width: 400
     height: 400
-    property alias userIdText: userIdField.text
     property alias userEmailText: userEmailField.text
     property alias userDisplayNameText: userDisplayNameField.text
     property alias userLevelText: userLevelField.text
 
     GridLayout {
+        rowSpacing: 20
         anchors.fill: parent
         columns: 2
 
         Label {
-            text: qsTr("ID")
-        }
-
-        Label {
-            id: userIdField
-            Layout.fillWidth: true
-            wrapMode: Text.WrapAnywhere
-        }
-
-        Label {
-            text: qsTr("email")
+            text: qsTr("Email")
         }
 
         Label {
@@ -33,7 +23,7 @@ Page {
         }
 
         Label {
-            text: qsTr("displayName")
+            text: qsTr("Display Name")
         }
 
         Label {

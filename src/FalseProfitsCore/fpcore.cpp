@@ -18,6 +18,8 @@ FpCore::FpCore(bsmi::IInvestorAPIClient *client, IFpSettings *settings, QObject 
     , m_client{ client }
     , m_settings{ settings }
 {
+    m_coreAttributes[AutoAuthenticateNewUserAttribute] = true;
+
     connect(m_client, &bsmi::IInvestorAPIClient::authTokenChanged, this,
             &FpCore::onClientAuthenticated);
 }
@@ -69,7 +71,9 @@ NewUserResponse *FpCore::createNewUser(const NewUserDetails &newUser)
             resp->setPayload(rep->readAll());
 
             // auto sign in as user that was just created
-            signInAsNewUser(newUser);
+            if (m_coreAttributes[AutoAuthenticateNewUserAttribute].toBool()) {
+                signInAsNewUser(newUser);
+            }
         } else {
             resp->setError(rep->errorString());
         }
@@ -282,8 +286,9 @@ SendOrderResponse *FpCore::sendOrder(const QString &accountId, const OrderParams
     bsmi::IInvestorAPIClient::OrderParams v;
     v.symbol = args.symbol();
     v.quantity = args.quantity();
-    v.side = args.side() == OrderParams::SellSide ? QStringLiteral("Sell") : QStringLiteral("Buy");
-    v.nonce = args.nonce();
+    v.side =
+        args.side() == OrderParams::Side::SellSide ? QStringLiteral("Sell") : QStringLiteral("Buy");
+    v.nonce = args.nonce() != 0 ? args.nonce() : getNonce();
 
     auto rep = m_client->sendOrder(accountId, v);
     connect(rep, &bsmi::INetworkReply::finished, this, [resp, rep, this]() {
