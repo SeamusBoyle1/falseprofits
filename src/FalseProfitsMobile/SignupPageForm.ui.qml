@@ -7,7 +7,6 @@ Pane {
     height: 400
     property alias busyIndicator: busyIndicator
     property alias signInPageButton: signInPageButton
-    property alias signupStatusField: signupStatusField
     property alias signupButton: signupButton
     property alias passwordField: passwordField
     property alias emailField: emailField
@@ -101,15 +100,6 @@ Pane {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             flat: true
-        }
-
-        Label {
-            text: qsTr("sign up status:")
-        }
-
-        Label {
-            id: signupStatusField
-            text: qsTr("no status yet")
         }
     }
 

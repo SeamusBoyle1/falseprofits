@@ -15,11 +15,9 @@ SignupPageForm {
         resp.onFinished.connect(function() {
             busyIndicator.visible = false
             if (!resp.hasError()) {
-                signupStatusField.text = qsTr("Signed up")
             } else {
                 errorDialogText.text = resp.httpStatusReason()
                 errorDialog.open()
-                signupStatusField.text = resp.httpStatusReason()
             }
         })
     }
