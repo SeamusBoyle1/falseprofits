@@ -10,11 +10,12 @@ Page {
     property alias userLevelText: userLevelField.text
 
     GridLayout {
+        rowSpacing: 20
         anchors.fill: parent
         columns: 2
 
         Label {
-            text: qsTr("email")
+            text: qsTr("Email")
         }
 
         Label {
@@ -22,7 +23,7 @@ Page {
         }
 
         Label {
-            text: qsTr("displayName")
+            text: qsTr("Display Name")
         }
 
         Label {
