@@ -9,7 +9,7 @@ platform:
 clone_folder: c:\projects\source
 
 install:
-  - set QTDIR=C:\Qt\5.9.1\msvc2017_64
+  - set QTDIR=C:\Qt\5.9.1
   - set PATH=%PATH%;%QTDIR%\bin
 
 build_script:
