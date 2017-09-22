@@ -9,6 +9,13 @@ install:
   - set QTDIR=C:\Qt\5.5\mingw492_32
   - set PATH=%PATH%;%QTDIR%\bin;C:\MinGW\bin
   
+
+# Boost is already installed on AppVeyor.
+environment:
+  BOOST_ROOT: C:\Libraries\boost_1_59_0
+  BOOST_LIBRARYDIR: C:\Libraries\boost_1_59_0\lib64-msvc-14.0
+
+
 build_script:
   - qmake src\src.pro
   - mingw32-make
