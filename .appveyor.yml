@@ -10,5 +10,5 @@ install:
   - set PATH=%PATH%;%QTDIR%\bin;C:\MinGW\bin
 
 build_script:
-  - qmake -r "BOOST_ROOT=C:\Libraries\boost_1_61_0"
+  - qmake -r "BOOST_ROOT=C:\Libraries\boost_1_62_0"
   - mingw32-make
