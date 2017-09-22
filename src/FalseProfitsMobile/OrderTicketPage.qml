@@ -6,6 +6,8 @@ import com.example.fpx 1.0
 OrderTicketPageForm {
     signal orderCompleted
 
+    property int busyIndicatorVisibility: 0
+
     FpTradingAccounts {
         id: myTradingAccounts
         coreClient: fpCore
@@ -29,9 +31,9 @@ OrderTicketPageForm {
         orderArgs.side = buySideOption.checked ? OrderParams.BuySide : OrderParams.SellSide
 
         var resp = fpCore.sendOrder(accountId, orderArgs)
-        busyIndicator.visible = true
+        incrementBusyIndicatorVisibility()
         resp.onFinished.connect(function() {
-            busyIndicator.visible = false;
+            decrementBusyIndicatorVisibility()
             if (!resp.hasError()) {
                 infoDialogText.text = resp.httpStatusReason()
                 infoDialog.open()
@@ -71,6 +73,18 @@ OrderTicketPageForm {
 
         Label {
             id: infoDialogText
+        }
+    }
+
+    function incrementBusyIndicatorVisibility() {
+        busyIndicator.visible = true
+        busyIndicatorVisibility = busyIndicatorVisibility + 1
+    }
+
+    function decrementBusyIndicatorVisibility() {
+        busyIndicatorVisibility = busyIndicatorVisibility - 1
+        if (busyIndicatorVisibility == 0) {
+            busyIndicator.visible = false
         }
     }
 }
