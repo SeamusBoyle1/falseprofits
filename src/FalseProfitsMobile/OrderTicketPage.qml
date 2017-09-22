@@ -27,7 +27,6 @@ OrderTicketPageForm {
         orderArgs.symbol = symbolField.text.trim().toUpperCase()
         orderArgs.quantity = quantityField.text
         orderArgs.side = buySideOption.checked ? OrderParams.BuySide : OrderParams.SellSide
-        orderArgs.nonce = fpCore.getNonce()
 
         var resp = fpCore.sendOrder(accountId, orderArgs)
         busyIndicator.visible = true

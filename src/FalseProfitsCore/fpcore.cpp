@@ -288,7 +288,7 @@ SendOrderResponse *FpCore::sendOrder(const QString &accountId, const OrderParams
     v.quantity = args.quantity();
     v.side =
         args.side() == OrderParams::Side::SellSide ? QStringLiteral("Sell") : QStringLiteral("Buy");
-    v.nonce = args.nonce();
+    v.nonce = args.nonce() != 0 ? args.nonce() : getNonce();
 
     auto rep = m_client->sendOrder(accountId, v);
     connect(rep, &bsmi::INetworkReply::finished, this, [resp, rep, this]() {
