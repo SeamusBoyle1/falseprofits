@@ -43,6 +43,10 @@ DetailedQuotePageForm {
         companyNameText = ""
         industryText = ""
         lastPriceLabel.text = ""
+        bidText = ""
+        askText = ""
+        dayLowText = ""
+        dayHighText = ""
     }
 
     function updateQuote() {
@@ -55,6 +59,10 @@ DetailedQuotePageForm {
                 var quote = quotes.find(currentSymbol)
                 if (quote.isValid) {
                     lastPriceLabel.text = quote.last
+                    bidText = quote.bid
+                    askText = quote.ask
+                    dayLowText = quote.dayLow
+                    dayHighText = quote.dayHigh
                 }
             } else {
                 errorDialogText.text = quoteResp.httpStatusReason()

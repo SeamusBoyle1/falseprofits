@@ -9,6 +9,10 @@ Page {
     property string symbolText
     property string companyNameText
     property string industryText
+    property string bidText
+    property string askText
+    property string dayLowText
+    property string dayHighText
     property alias lastPriceLabel: lastPriceLabel
     property alias orderButton: orderButton
     property alias busyIndicator: busyIndicator
@@ -64,14 +68,100 @@ Page {
                 }
             }
 
-            ColumnLayout {
-                Layout.leftMargin: 16
-                Layout.rightMargin: 16
+            TabBar {
+                id: tabBar
+                Layout.fillWidth: true
+                currentIndex: swipeView.currentIndex
+                TabButton {
+                    text: qsTr("Summary")
+                }
+                TabButton {
+                    text: qsTr("Key stats")
+                }
+            }
 
-                Label {
-                    id: lastPriceLabel
-                    Layout.fillWidth: true
-                    font.pixelSize: 32
+            SwipeView {
+                id: swipeView
+                Layout.fillWidth: true
+                Layout.minimumHeight: currentItem ? currentItem.implicitHeight : 1
+                currentIndex: tabBar.currentIndex
+
+                Page {
+                    ColumnLayout {
+                        anchors.fill: parent
+
+                        GridLayout {
+                            columnSpacing: 20
+                            Layout.fillWidth: true
+                            Layout.leftMargin: 16
+                            Layout.rightMargin: 16
+                            columns: 3
+
+                            Label {
+                                id: lastPriceLabel
+                                Layout.rowSpan: 2
+                                font.pixelSize: 32
+                            }
+
+                            Label {
+                                text: qsTr("Bid")
+                                font.capitalization: Font.AllUppercase
+                            }
+                            Label {
+                                text: qsTr("Ask")
+                                font.capitalization: Font.AllUppercase
+                            }
+
+                            Label {
+                                text: bidText
+                            }
+                            Label {
+                                text: askText
+                            }
+                        }
+                    }
+                }
+
+                Page {
+                    ColumnLayout {
+                        anchors.fill: parent
+
+                        GridLayout {
+                            rowSpacing: 20
+                            Layout.fillWidth: true
+                            Layout.leftMargin: 16
+                            Layout.rightMargin: 16
+                            columns: 2
+
+                            Label {
+                                text: qsTr("Day High")
+                            }
+                            Label {
+                                text: dayHighText
+                            }
+
+                            Label {
+                                text: qsTr("Day Low")
+                            }
+                            Label {
+                                text: dayLowText
+                            }
+
+                            Label {
+                                text: qsTr("Bid")
+                            }
+                            Label {
+                                text: bidText
+                            }
+
+                            Label {
+                                text: qsTr("Ask")
+                            }
+                            Label {
+                                text: askText
+                            }
+                        }
+                    }
                 }
             }
         }
