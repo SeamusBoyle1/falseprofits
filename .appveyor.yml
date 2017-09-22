@@ -1,9 +1,7 @@
-version: '1.0.{build}'
-
-platform:
- - x64
- 
+image:
+ - Visual Studio 2017
 clone_folder: c:\projects\source
+<<<<<<< HEAD
 
 install:
   - set QTDIR=C:\Qt\5.5\mingw492_32
@@ -19,3 +17,14 @@ environment:
 build_script:
   - qmake src\src.pro
   - mingw32-make
+=======
+build_script:
+- cmd: >-
+   mkdir build
+
+   cd build
+
+   cmake c:\projects\source -G "Visual Studio 15"
+
+   cmake --build . --config "Debug" 
+>>>>>>> parent of 7dbeff5... Edit Appveyor CI config file
