@@ -204,6 +204,22 @@ public:
     }
 };
 
+class InvestorAPIClientGetQuotesMock : public InvestorAPIClientMock
+{
+    Q_OBJECT
+public:
+    InvestorAPIClientGetQuotesMock() {}
+
+    NetworkReply *m_nextQuotesReply{ nullptr };
+    QStringList m_symbols;
+
+    INetworkReply *getQuotes(const QStringList &symbols) override
+    {
+        m_symbols = symbols;
+        return m_nextQuotesReply;
+    }
+};
+
 static bsmi::IInvestorAPIClient *createMockFpCore(QObject *parent = 0)
 {
     return new InvestorAPIClientMock(parent);
@@ -222,6 +238,7 @@ private Q_SLOTS:
     void authenticateTest();
     void deleteUserTest();
     void getUserProfileTest();
+    void getQuotesTest();
     void signOutTest();
 };
 
@@ -425,6 +442,49 @@ void FpCoreTest::getUserProfileTest()
                                 "};";
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextUserProfileReply->setFinished();
+
+        QVERIFY(!netAuthRep->m_payload.isEmpty());
+        QCOMPARE(QJsonDocument::fromJson(resp->payload()),
+                 QJsonDocument::fromJson(netAuthRep->m_payload));
+    }
+}
+
+void FpCoreTest::getQuotesTest()
+{
+    {
+        auto client = new InvestorAPIClientGetQuotesMock;
+        auto fpCoreSettings = new MockFpSettings;
+        auto fpCore = new FpCore(client, fpCoreSettings);
+        client->setParent(fpCore);
+
+        QVERIFY(client->m_symbols.isEmpty());
+
+        QStringList symbolsA{ { "SYM1" }, { "SYM2" } };
+
+        // mock success response
+        auto netAuthRep = new QNetworkReplyMock;
+        client->m_nextQuotesReply = new bsmi::INetworkReply(netAuthRep);
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::NotAuthenticatedState);
+        fpCore->setAccessToken("i_am_very_token", QDateTime::currentDateTimeUtc().addDays(7));
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::AuthenticatedState);
+
+        auto resp = fpCore->getQuotes(symbolsA);
+        QVERIFY(resp);
+
+        // Test bsmi::IInvestorAPIClient::getQuotes was called
+        QVERIFY(!client->m_symbols.isEmpty());
+
+        netAuthRep->m_payload = "["
+                                "  {"
+                                "    \"symbol\": \"SYM1\","
+                                "    \"last\": 0,"
+                                "  }, {"
+                                "    \"symbol\": \"SYM2\","
+                                "    \"last\": 0,"
+                                "    },"
+                                "]";
+        netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
+        client->m_nextQuotesReply->setFinished();
 
         QVERIFY(!netAuthRep->m_payload.isEmpty());
         QCOMPARE(QJsonDocument::fromJson(resp->payload()),
