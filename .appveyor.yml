@@ -12,3 +12,11 @@ install:
 build_script:
   - qmake -r "BOOST_ROOT=C:\Libraries\boost_1_62_0"
   - mingw32-make
+
+test_script:
+ - .\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:"%xunit20%\xunit.console.x86.exe" -targetargs:"YourTestDll -noshadow" -output:"coverage.xml" -filter:"+[YourSUTNamepace*]* -[YourTestNamespace*]*"
+ 
+after_test:
+ - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
+ - pip install codecov
+ - codecov -f "coverage.xml" -t 705d31b2-19b4-457e-a6c7-e1559ff99600
