@@ -8,6 +8,9 @@ given $1 million dollars to trade stocks listed on the Australian stock
 market. Players compete to become Top Trader.
 
 ## Supported Platforms
+- Windows 10, 8.1, 7 (64-bit and 32-bit)
+- Linux/X11; Ubuntu 16.04 (64-bit)
+- macOS 10.10, 10.11, 10.12
 - Android (API Level 16)
 - iOS 8, 9, 10
 
