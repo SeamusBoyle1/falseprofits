@@ -1,22 +1,17 @@
 version: '1.0.{build}'
 
+image:
+ - Visual Studio 2017
+
 platform:
  - x64
  
 clone_folder: c:\projects\source
 
 install:
-  - set QTDIR=C:\Qt\5.5\mingw492_32
-  - set PATH=%PATH%;%QTDIR%\bin;C:\MinGW\bin
+  - set QTDIR=C:\Qt\5.9.1\msvc2017_64
 
 build_script:
   - qmake -r "BOOST_ROOT=C:\Libraries\boost_1_62_0"
-  - mingw32-make
+  - cmake --build .
 
-test_script:
- - .\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:"%xunit20%\xunit.console.x86.exe" -targetargs:"YourTestDll -noshadow" -output:"coverage.xml" -filter:"+[YourSUTNamepace*]* -[YourTestNamespace*]*"
- 
-after_test:
- - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
- - pip install codecov
- - codecov -f "coverage.xml" -t 705d31b2-19b4-457e-a6c7-e1559ff99600
