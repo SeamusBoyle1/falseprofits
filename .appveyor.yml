@@ -10,5 +10,5 @@ install:
   - set PATH=%PATH%;%QTDIR%\bin;C:\MinGW\bin
   
 build_script:
-  - qmake src.pro
+  - qmake src\src.pro
   - mingw32-make
