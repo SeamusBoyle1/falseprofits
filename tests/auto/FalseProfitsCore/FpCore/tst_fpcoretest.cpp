@@ -188,6 +188,22 @@ public:
     }
 };
 
+class InvestorAPIClientGetUserProfileMock : public InvestorAPIClientMock
+{
+    Q_OBJECT
+public:
+    InvestorAPIClientGetUserProfileMock() {}
+
+    NetworkReply *m_nextUserProfileReply{ nullptr };
+    bool m_getUserProfileWasCalled{ false };
+
+    INetworkReply *getUserProfile() override
+    {
+        m_getUserProfileWasCalled = true;
+        return m_nextUserProfileReply;
+    }
+};
+
 static bsmi::IInvestorAPIClient *createMockFpCore(QObject *parent = 0)
 {
     return new InvestorAPIClientMock(parent);
@@ -205,6 +221,7 @@ private Q_SLOTS:
     void createNewUserTest();
     void authenticateTest();
     void deleteUserTest();
+    void getUserProfileTest();
     void signOutTest();
 };
 
@@ -369,6 +386,49 @@ void FpCoreTest::deleteUserTest()
         // are removed from settings
         QVERIFY(fpCoreSettings->m_token.isEmpty());
         QVERIFY(!fpCoreSettings->m_expiryDate.isValid());
+    }
+}
+
+void FpCoreTest::getUserProfileTest()
+{
+    {
+        auto client = new InvestorAPIClientGetUserProfileMock;
+        auto fpCoreSettings = new MockFpSettings;
+        auto fpCore = new FpCore(client, fpCoreSettings);
+        client->setParent(fpCore);
+
+        // mock success response
+        auto netAuthRep = new QNetworkReplyMock;
+        client->m_nextUserProfileReply = new bsmi::INetworkReply(netAuthRep);
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::NotAuthenticatedState);
+        fpCore->setAccessToken("i_am_very_token", QDateTime::currentDateTimeUtc().addDays(7));
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::AuthenticatedState);
+
+        auto resp = fpCore->getUserProfile();
+        QVERIFY(resp);
+
+        // Test bsmi::IInvestorAPIClient::getUserProfile was called
+        QVERIFY(client->m_getUserProfileWasCalled);
+
+        netAuthRep->m_payload = "{"
+                                "  \"id\": \"string\","
+                                "  \"email\": \"string\","
+                                "  \"displayName\": \"string\","
+                                "  \"level\": \"Friend\","
+                                "  \"accounts\": ["
+                                "    {"
+                                "      \"id\": \"string\","
+                                "      \"name\": \"string\","
+                                "      \"balance\": 0"
+                                "    }"
+                                "  ]"
+                                "};";
+        netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
+        client->m_nextUserProfileReply->setFinished();
+
+        QVERIFY(!netAuthRep->m_payload.isEmpty());
+        QCOMPARE(QJsonDocument::fromJson(resp->payload()),
+                 QJsonDocument::fromJson(netAuthRep->m_payload));
     }
 }
 
