@@ -236,6 +236,24 @@ public:
     }
 };
 
+class InvestorAPIClientSendOrderMock : public InvestorAPIClientMock
+{
+    Q_OBJECT
+public:
+    InvestorAPIClientSendOrderMock() {}
+
+    NetworkReply *m_nextSendOrderReply{ nullptr };
+    QString m_accountId;
+    OrderParams m_orderArgs;
+
+    INetworkReply *sendOrder(const QString &accountId, const OrderParams &args) override
+    {
+        m_accountId = accountId;
+        m_orderArgs = args;
+        return m_nextSendOrderReply;
+    }
+};
+
 static bsmi::IInvestorAPIClient *createMockFpCore(QObject *parent = 0)
 {
     return new InvestorAPIClientMock(parent);
@@ -256,6 +274,7 @@ private Q_SLOTS:
     void getUserProfileTest();
     void getQuotesTest();
     void symbolSearchTest();
+    void sendOrderTest();
     void signOutTest();
 };
 
@@ -556,6 +575,46 @@ void FpCoreTest::symbolSearchTest()
         QVERIFY(!netAuthRep->m_payload.isEmpty());
         QCOMPARE(QJsonDocument::fromJson(resp->payload()),
                  QJsonDocument::fromJson(netAuthRep->m_payload));
+    }
+}
+
+void FpCoreTest::sendOrderTest()
+{
+    {
+        auto client = new InvestorAPIClientSendOrderMock;
+        auto fpCoreSettings = new MockFpSettings;
+        auto fpCore = new FpCore(client, fpCoreSettings);
+        client->setParent(fpCore);
+
+        // any id can be used, sendOrder() doesn't validate
+        QString accountIdA("anyUnverifiedId");
+
+        // any order can be used, sendOrder() doesn't validate
+        OrderParams orderArgsA;
+        orderArgsA.setSymbol("BHP");
+        orderArgsA.setQuantity(20);
+        orderArgsA.setSide(OrderParams::Side::SellSide);
+
+        // mock success response
+        auto netAuthRep = new QNetworkReplyMock;
+        client->m_nextSendOrderReply = new bsmi::INetworkReply(netAuthRep);
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::NotAuthenticatedState);
+        fpCore->setAccessToken("i_am_very_token", QDateTime::currentDateTimeUtc().addDays(7));
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::AuthenticatedState);
+
+        auto resp = fpCore->sendOrder(accountIdA, orderArgsA);
+        QVERIFY(resp);
+
+        // Test bsmi::IInvestorAPIClient got args
+        QCOMPARE(client->m_accountId, accountIdA);
+        QCOMPARE(client->m_orderArgs.symbol, orderArgsA.symbol());
+        QCOMPARE(client->m_orderArgs.quantity, orderArgsA.quantity());
+        auto sideStr =
+            orderArgsA.side() == OrderParams::Side::SellSide ? QString("Sell") : QString("Buy");
+        QCOMPARE(client->m_orderArgs.side, sideStr);
+
+        netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 201);
+        client->m_nextSendOrderReply->setFinished();
     }
 }
 
