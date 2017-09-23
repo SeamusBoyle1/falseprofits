@@ -13,7 +13,13 @@ Pane {
     property alias displayNameField: displayNameField
 
     ColumnLayout {
-        anchors.fill: parent
+        spacing: 37
+        anchors.top: parent.top
+        anchors.topMargin: 20
+        anchors.left: parent.left
+        anchors.leftMargin: 0
+        anchors.right: parent.right
+        anchors.rightMargin: 0
 
         TextField {
             id: displayNameField
@@ -32,6 +38,7 @@ Pane {
 
             Label {
                 text: qsTr("Name must be between 5 and 30 characters")
+                font.bold: true
                 wrapMode: Text.WordWrap
                 visible: parent.text.length > 0 && !parent.acceptableInput
                 anchors.top: parent.bottom
@@ -58,6 +65,7 @@ Pane {
 
             Label {
                 text: qsTr("Email must be valid and not already used")
+                font.bold: true
                 wrapMode: Text.WordWrap
                 visible: parent.text.length > 0 && !parent.acceptableInput
                 anchors.top: parent.bottom
@@ -82,6 +90,7 @@ Pane {
 
             Label {
                 text: qsTr("Password must be between 8 and 30 characters")
+                font.bold: true
                 wrapMode: Text.WordWrap
                 visible: parent.text.length > 0 && !parent.acceptableInput
                 anchors.top: parent.bottom

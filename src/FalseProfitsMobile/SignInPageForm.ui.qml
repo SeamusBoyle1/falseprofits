@@ -12,7 +12,13 @@ Pane {
     property alias emailField: emailField
 
     ColumnLayout {
-        anchors.fill: parent
+        spacing: 20
+        anchors.top: parent.top
+        anchors.topMargin: 20
+        anchors.left: parent.left
+        anchors.leftMargin: 0
+        anchors.right: parent.right
+        anchors.rightMargin: 0
 
         TextField {
             id: emailField
