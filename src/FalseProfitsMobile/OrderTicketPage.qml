@@ -8,6 +8,8 @@ OrderTicketPageForm {
 
     property int busyIndicatorVisibility: 0
 
+    property double lastPriceValue: 0
+
     FpTradingAccounts {
         id: myTradingAccounts
         coreClient: fpCore
@@ -24,6 +26,26 @@ OrderTicketPageForm {
 
     symbolField.onTextChanged: {
         currentSymbol = symbolField.text.toUpperCase()
+
+        // Workaround: For QTBUG-59908
+        // Calling updateQuote() on every text change isn't
+        // the best idea, use onEditingFinished when the
+        // bug is fixed in Qt.
+        // This is an acceptable workaround since it is unlikely
+        // that the user will regularly change the symbol manually.
+        updateQuote()
+    }
+
+    buySideOption.onCheckedChanged: {
+        updateEstimatedTotal()
+    }
+
+    quantityField.onTextChanged: {
+        updateEstimatedTotal()
+    }
+
+    onLastPriceValueChanged: {
+        updateEstimatedTotal()
     }
 
     function doPlaceOrder() {
@@ -101,5 +123,50 @@ OrderTicketPageForm {
                 accountsComboBox.incrementCurrentIndex()
             }
         })
+    }
+
+    function updateQuote() {
+        lastPriceText = ""
+        lastPriceValue = 0
+
+        if (currentSymbol === "")
+            return
+
+        incrementBusyIndicatorVisibility()
+        var quoteResp = fpCore.getQuotes(currentSymbol)
+        quoteResp.onFinished.connect(function() {
+            decrementBusyIndicatorVisibility()
+            if (!quoteResp.hasError()) {
+                var quotes = fpType.makeJsonQuotes(quoteResp.payload())
+                var quote = quotes.find(currentSymbol)
+                if (quote.isValid) {
+                    // TODO(seamus): Don't use toFixed(), it isn't localized
+                    lastPriceText = quote.last.toFixed(3)
+                    lastPriceValue = quote.last
+                }
+            } else {
+                // No error handling needed we clear the lastPriceValue
+                // and lastPriceText before sending the request
+            }
+        })
+    }
+
+    function updateEstimatedTotal() {
+        if (lastPriceValue == 0 || !quantityField.acceptableInput) {
+            orderValueText = ""
+            brokerageCostText = ""
+            totalText = ""
+        } else {
+            var costArgs = fpType.makeBrokerCostCalcArgs()
+            costArgs.quantity = parseInt(quantityField.text)
+            costArgs.price = lastPriceValue
+            costArgs.side = buySideOption.checked ? OrderParams.BuySide : OrderParams.SellSide
+
+            var costResult = fpCore.calcBrokerageCost(costArgs)
+            // TODO(seamus): Don't use toFixed(), it isn't localized
+            orderValueText = costResult.orderValue.toFixed(3)
+            brokerageCostText = costResult.brokerageCost.toFixed(3)
+            totalText = costResult.estimatedTotal.toFixed(3)
+        }
     }
 }

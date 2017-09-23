@@ -7,6 +7,10 @@ Page {
     width: 400
     height: 400
     property string currentSymbol
+    property string lastPriceText
+    property string orderValueText
+    property string brokerageCostText
+    property string totalText
     property alias sellSideOption: sellSideOption
     property alias buySideOption: buySideOption
     property alias accountsComboBox: accountsComboBox
@@ -58,6 +62,7 @@ Page {
                 TextField {
                     id: symbolField
                     Layout.fillWidth: true
+                    placeholderText: qsTr("Ticker Symbol")
                     selectByMouse: true
                     text: currentSymbol
                     validator: RegExpValidator {
@@ -73,10 +78,71 @@ Page {
                 TextField {
                     id: quantityField
                     Layout.fillWidth: true
+                    placeholderText: qsTr("Number of shares")
                     selectByMouse: true
                     inputMethodHints: Qt.ImhDigitsOnly
                     validator: IntValidator {
                         bottom: 0
+                    }
+                }
+
+                GridLayout {
+                    rowSpacing: 12
+                    columns: 2
+
+                    Label {
+                        text: qsTr("Last Price ($):")
+                        Layout.fillWidth: true
+                        horizontalAlignment: Text.AlignRight
+                    }
+
+                    Label {
+                        text: lastPriceText
+                        horizontalAlignment: Text.AlignRight
+                        Layout.fillWidth: true
+                    }
+
+                    Label {
+                        text: qsTr("Estimated Total")
+                        Layout.fillWidth: true
+                        Layout.columnSpan: 2
+                        font.weight: Font.Bold
+                    }
+
+                    Label {
+                        text: qsTr("Order Value ($):")
+                        Layout.fillWidth: true
+                        horizontalAlignment: Text.AlignRight
+                    }
+
+                    Label {
+                        text: orderValueText
+                        horizontalAlignment: Text.AlignRight
+                        Layout.fillWidth: true
+                    }
+
+                    Label {
+                        text: qsTr("Brokerage Cost ($):")
+                        Layout.fillWidth: true
+                        horizontalAlignment: Text.AlignRight
+                    }
+
+                    Label {
+                        text: brokerageCostText
+                        horizontalAlignment: Text.AlignRight
+                        Layout.fillWidth: true
+                    }
+
+                    Label {
+                        text: qsTr("Total ($):")
+                        Layout.fillWidth: true
+                        horizontalAlignment: Text.AlignRight
+                    }
+
+                    Label {
+                        text: totalText
+                        horizontalAlignment: Text.AlignRight
+                        Layout.fillWidth: true
                     }
                 }
 
