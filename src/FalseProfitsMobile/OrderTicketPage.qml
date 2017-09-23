@@ -22,11 +22,15 @@ OrderTicketPageForm {
         doPlaceOrder()
     }
 
+    symbolField.onTextChanged: {
+        currentSymbol = symbolField.text.toUpperCase()
+    }
+
     function doPlaceOrder() {
         var accountId = accountsComboBox.model.getAccountId(accountsComboBox.currentIndex)
 
         var orderArgs = fpType.makeOrderParams()
-        orderArgs.symbol = symbolField.text.trim().toUpperCase()
+        orderArgs.symbol = currentSymbol
         orderArgs.quantity = quantityField.text
         orderArgs.side = buySideOption.checked ? OrderParams.BuySide : OrderParams.SellSide
 
