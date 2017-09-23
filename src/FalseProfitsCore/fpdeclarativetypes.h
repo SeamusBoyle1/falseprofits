@@ -94,6 +94,56 @@ private:
     Side m_side{ Side::BuySide };
 };
 
+class BrokerCostCalcArgs
+{
+    Q_GADGET
+    Q_PROPERTY(int quantity READ quantity WRITE setQuantity)
+    Q_PROPERTY(double price READ price WRITE setPrice)
+    Q_PROPERTY(OrderParams::Side side READ side WRITE setSide)
+public:
+    int quantity() const { return m_quantity; }
+
+    void setQuantity(int quantity) { m_quantity = quantity; }
+
+    double price() const { return m_price; }
+
+    void setPrice(double price) { m_price = price; }
+
+    OrderParams::Side side() const { return m_side; }
+
+    void setSide(OrderParams::Side side) { m_side = side; }
+
+private:
+    double m_price{ 0 };
+    int m_quantity{ 0 };
+    OrderParams::Side m_side;
+};
+
+class BrokerCostCalcResult
+{
+    Q_GADGET
+    Q_PROPERTY(double orderValue READ orderValue WRITE setOrderValue)
+    Q_PROPERTY(double brokerageCost READ brokerageCost WRITE setBrokerageCost)
+    Q_PROPERTY(double estimatedTotal READ estimatedTotal WRITE setEstimatedTotal)
+public:
+    double orderValue() const { return m_orderValue; }
+
+    void setOrderValue(double orderValue) { m_orderValue = orderValue; }
+
+    double brokerageCost() const { return m_brokerageCost; }
+
+    void setBrokerageCost(double brokerageCost) { m_brokerageCost = brokerageCost; }
+
+    double estimatedTotal() const { return m_estimatedTotal; }
+
+    void setEstimatedTotal(double estimatedTotal) { m_estimatedTotal = estimatedTotal; }
+
+private:
+    double m_orderValue{ 0 };
+    double m_brokerageCost{ 0 };
+    double m_estimatedTotal{ 0 };
+};
+
 class JsonUserTradingAccount
 {
     Q_GADGET
@@ -293,6 +343,8 @@ private:
 Q_DECLARE_METATYPE(NewUserDetails)
 Q_DECLARE_METATYPE(SymbolSearchQuery)
 Q_DECLARE_METATYPE(OrderParams)
+Q_DECLARE_METATYPE(BrokerCostCalcArgs)
+Q_DECLARE_METATYPE(BrokerCostCalcResult)
 Q_DECLARE_METATYPE(JsonUserTradingAccount)
 Q_DECLARE_METATYPE(JsonUserTradingAccounts)
 Q_DECLARE_METATYPE(JsonUserDetails)
@@ -312,6 +364,8 @@ public:
         qRegisterMetaType<SymbolSearchQuery>("SymbolSearchQuery");
         qRegisterMetaType<OrderParams>("OrderParams");
         qRegisterMetaType<OrderParams::Side>("OrderParams::Side");
+        qRegisterMetaType<BrokerCostCalcArgs>("BrokerCostCalcArgs");
+        qRegisterMetaType<BrokerCostCalcResult>("BrokerCostCalcResult");
 
         qRegisterMetaType<JsonUserTradingAccount>("JsonUserTradingAccount");
         qRegisterMetaType<JsonUserTradingAccounts>("JsonUserTradingAccounts");
@@ -330,6 +384,9 @@ public:
 
     Q_INVOKABLE
     OrderParams makeOrderParams() { return OrderParams{}; }
+
+    Q_INVOKABLE
+    BrokerCostCalcArgs makeBrokerCostCalcArgs() { return BrokerCostCalcArgs{}; }
 
     Q_INVOKABLE
     JsonUserDetails makeJsonUserDetails(const QByteArray &json)

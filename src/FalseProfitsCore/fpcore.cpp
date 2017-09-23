@@ -49,6 +49,21 @@ qint64 FpCore::getNonce() const
     return now;
 }
 
+BrokerCostCalcResult FpCore::calcBrokerageCost(const BrokerCostCalcArgs &args)
+{
+    auto orderValue = args.quantity() * args.price();
+    auto brokerageCostFixed = 50;
+    auto brokerageCostPercent = args.side() == OrderParams::Side::BuySide ? 0.01 : 0.0025;
+    auto brokerageCostTotal = brokerageCostFixed + (orderValue * brokerageCostPercent);
+    auto estimatedTotal = orderValue + brokerageCostTotal;
+
+    BrokerCostCalcResult r;
+    r.setOrderValue(orderValue);
+    r.setBrokerageCost(brokerageCostTotal);
+    r.setEstimatedTotal(estimatedTotal);
+    return r;
+}
+
 NewUserResponse *FpCore::createNewUser(const NewUserDetails &newUser)
 {
     QPointer<NewUserResponse> resp(new NewUserResponse);

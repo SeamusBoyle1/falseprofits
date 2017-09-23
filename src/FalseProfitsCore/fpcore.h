@@ -43,6 +43,9 @@ public:
     qint64 getNonce() const;
 
     Q_INVOKABLE
+    BrokerCostCalcResult calcBrokerageCost(const BrokerCostCalcArgs &args);
+
+    Q_INVOKABLE
     NewUserResponse *createNewUser(const NewUserDetails &newUser);
 
     Q_INVOKABLE
