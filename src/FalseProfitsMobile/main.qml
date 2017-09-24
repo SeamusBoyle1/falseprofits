@@ -42,7 +42,9 @@ ApplicationWindow {
                 highlighted: ListView.isCurrentItem
                 onClicked: {
                     listView.currentIndex = index
-                    appNavStack.clear() // limit depth
+                    if (model.source !== "qrc:/SignOutPage.qml") {
+                        appNavStack.clear() // limit depth
+                    }
                     appNavStack.push(model.source)
                     appDrawer.close()
                 }
@@ -51,7 +53,7 @@ ApplicationWindow {
             model: ListModel {
                 ListElement{ title: qsTr("Quotes"); source: "qrc:/QuotesNavigation.qml" }
                 ListElement{ title: qsTr("My Profile"); source: "qrc:/MyUserProfileNavigation.qml" }
-                ListElement{ title: qsTr("Sign Out"); source: "qrc:/SignOutNavigation.qml" }
+                ListElement{ title: qsTr("Sign Out"); source: "qrc:/SignOutPage.qml" }
             }
 
             ScrollIndicator.vertical: ScrollIndicator { }

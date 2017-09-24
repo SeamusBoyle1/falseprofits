@@ -6,19 +6,41 @@ Page {
     ColumnLayout {
         anchors.centerIn: parent
 
-        Button {
-            text: qsTr("Sign out")
+        Label {
+            text: qsTr("Really sign out?")
+            font.pixelSize: 24
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+        }
 
-            Component {
-                id: me
-                Dialog {
-                    id: me2
+        Item {
+            Layout.preferredWidth: 20
+            Layout.preferredHeight: 20
+        }
+
+        RowLayout {
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            spacing: 20
+
+            Button {
+                text: qsTr("No")
+
+                onClicked: {
+                    if (appNavStack.depth > 1) {
+                        appNavStack.pop()
+                        listView.currentIndex = -1
+                    } else {
+                        appDrawer.open()
+                    }
                 }
             }
 
-            onClicked: {
-                fpCore.signOut()
-                signedOutDialog.visible = true
+            Button {
+                text: qsTr("Yes")
+
+                onClicked: {
+                    fpCore.signOut()
+                    signedOutDialog.visible = true
+                }
             }
         }
     }
