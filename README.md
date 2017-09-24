@@ -1,6 +1,6 @@
 # FalseProfits
 
-[![Build Status](https://travis-ci.org/SeamusBoyle1/falseprofits.svg?branch=develop)](https://travis-ci.org/SeamusBoyle1/falseprofits)
+[![Build Status](https://travis-ci.org/programmingproject1-org/falseprofits.svg?branch=develop)](https://travis-ci.org/programmingproject1-org/falseprofits)
 [![codecov.io](https://codecov.io/github/SeamusBoyle1/falseprofits/coverage.svg?branch=develop)](https://codecov.io/github/SeamusBoyle1/falseprofits?branch=develop)
 
 FalseProfits is an Android and iOS sharemarket game where players are
