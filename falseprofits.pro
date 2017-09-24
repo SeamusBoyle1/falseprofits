@@ -6,4 +6,5 @@ SUBDIRS += \
 
 OTHER_FILES += \
     README.md \
+    .appveyor.yml \
     .travis.yml
