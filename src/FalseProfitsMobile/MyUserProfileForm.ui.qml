@@ -10,6 +10,7 @@ Page {
     property alias userLevelText: userLevelField.text
 
     GridLayout {
+        columnSpacing: 12
         rowSpacing: 20
         anchors.fill: parent
         columns: 2
@@ -20,6 +21,7 @@ Page {
 
         Label {
             id: userEmailField
+            Layout.fillWidth: true
         }
 
         Label {
@@ -28,6 +30,7 @@ Page {
 
         Label {
             id: userDisplayNameField
+            Layout.fillWidth: true
         }
 
         Label {
@@ -36,6 +39,7 @@ Page {
 
         Label {
             id: userLevelField
+            Layout.fillWidth: true
         }
     }
 }
