@@ -6,4 +6,5 @@ QtObject {
     property int appWindowHeight: 600
 
     property string iconAccent: "white"
+    property string iconPrimary: "black"
 }

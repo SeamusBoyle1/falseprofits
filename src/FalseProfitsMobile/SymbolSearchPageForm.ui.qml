@@ -2,6 +2,8 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
+import com.example.fpx 1.0
+
 Pane {
     width: 400
     height: 400
@@ -27,8 +29,14 @@ Pane {
 
                 Button {
                     id: searchButton
+                    anchors.bottom: parent.bottom
                     anchors.right: queryString.right
-                    text: qsTr("Search")
+                    contentItem: Image {
+                        fillMode: Image.Pad
+                        horizontalAlignment: Image.AlignHCenter
+                        verticalAlignment: Image.AlignVCenter
+                        source: "qrc:/images/" + FpStyle.iconPrimary + "/search.png"
+                    }
                     flat: true
                 }
             }
