@@ -1,0 +1,20 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/black/arrow_back.png</file>
+        <file>images/black/arrow_back@2x.png</file>
+        <file>images/black/arrow_back@3x.png</file>
+        <file>images/black/arrow_back@4x.png</file>
+        <file>images/black/menu.png</file>
+        <file>images/black/menu@2x.png</file>
+        <file>images/black/menu@3x.png</file>
+        <file>images/black/menu@4x.png</file>
+        <file>images/white/arrow_back.png</file>
+        <file>images/white/arrow_back@2x.png</file>
+        <file>images/white/arrow_back@3x.png</file>
+        <file>images/white/arrow_back@4x.png</file>
+        <file>images/white/menu.png</file>
+        <file>images/white/menu@2x.png</file>
+        <file>images/white/menu@3x.png</file>
+        <file>images/white/menu@4x.png</file>
+    </qresource>
+</RCC>

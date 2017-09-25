@@ -2,6 +2,8 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
+import com.example.fpx 1.0
+
 Page {
     SwipeView {
         id: swipeView
@@ -18,7 +20,12 @@ Page {
             RowLayout {
                 anchors.fill: parent
                 ToolButton {
-                    text: qsTr("...")
+                    contentItem: Image {
+                        fillMode: Image.Pad
+                        horizontalAlignment: Image.AlignHCenter
+                        verticalAlignment: Image.AlignVCenter
+                        source: "qrc:/images/" + FpStyle.iconAccent + "/menu.png"
+                    }
                     onClicked: {
                         appDrawer.open()
                     }

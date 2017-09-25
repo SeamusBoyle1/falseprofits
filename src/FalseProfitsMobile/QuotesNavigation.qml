@@ -15,7 +15,14 @@ Page {
         RowLayout {
             anchors.fill: parent
             ToolButton {
-                text: navPan.depth > 1 ? qsTr("‹") : qsTr("...")
+                contentItem: Image {
+                    fillMode: Image.Pad
+                    horizontalAlignment: Image.AlignHCenter
+                    verticalAlignment: Image.AlignVCenter
+                    source: navPan.depth > 1 ? "qrc:/images/" + FpStyle.iconAccent
+                                               + "/arrow_back.png"
+                                             : "qrc:/images/" + FpStyle.iconAccent + "/menu.png"
+                }
                 onClicked: {
                     if (navPan.depth > 1) {
                         navPan.pop()
