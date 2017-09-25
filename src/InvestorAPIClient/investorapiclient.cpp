@@ -63,6 +63,11 @@ INetworkReply *InvestorAPIClient::getUserProfile()
     return m_requestQueue->get(createGetUserProfileRequest());
 }
 
+INetworkReply *InvestorAPIClient::getCommissions(IInvestorAPIClient::CommissionSide side)
+{
+    return m_requestQueue->get(createGetCommissionsRequest(side));
+}
+
 INetworkReply *InvestorAPIClient::getQuotes(const QStringList &symbols)
 {
     return m_requestQueue->get(createGetQuotesRequest(symbols));
@@ -117,6 +122,13 @@ QNetworkRequest InvestorAPIClient::createDeleteUserRequest() const
 QNetworkRequest InvestorAPIClient::createGetUserProfileRequest() const
 {
     QUrl url(m_apiUrl + QStringLiteral("/api/1.0/users"));
+    return makeAuthenticatedRequest(url);
+}
+
+QNetworkRequest InvestorAPIClient::createGetCommissionsRequest(CommissionSide side) const
+{
+    QUrl url(m_apiUrl + QStringLiteral("/api/1.0/commissions/")
+             + (side == CommissionSide::Buy ? QStringLiteral("buy") : QStringLiteral("sell")));
     return makeAuthenticatedRequest(url);
 }
 

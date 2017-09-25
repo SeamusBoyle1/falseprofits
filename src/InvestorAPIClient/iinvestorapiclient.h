@@ -46,6 +46,12 @@ public:
 
     virtual INetworkReply *getUserProfile() = 0;
 
+    enum class CommissionSide {
+        Buy,
+        Sell,
+    };
+    virtual INetworkReply *getCommissions(CommissionSide side) = 0;
+
     virtual INetworkReply *getQuotes(const QStringList &symbols) = 0;
 
     struct SymbolSearchQuery

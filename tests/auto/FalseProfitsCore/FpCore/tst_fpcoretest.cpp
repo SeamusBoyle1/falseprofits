@@ -87,6 +87,12 @@ public:
         return nullptr;
     }
 
+    INetworkReply *getCommissions(CommissionSide side) override
+    {
+        Q_UNUSED(side)
+        return nullptr;
+    }
+
     INetworkReply *getQuotes(const QStringList &symbols) override
     {
         Q_UNUSED(symbols)

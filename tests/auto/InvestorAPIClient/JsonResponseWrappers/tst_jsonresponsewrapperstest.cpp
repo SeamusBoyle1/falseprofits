@@ -41,6 +41,7 @@ public:
 
 private Q_SLOTS:
     void userProfileResponseTest();
+    void commissionResponseTest();
     void symbolSearchTest();
 };
 
@@ -70,6 +71,88 @@ void JsonResponseWrappersTest::userProfileResponseTest()
         QCOMPARE(*parser.displayName(), QString("Seamus"));
         QVERIFY(parser.level());
         QCOMPARE(*parser.level(), QString("Investor"));
+    }
+}
+
+void JsonResponseWrappersTest::commissionResponseTest()
+{
+    using namespace bsmi;
+
+    // buy commission
+    {
+        QString testFile("commissionBuy1.json");
+        auto doc = readFileContentsAsJson(srcDirFile(testFile));
+        if (doc.isNull()) {
+            QSKIP("Unable to open test file");
+        }
+
+        JsonObjectWrappers::CommissionsResponse parser;
+        parser.d = doc.object();
+
+        QVERIFY(parser.isValid());
+
+        auto fixed = parser.fixed();
+        QVERIFY(!fixed.isEmpty());
+        QCOMPARE(fixed.size(), 1);
+
+        auto fixedRange1 = fixed.at(0);
+        QVERIFY(fixedRange1.min());
+        QCOMPARE(*fixedRange1.min(), 0);
+        QVERIFY(fixedRange1.max());
+        QCOMPARE(*fixedRange1.max(), 1000000);
+        QVERIFY(fixedRange1.value());
+        QCOMPARE(*fixedRange1.value(), 50.0);
+
+        auto percent = parser.percent();
+        QVERIFY(!percent.isEmpty());
+        QCOMPARE(percent.size(), 1);
+
+        auto percentRange1 = percent.at(0);
+        QVERIFY(percentRange1.min());
+        QCOMPARE(*percentRange1.min(), 0);
+        QVERIFY(percentRange1.max());
+        QCOMPARE(*percentRange1.max(), 1000000);
+        QVERIFY(percentRange1.value());
+        QCOMPARE(*percentRange1.value(), 1.0);
+    }
+
+    // sell commission
+    {
+        // todo
+        QString testFile("commissionSell1.json");
+        auto doc = readFileContentsAsJson(srcDirFile(testFile));
+        if (doc.isNull()) {
+            QSKIP("Unable to open test file");
+        }
+
+        JsonObjectWrappers::CommissionsResponse parser;
+        parser.d = doc.object();
+
+        QVERIFY(parser.isValid());
+
+        auto fixed = parser.fixed();
+        QVERIFY(!fixed.isEmpty());
+        QCOMPARE(fixed.size(), 1);
+
+        auto fixedRange1 = fixed.at(0);
+        QVERIFY(fixedRange1.min());
+        QCOMPARE(*fixedRange1.min(), 0);
+        QVERIFY(fixedRange1.max());
+        QCOMPARE(*fixedRange1.max(), 1000000);
+        QVERIFY(fixedRange1.value());
+        QCOMPARE(*fixedRange1.value(), 50.0);
+
+        auto percent = parser.percent();
+        QVERIFY(!percent.isEmpty());
+        QCOMPARE(percent.size(), 1);
+
+        auto percentRange1 = percent.at(0);
+        QVERIFY(percentRange1.min());
+        QCOMPARE(*percentRange1.min(), 0);
+        QVERIFY(percentRange1.max());
+        QCOMPARE(*percentRange1.max(), 1000000);
+        QVERIFY(percentRange1.value());
+        QCOMPARE(*percentRange1.value(), 0.25);
     }
 }
 

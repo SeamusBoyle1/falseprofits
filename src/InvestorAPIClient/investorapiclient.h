@@ -33,6 +33,8 @@ public:
 
     INetworkReply *getUserProfile() override;
 
+    INetworkReply *getCommissions(CommissionSide side) override;
+
     INetworkReply *getQuotes(const QStringList &symbols) override;
 
     INetworkReply *symbolSearch(const SymbolSearchQuery &query) override;
@@ -49,6 +51,8 @@ public:
     QNetworkRequest createDeleteUserRequest() const;
 
     QNetworkRequest createGetUserProfileRequest() const;
+
+    QNetworkRequest createGetCommissionsRequest(CommissionSide side) const;
 
     QNetworkRequest createGetQuotesRequest(const QStringList &symbols) const;
 

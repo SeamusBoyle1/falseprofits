@@ -115,6 +115,51 @@ public:
     }
 };
 
+class CommissionRange
+{
+public:
+    QJsonObject d;
+
+    boost::optional<int> min() const
+    {
+        return util::getOptionalInt(d, QLatin1String("min"), -1);
+    }
+
+    boost::optional<int> max() const
+    {
+        return util::getOptionalInt(d, QLatin1String("max"), -1);
+    }
+
+    boost::optional<double> value() const
+    {
+        return util::getOptionalDouble(d, QLatin1String("value"));
+    }
+};
+
+class Commissions
+{
+public:
+    QJsonArray jsonItems;
+
+    bool isEmpty() const { return jsonItems.isEmpty(); }
+
+    int size() const { return jsonItems.size(); }
+
+    CommissionRange at(int i) const { return { jsonItems.at(i).toObject() }; }
+};
+
+class CommissionsResponse
+{
+public:
+    QJsonObject d;
+
+    bool isValid() const { return !d.isEmpty(); }
+
+    Commissions fixed() const { return { d.value(QLatin1String("fixed")).toArray() }; }
+
+    Commissions percent() const { return { d.value(QLatin1String("percentage")).toArray() }; }
+};
+
 class SymbolSearchResponseItem
 {
 public:
