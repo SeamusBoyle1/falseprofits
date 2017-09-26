@@ -44,16 +44,18 @@ void CommissionTableTest::testCase1()
     QCOMPARE(*aPercent, 1.0);
 
     // quantity equal to max of inserted rows
-    // max value is exclusive
+    // max value is inclusive
     auto bQty = 1000000;
     auto bFixed = comm.fixedCommission(bQty);
-    QVERIFY(!bFixed);
+    QVERIFY(bFixed);
+    QCOMPARE(*bFixed, 50.0);
 
     auto bPercent = comm.percentCommission(bQty);
-    QVERIFY(!bPercent);
+    QVERIFY(bPercent);
+    QCOMPARE(*bPercent, 1.0);
 
     // quantity equal to max less one of inserted rows
-    // max value is exclusive
+    // max value is inclusive
     auto cQty = 999999;
     auto cFixed = comm.fixedCommission(cQty);
     QVERIFY(cFixed);
@@ -124,23 +126,29 @@ void CommissionTableTest::testCase2()
         auto aQty = 100;
         auto aFixed = comm.fixedCommission(aQty);
         QVERIFY(aFixed);
-        QCOMPARE(*aFixed, 51.0);
+        QCOMPARE(*aFixed, 50.0);
 
         auto bQty = 200;
         auto bFixed = comm.fixedCommission(bQty);
         QVERIFY(bFixed);
-        QCOMPARE(*bFixed, 52.0);
+        QCOMPARE(*bFixed, 51.0);
 
         auto cQty = 300;
         auto cFixed = comm.fixedCommission(cQty);
         QVERIFY(cFixed);
-        QCOMPARE(*cFixed, 53.0);
+        QCOMPARE(*cFixed, 52.0);
 
         // qty equal to max of largest fixed range
-        // max is exclusive
+        // max is inclusive
         auto dQty = 400;
         auto dFixed = comm.fixedCommission(dQty);
-        QVERIFY(!dFixed);
+        QVERIFY(dFixed);
+        QCOMPARE(*dFixed, 53.0);
+
+        // qty greater than max of largest fixed range
+        auto eQty = 401;
+        auto eFixed = comm.fixedCommission(eQty);
+        QVERIFY(!eFixed);
     }
 
     {
@@ -176,23 +184,29 @@ void CommissionTableTest::testCase2()
         auto aQty = 99;
         auto aPct = comm.percentCommission(aQty);
         QVERIFY(aPct);
-        QCOMPARE(*aPct, 2.0);
+        QCOMPARE(*aPct, 1.0);
 
         auto bQty = 199;
         auto bPct = comm.percentCommission(bQty);
         QVERIFY(bPct);
-        QCOMPARE(*bPct, 3.0);
+        QCOMPARE(*bPct, 2.0);
 
         auto cQty = 299;
         auto cPct = comm.percentCommission(cQty);
         QVERIFY(cPct);
-        QCOMPARE(*cPct, 4.0);
+        QCOMPARE(*cPct, 3.0);
 
         // qty equal to max of largest percent range
-        // max is exclusive
+        // max is inclusive
         auto dQty = 399;
         auto dPct = comm.percentCommission(dQty);
-        QVERIFY(!dPct);
+        QVERIFY(dPct);
+        QCOMPARE(*dPct, 4.0);
+
+        // qty equal to max of largest percent range
+        auto eQty = 400;
+        auto ePct = comm.percentCommission(eQty);
+        QVERIFY(!ePct);
     }
 }
 

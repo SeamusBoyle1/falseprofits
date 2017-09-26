@@ -72,7 +72,7 @@ inline void CommissionTable::insertPercent(int upperBound, double percentValue)
 inline boost::optional<double> CommissionTable::fixedCommission(int quantity) const
 {
     auto it = std::upper_bound(fixed.cbegin(), fixed.cend(), quantity,
-                               [](int a, const FixedCommission &b) { return a < b.upperBound; });
+                               [](int a, const FixedCommission &b) { return a <= b.upperBound; });
     if (it != fixed.cend()) {
         return it->value;
     }
@@ -83,7 +83,7 @@ inline boost::optional<double> CommissionTable::percentCommission(int quantity) 
 {
     auto it =
         std::upper_bound(percent.cbegin(), percent.cend(), quantity,
-                         [](int a, const PercentageCommission &b) { return a < b.upperBound; });
+                         [](int a, const PercentageCommission &b) { return a <= b.upperBound; });
     if (it != percent.cend()) {
         return it->percentValue;
     }
