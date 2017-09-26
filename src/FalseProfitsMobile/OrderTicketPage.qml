@@ -136,18 +136,12 @@ OrderTicketPageForm {
         incrementBusyIndicatorVisibility()
         buyNotifier.onFinished.connect(function() {
             decrementBusyIndicatorVisibility()
-            if (accountsComboBox.currentIndex == -1) {
-                accountsComboBox.incrementCurrentIndex()
-            }
         })
 
         var sellNotifier = brokerageCostCalculator.updateSellCommission()
         incrementBusyIndicatorVisibility()
         sellNotifier.onFinished.connect(function() {
             decrementBusyIndicatorVisibility()
-            if (accountsComboBox.currentIndex == -1) {
-                accountsComboBox.incrementCurrentIndex()
-            }
         })
     }
 
