@@ -40,6 +40,7 @@ public:
     JsonResponseWrappersTest();
 
 private Q_SLOTS:
+    void errorMessageResponseTest();
     void userProfileResponseTest();
     void commissionResponseTest();
     void symbolSearchTest();
@@ -47,6 +48,25 @@ private Q_SLOTS:
 
 JsonResponseWrappersTest::JsonResponseWrappersTest()
 {
+}
+
+void JsonResponseWrappersTest::errorMessageResponseTest()
+{
+    using namespace bsmi;
+
+    {
+        QString testFile("errorNewUserDuplicateEmail.json");
+        auto doc = readFileContentsAsJson(srcDirFile(testFile));
+        if (doc.isNull()) {
+            QSKIP("Unable to open test file");
+        }
+
+        JsonObjectWrappers::ErrorMessageResponse parser;
+        parser.d = doc.object();
+
+        QVERIFY(parser.message());
+        QCOMPARE(*parser.message(), QString("There is already a user with this email address."));
+    }
 }
 
 void JsonResponseWrappersTest::userProfileResponseTest()

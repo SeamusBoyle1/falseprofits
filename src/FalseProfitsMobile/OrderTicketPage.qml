@@ -74,7 +74,7 @@ OrderTicketPageForm {
                 infoDialog.open()
                 orderCompleted()
             } else {
-                errorDialogText.text = resp.httpStatusReason()
+                errorDialogText.text = resp.errorMessage()
                 errorDialog.open()
             }
         })

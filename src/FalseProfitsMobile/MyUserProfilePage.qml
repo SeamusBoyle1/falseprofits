@@ -20,7 +20,7 @@ MyUserProfilePageForm {
                 infoDialogText.text = qsTr("Your user account has been annihilated.")
                 infoDialog.open()
             } else {
-                errorDialogText.text = resp.httpStatusReason()
+                errorDialogText.text = resp.errorMessage()
                 errorDialog.open()
             }
         })
@@ -96,7 +96,7 @@ MyUserProfilePageForm {
                     userDetails.userLevelText = userDetailsDat.level
                 } else {
                     clearUserProfileDisplay()
-                    errorDialogText.text = userProfileResp.httpStatusReason()
+                    errorDialogText.text = userProfileResp.errorMessage()
                     errorDialog.open()
                 }
             })

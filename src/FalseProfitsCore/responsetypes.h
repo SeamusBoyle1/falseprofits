@@ -26,14 +26,12 @@ public:
 
     Q_INVOKABLE
     QString errorMessage() const { return m_errorMessage; }
-    void setError(const QString &errorMessage) { m_errorMessage = errorMessage; }
+    void setErrorMessage(const QString &errorMessage) { m_errorMessage = errorMessage; }
 
     Q_INVOKABLE
     QByteArray payload() const { return m_payload; }
     void setPayload(const QByteArray &payload) { m_payload = payload; }
 
-    Q_INVOKABLE
-    QString httpStatusReason() { return getHttpStatusReason(m_httpStatusCode); }
     // TODO(seamus): Extract reason text
     Q_INVOKABLE
     virtual QString getHttpStatusReason(int httpStatusCode) const = 0;
@@ -71,17 +69,12 @@ public:
         case 201:
             return "New user successfully created.";
         case 400: {
-            auto obj = QJsonDocument::fromJson(payload()).object();
-            auto message = obj.value(QLatin1String("message")).toString();
-            if (!message.isEmpty()) {
-                return message;
-            }
             return "Request failed validation.";
         }
         default:
             break;
         }
-        return errorMessage();
+        return QString();
     }
 };
 
@@ -103,7 +96,7 @@ public:
         default:
             break;
         }
-        return errorMessage();
+        return QString();
     }
 };
 
@@ -125,7 +118,7 @@ public:
         default:
             break;
         }
-        return errorMessage();
+        return QString();
     }
 };
 
@@ -145,7 +138,7 @@ public:
         default:
             break;
         }
-        return errorMessage();
+        return QString();
     }
 };
 
@@ -160,7 +153,7 @@ public:
     {
         Q_UNUSED(httpStatusCode);
         // no codes in swagger docs
-        return errorMessage();
+        return QString();
     }
 };
 
@@ -180,7 +173,7 @@ public:
         default:
             break;
         }
-        return errorMessage();
+        return QString();
     }
 };
 
@@ -200,7 +193,7 @@ public:
         default:
             break;
         }
-        return errorMessage();
+        return QString();
     }
 };
 
@@ -227,7 +220,7 @@ public:
         default:
             break;
         }
-        return errorMessage();
+        return QString();
     }
 
     QString symbol() const { return m_symbol; }
@@ -297,7 +290,7 @@ public:
         default:
             break;
         }
-        return errorMessage();
+        return QString();
     }
 };
 

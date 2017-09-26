@@ -108,6 +108,9 @@ private:
     void signInAsNewUser(const NewUserDetails &newUser);
 
     static int readHttpStatusCode(bsmi::INetworkReply *reply);
+
+    static QString readErrorMessage(BaseResponse *response, bsmi::INetworkReply *reply,
+                                    int httpStatusCode);
 };
 
 #endif // FPCORE_H

@@ -41,6 +41,17 @@ inline boost::optional<int> getOptionalInt(const QJsonObject &o, const String &k
 
 } // namespace util
 
+class ErrorMessageResponse
+{
+public:
+    QJsonObject d;
+
+    boost::optional<QString> message() const
+    {
+        return util::getOptionalString(d, QLatin1String("message"));
+    }
+};
+
 class TokenResponse
 {
 public:

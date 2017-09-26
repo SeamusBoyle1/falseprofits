@@ -65,7 +65,7 @@ DetailedQuotePageForm {
                     dayHighText = quote.dayHigh
                 }
             } else {
-                errorDialogText.text = quoteResp.httpStatusReason()
+                errorDialogText.text = quoteResp.errorMessage()
                 errorDialog.open()
             }
         })
@@ -78,7 +78,7 @@ DetailedQuotePageForm {
                 companyNameText = detailsResp.companyName
                 industryText = detailsResp.industry
             } else {
-                errorDialogText.text = detailsResp.httpStatusReason()
+                errorDialogText.text = detailsResp.errorMessage()
                 errorDialog.open()
             }
         })

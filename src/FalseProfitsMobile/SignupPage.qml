@@ -16,7 +16,7 @@ SignupPageForm {
             busyIndicator.visible = false
             if (!resp.hasError()) {
             } else {
-                errorDialogText.text = resp.httpStatusReason()
+                errorDialogText.text = resp.errorMessage()
                 errorDialog.open()
             }
         })

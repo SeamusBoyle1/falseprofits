@@ -66,7 +66,8 @@ NewUserResponse *FpCore::createNewUser(const NewUserDetails &newUser)
             rep->deleteLater();
             return;
         }
-        resp->setHttpStatusCode(readHttpStatusCode(rep));
+        auto httpStatusCode = readHttpStatusCode(rep);
+        resp->setHttpStatusCode(httpStatusCode);
         if (rep->error() == QNetworkReply::NoError) {
             resp->setPayload(rep->readAll());
 
@@ -75,11 +76,7 @@ NewUserResponse *FpCore::createNewUser(const NewUserDetails &newUser)
                 signInAsNewUser(newUser);
             }
         } else {
-            resp->setError(rep->errorString());
-
-            if (resp->httpStatusCode() >= 400 && resp->httpStatusCode() <= 499) {
-                resp->setPayload(rep->readAll());
-            }
+            resp->setErrorMessage(readErrorMessage(resp, rep, httpStatusCode));
         }
 
         rep->deleteLater();
@@ -99,7 +96,8 @@ AuthenticateResponse *FpCore::authenticate(const QString &email, const QString &
             rep->deleteLater();
             return;
         }
-        resp->setHttpStatusCode(readHttpStatusCode(rep));
+        auto httpStatusCode = readHttpStatusCode(rep);
+        resp->setHttpStatusCode(httpStatusCode);
         if (rep->error() == QNetworkReply::NoError) {
             resp->setPayload(rep->readAll());
             bsmi::JsonObjectWrappers::TokenResponse jsonReader;
@@ -115,7 +113,7 @@ AuthenticateResponse *FpCore::authenticate(const QString &email, const QString &
                 m_settings->writeAccessToken(*token, expiryDt);
             }
         } else {
-            resp->setError(rep->errorString());
+            resp->setErrorMessage(readErrorMessage(resp, rep, httpStatusCode));
         }
 
         rep->deleteLater();
@@ -135,13 +133,14 @@ DeleteUserResponse *FpCore::deleteUser()
             rep->deleteLater();
             return;
         }
-        resp->setHttpStatusCode(readHttpStatusCode(rep));
+        auto httpStatusCode = readHttpStatusCode(rep);
+        resp->setHttpStatusCode(httpStatusCode);
         if (rep->error() == QNetworkReply::NoError) {
             resp->setPayload(rep->readAll());
 
             clearAccessToken();
         } else {
-            resp->setError(rep->errorString());
+            resp->setErrorMessage(readErrorMessage(resp, rep, httpStatusCode));
         }
 
         rep->deleteLater();
@@ -161,11 +160,12 @@ GetUserProfileResponse *FpCore::getUserProfile()
             rep->deleteLater();
             return;
         }
-        resp->setHttpStatusCode(readHttpStatusCode(rep));
+        auto httpStatusCode = readHttpStatusCode(rep);
+        resp->setHttpStatusCode(httpStatusCode);
         if (rep->error() == QNetworkReply::NoError) {
             resp->setPayload(rep->readAll());
         } else {
-            resp->setError(rep->errorString());
+            resp->setErrorMessage(readErrorMessage(resp, rep, httpStatusCode));
         }
 
         rep->deleteLater();
@@ -187,11 +187,12 @@ GetCommissionsResponse *FpCore::getCommissions(Fpx::CommissionSide side)
             rep->deleteLater();
             return;
         }
-        resp->setHttpStatusCode(readHttpStatusCode(rep));
+        auto httpStatusCode = readHttpStatusCode(rep);
+        resp->setHttpStatusCode(httpStatusCode);
         if (rep->error() == QNetworkReply::NoError) {
             resp->setPayload(rep->readAll());
         } else {
-            resp->setError(rep->errorString());
+            resp->setErrorMessage(readErrorMessage(resp, rep, httpStatusCode));
         }
 
         rep->deleteLater();
@@ -211,11 +212,12 @@ GetQuotesResponse *FpCore::getQuotes(const QStringList &symbols)
             rep->deleteLater();
             return;
         }
-        resp->setHttpStatusCode(readHttpStatusCode(rep));
+        auto httpStatusCode = readHttpStatusCode(rep);
+        resp->setHttpStatusCode(httpStatusCode);
         if (rep->error() == QNetworkReply::NoError) {
             resp->setPayload(rep->readAll());
         } else {
-            resp->setError(rep->errorString());
+            resp->setErrorMessage(readErrorMessage(resp, rep, httpStatusCode));
         }
 
         rep->deleteLater();
@@ -240,11 +242,12 @@ SymbolSearchResponse *FpCore::symbolSearch(const SymbolSearchQuery &query)
             rep->deleteLater();
             return;
         }
-        resp->setHttpStatusCode(readHttpStatusCode(rep));
+        auto httpStatusCode = readHttpStatusCode(rep);
+        resp->setHttpStatusCode(httpStatusCode);
         if (rep->error() == QNetworkReply::NoError) {
             resp->setPayload(rep->readAll());
         } else {
-            resp->setError(rep->errorString());
+            resp->setErrorMessage(readErrorMessage(resp, rep, httpStatusCode));
         }
 
         rep->deleteLater();
@@ -268,7 +271,8 @@ GetShareDetailsResponse *FpCore::getShareDetails(const QString &symbol)
             rep->deleteLater();
             return;
         }
-        resp->setHttpStatusCode(readHttpStatusCode(rep));
+        auto httpStatusCode = readHttpStatusCode(rep);
+        resp->setHttpStatusCode(httpStatusCode);
         if (rep->error() == QNetworkReply::NoError) {
             resp->setPayload(rep->readAll());
             auto doc = QJsonDocument::fromJson(resp->payload());
@@ -299,7 +303,7 @@ GetShareDetailsResponse *FpCore::getShareDetails(const QString &symbol)
                 resp->setHttpStatusCode(404);
             }
         } else {
-            resp->setError(rep->errorString());
+            resp->setErrorMessage(readErrorMessage(resp, rep, httpStatusCode));
         }
 
         rep->deleteLater();
@@ -326,11 +330,12 @@ SendOrderResponse *FpCore::sendOrder(const QString &accountId, const OrderParams
             rep->deleteLater();
             return;
         }
-        resp->setHttpStatusCode(readHttpStatusCode(rep));
+        auto httpStatusCode = readHttpStatusCode(rep);
+        resp->setHttpStatusCode(httpStatusCode);
         if (rep->error() == QNetworkReply::NoError) {
             resp->setPayload(rep->readAll());
         } else {
-            resp->setError(rep->errorString());
+            resp->setErrorMessage(readErrorMessage(resp, rep, httpStatusCode));
         }
 
         rep->deleteLater();
@@ -411,4 +416,43 @@ void FpCore::signInAsNewUser(const NewUserDetails &newUser)
 int FpCore::readHttpStatusCode(bsmi::INetworkReply *reply)
 {
     return reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+}
+
+/*!
+ * Returns an error message that can be displayed to the user.
+ * The returned string is never empty.
+ *
+ * If \a httpStatusCode is a server error response
+ * (400 <= \a httpStatusCode <= 499) the content of the \a reply
+ * is read and set on the \a response as the payload.
+ */
+QString FpCore::readErrorMessage(BaseResponse *response, bsmi::INetworkReply *reply,
+                                 int httpStatusCode)
+{
+    QString errorMessage;
+
+    if (httpStatusCode >= 400 && httpStatusCode <= 499) {
+        auto json = reply->readAll();
+        if (!json.isEmpty()) {
+            response->setPayload(json);
+
+            bsmi::JsonObjectWrappers::ErrorMessageResponse parser;
+            parser.d = QJsonDocument::fromJson(json).object();
+            auto msg = parser.message();
+            if (msg) {
+                errorMessage = *msg;
+            }
+        }
+        if (errorMessage.isEmpty()) {
+            errorMessage = response->getHttpStatusReason(httpStatusCode);
+        }
+    } else if (errorMessage.isEmpty()) {
+        errorMessage = reply->errorString();
+    }
+
+    if (errorMessage.isEmpty()) {
+        errorMessage = tr("Unknown error code: %1").arg(httpStatusCode);
+    }
+
+    return errorMessage;
 }

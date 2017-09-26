@@ -1,0 +1,8 @@
+{
+    "message": "There is already a user with this email address.",
+    "validationErrors": [
+        {
+            "message": "There is already a user with this email address."
+        }
+    ]
+}
