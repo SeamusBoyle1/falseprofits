@@ -42,9 +42,11 @@ ApplicationWindow {
                 highlighted: ListView.isCurrentItem
                 onClicked: {
                     listView.currentIndex = index
-                    if (model.source !== "qrc:/SignOutPage.qml") {
-                        appNavStack.clear() // limit depth
+                    if (model.source === "qrc:/SignOutPage.qml") {
+                        showSignOutScreen()
+                        return
                     }
+                    appNavStack.clear() // limit depth
                     appNavStack.push(model.source)
                     appDrawer.close()
                 }
@@ -67,6 +69,12 @@ ApplicationWindow {
         appDrawer.enableDrawer = false
     }
 
+    function showSignOutScreen() {
+        listView.currentIndex = -1
+        appNavStack.push("qrc:/SignOutPage.qml", {"objectName": "SignOutPage"})
+        appDrawer.close()
+    }
+
     /*!
        Push the sign in screen if not authenticated,
        Pop the sign in screen if authenticated and the
@@ -79,9 +87,20 @@ ApplicationWindow {
         } else if (appNavStack.currentItem
                    && appNavStack.currentItem.objectName === "SignInNavigation"){
             appDrawer.enableDrawer = true
+            var didGetBackToWork = false
             if (appNavStack.depth > 1) {
                 appNavStack.pop()
-            } else {
+                if (appNavStack.currentItem.objectName === "SignOutPage") {
+                    if (appNavStack.depth > 1) {
+                        appNavStack.pop()
+                        didGetBackToWork = true
+                    }
+                } else {
+                    didGetBackToWork = true
+                }
+            }
+
+            if (!didGetBackToWork) {
                 listView.currentIndex = 0
                 appNavStack.clear() // limit depth
                 appNavStack.push("qrc:/QuotesNavigation.qml")
