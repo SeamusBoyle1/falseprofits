@@ -140,6 +140,21 @@ public:
     }
 };
 
+class GetCommissionsResponse : public BaseResponse
+{
+    Q_OBJECT
+public:
+    GetCommissionsResponse() {}
+    virtual ~GetCommissionsResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        Q_UNUSED(httpStatusCode);
+        // no codes in swagger docs
+        return errorMessage();
+    }
+};
+
 class GetQuotesResponse : public BaseResponse
 {
     Q_OBJECT

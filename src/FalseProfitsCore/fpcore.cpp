@@ -186,6 +186,32 @@ GetUserProfileResponse *FpCore::getUserProfile()
     return resp;
 }
 
+GetCommissionsResponse *FpCore::getCommissions(Fpx::CommissionSide side)
+{
+    QPointer<GetCommissionsResponse> resp(new GetCommissionsResponse);
+
+    auto rep = m_client->getCommissions(side == Fpx::CommissionSide::BuySide
+                                            ? bsmi::IInvestorAPIClient::CommissionSide::Buy
+                                            : bsmi::IInvestorAPIClient::CommissionSide::Sell);
+    connect(rep, &bsmi::INetworkReply::finished, this, [resp, rep, this]() {
+        if (!resp) {
+            rep->deleteLater();
+            return;
+        }
+        resp->setHttpStatusCode(readHttpStatusCode(rep));
+        if (rep->error() == QNetworkReply::NoError) {
+            resp->setPayload(rep->readAll());
+        } else {
+            resp->setError(rep->errorString());
+        }
+
+        rep->deleteLater();
+        resp->setFinished();
+    });
+
+    return resp;
+}
+
 GetQuotesResponse *FpCore::getQuotes(const QStringList &symbols)
 {
     QPointer<GetQuotesResponse> resp(new GetQuotesResponse);

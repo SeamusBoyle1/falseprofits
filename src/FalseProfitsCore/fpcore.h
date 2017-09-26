@@ -25,6 +25,12 @@ enum class AuthenticationState {
     NotAuthenticatedState,
 };
 Q_ENUM_NS(AuthenticationState)
+
+enum class CommissionSide {
+    BuySide,
+    SellSide,
+};
+Q_ENUM_NS(CommissionSide)
 }
 
 class FpCore : public QObject
@@ -56,6 +62,9 @@ public:
 
     Q_INVOKABLE
     GetUserProfileResponse *getUserProfile();
+
+    Q_INVOKABLE
+    GetCommissionsResponse *getCommissions(Fpx::CommissionSide side);
 
     Q_INVOKABLE
     GetQuotesResponse *getQuotes(const QStringList &symbols);
