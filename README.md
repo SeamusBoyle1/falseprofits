@@ -14,6 +14,10 @@ market. Players compete to become Top Trader.
 - Android (API Level 16)
 - iOS 8, 9, 10
 
+## Pre-Release Downloads
+
+- Windows 10, 8.1, 7 ([64-bit](https://ci.appveyor.com/project/SeamusBoyle1/falseprofits/build/artifacts))
+
 ## Compiling FalseProfits
 
 ## Prerequisites
