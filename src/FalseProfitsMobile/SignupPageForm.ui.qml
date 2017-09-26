@@ -28,6 +28,19 @@ Pane {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             Layout.maximumWidth: _inDesktopMode ? 480 : parent.width
 
+            ColumnLayout {
+                visible: _inDesktopMode
+                spacing: 20
+                Layout.bottomMargin: 20
+
+                Label {
+                    text: qsTr("Create an account")
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pixelSize: 26
+                    Layout.fillWidth: true
+                }
+            }
+
             TextField {
                 id: displayNameField
                 Layout.fillWidth: true

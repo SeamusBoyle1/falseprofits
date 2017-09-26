@@ -27,6 +27,19 @@ Pane {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             Layout.maximumWidth: _inDesktopMode ? 480 : parent.width
 
+            ColumnLayout {
+                visible: _inDesktopMode
+                spacing: 20
+                Layout.bottomMargin: 20
+
+                Label {
+                    text: qsTr("Sign in to continue")
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pixelSize: 26
+                    Layout.fillWidth: true
+                }
+            }
+
             TextField {
                 id: emailField
                 Layout.fillWidth: true
