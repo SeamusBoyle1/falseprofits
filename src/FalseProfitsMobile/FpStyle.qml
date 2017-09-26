@@ -1,5 +1,5 @@
 pragma Singleton
-import QtQuick 2.0
+import QtQuick 2.7
 
 QtObject {
     property int appWindowWidth: 360
@@ -7,4 +7,6 @@ QtObject {
 
     property string iconAccent: "white"
     property string iconPrimary: "black"
+
+    property int passwordEchoMode: TextInput.PasswordEchoOnEdit
 }

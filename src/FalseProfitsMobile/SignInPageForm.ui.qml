@@ -2,6 +2,8 @@ import QtQuick 2.4
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
+import com.example.fpx 1.0
+
 Pane {
     width: 400
     height: 400
@@ -43,7 +45,7 @@ Pane {
             Layout.fillWidth: true
             placeholderText: qsTr("Password")
             selectByMouse: true
-            echoMode: TextInput.PasswordEchoOnEdit
+            echoMode: FpStyle.passwordEchoMode
 
             Label {
                 text: qsTr("Password")
