@@ -15,9 +15,15 @@ OrderTicketPageForm {
         coreClient: fpCore
     }
 
+    BrokerageCostCalculator {
+        id: brokerageCostCalculator
+        coreClient: fpCore
+    }
+
     Component.onCompleted: {
         accountsComboBox.model = myTradingAccounts.model
         updateAccounts()
+        updateCommissionTables()
     }
 
     placeOrderButton.onClicked: {
@@ -125,6 +131,26 @@ OrderTicketPageForm {
         })
     }
 
+    function updateCommissionTables() {
+        var buyNotifier = brokerageCostCalculator.updateBuyCommission()
+        incrementBusyIndicatorVisibility()
+        buyNotifier.onFinished.connect(function() {
+            decrementBusyIndicatorVisibility()
+            if (accountsComboBox.currentIndex == -1) {
+                accountsComboBox.incrementCurrentIndex()
+            }
+        })
+
+        var sellNotifier = brokerageCostCalculator.updateSellCommission()
+        incrementBusyIndicatorVisibility()
+        sellNotifier.onFinished.connect(function() {
+            decrementBusyIndicatorVisibility()
+            if (accountsComboBox.currentIndex == -1) {
+                accountsComboBox.incrementCurrentIndex()
+            }
+        })
+    }
+
     function updateQuote() {
         lastPriceText = ""
         lastPriceValue = 0
@@ -162,7 +188,7 @@ OrderTicketPageForm {
             costArgs.price = lastPriceValue
             costArgs.side = buySideOption.checked ? OrderParams.BuySide : OrderParams.SellSide
 
-            var costResult = fpCore.calcBrokerageCost(costArgs)
+            var costResult = brokerageCostCalculator.calcBrokerageCost(costArgs)
             // TODO(seamus): Don't use toFixed(), it isn't localized
             orderValueText = costResult.orderValue.toFixed(3)
             brokerageCostText = costResult.brokerageCost.toFixed(3)

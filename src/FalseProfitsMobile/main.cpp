@@ -3,6 +3,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
+#include <FalseProfitsCore/brokeragecostcalculator.h>
 #include <FalseProfitsCore/finishnotifier.h>
 #include <FalseProfitsCore/fpaccountslistmodel.h>
 #include <FalseProfitsCore/fpcore.h>
@@ -52,6 +53,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<GetShareDetailsResponse>("FpResponses", 1, 0, "GetShareDetailsResponse");
     qmlRegisterType<SendOrderResponse>("FpResponses", 1, 0, "SendOrderResponse");
 
+    qmlRegisterType<BrokerageCostCalculator>("com.example.fpx", 1, 0, "BrokerageCostCalculator");
     qmlRegisterType<FinishNotifier>("com.example.fpx", 1, 0, "FinishNotifier");
     qmlRegisterType<FpSymbolSearchWrapper>("com.example.fpx", 1, 0, "FpSymbolSearchWrapper");
     qmlRegisterType<FpSymbolSearchResultsItemModel>("com.example.fpx", 1, 0,
