@@ -15,7 +15,6 @@ Pane {
     property bool _inDesktopMode: FpStyle.selector === "desktop"
 
     ColumnLayout {
-        spacing: 20
         anchors.top: parent.top
         anchors.topMargin: 20
         anchors.left: parent.left
@@ -24,6 +23,7 @@ Pane {
         anchors.rightMargin: 0
 
         ColumnLayout {
+            spacing: 20
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             Layout.maximumWidth: _inDesktopMode ? 480 : parent.width
 
