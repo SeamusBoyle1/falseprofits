@@ -67,7 +67,10 @@ OrderTicketPageForm {
         resp.onFinished.connect(function() {
             decrementBusyIndicatorVisibility()
             if (!resp.hasError()) {
-                infoDialogText.text = resp.httpStatusReason()
+                // TODO(seamus): Add order price (from response) to text
+                infoDialogText.text = infoDialogText.text = qsTr("%1 %2 %3 shares.").arg(
+                            orderArgs.side === OrderParams.BuySide ? "Bought" : "Sold").arg(
+                            orderArgs.quantity).arg(orderArgs.symbol)
                 infoDialog.open()
                 orderCompleted()
             } else {

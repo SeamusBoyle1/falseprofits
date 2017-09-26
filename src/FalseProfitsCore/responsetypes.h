@@ -279,8 +279,6 @@ public:
     {
         // TODO(seamus): Define enums for errors
         switch (httpStatusCode) {
-        case 201:
-            return "Shares successfully bought.";
         case 400:
             return "Invalid order.";
         case 401:
