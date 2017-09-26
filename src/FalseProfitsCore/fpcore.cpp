@@ -76,6 +76,10 @@ NewUserResponse *FpCore::createNewUser(const NewUserDetails &newUser)
             }
         } else {
             resp->setError(rep->errorString());
+
+            if (resp->httpStatusCode() >= 400 || resp->httpStatusCode() <= 499) {
+                resp->setPayload(rep->readAll());
+            }
         }
 
         rep->deleteLater();

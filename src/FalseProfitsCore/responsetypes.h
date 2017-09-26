@@ -5,6 +5,9 @@
 
 #include <QObject>
 
+#include <QJsonDocument>
+#include <QJsonObject>
+
 // TODO(seamus): Rewrite response types
 
 class BaseResponse : public QObject
@@ -67,8 +70,14 @@ public:
         switch (httpStatusCode) {
         case 201:
             return "New user successfully created.";
-        case 400:
+        case 400: {
+            auto obj = QJsonDocument::fromJson(payload()).object();
+            auto message = obj.value(QLatin1String("message")).toString();
+            if (!message.isEmpty()) {
+                return message;
+            }
             return "Request failed validation.";
+        }
         default:
             break;
         }
