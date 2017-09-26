@@ -35,7 +35,7 @@ struct CommissionTable
 
     void insertPercent(int upperBound, double percentValue);
 
-    boost::optional<double> fixCommission(int quantity) const;
+    boost::optional<double> fixedCommission(int quantity) const;
 
     boost::optional<double> percentCommission(int quantity) const;
 
@@ -69,7 +69,7 @@ inline void CommissionTable::insertPercent(int upperBound, double percentValue)
     percent.append({ percentValue, upperBound });
 }
 
-inline boost::optional<double> CommissionTable::fixCommission(int quantity) const
+inline boost::optional<double> CommissionTable::fixedCommission(int quantity) const
 {
     auto it = std::upper_bound(fixed.cbegin(), fixed.cend(), quantity,
                                [](int a, const FixedCommission &b) { return a < b.upperBound; });
@@ -93,7 +93,7 @@ inline boost::optional<double> CommissionTable::percentCommission(int quantity) 
 inline std::tuple<boost::optional<double>, boost::optional<double>>
 CommissionTable::commissions(int quantity) const
 {
-    return std::make_tuple(fixCommission(quantity), percentCommission(quantity));
+    return std::make_tuple(fixedCommission(quantity), percentCommission(quantity));
 }
 
 #endif // COMMISSIONTABLE_H

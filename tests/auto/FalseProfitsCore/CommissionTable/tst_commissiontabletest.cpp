@@ -35,7 +35,7 @@ void CommissionTableTest::testCase1()
 
     // quantity below max of inserted row
     auto aQty = 20;
-    auto aFixed = comm.fixCommission(aQty);
+    auto aFixed = comm.fixedCommission(aQty);
     QVERIFY(aFixed);
     QCOMPARE(*aFixed, 50.0);
 
@@ -46,7 +46,7 @@ void CommissionTableTest::testCase1()
     // quantity equal to max of inserted rows
     // max value is exclusive
     auto bQty = 1000000;
-    auto bFixed = comm.fixCommission(bQty);
+    auto bFixed = comm.fixedCommission(bQty);
     QVERIFY(!bFixed);
 
     auto bPercent = comm.percentCommission(bQty);
@@ -55,7 +55,7 @@ void CommissionTableTest::testCase1()
     // quantity equal to max less one of inserted rows
     // max value is exclusive
     auto cQty = 999999;
-    auto cFixed = comm.fixCommission(cQty);
+    auto cFixed = comm.fixedCommission(cQty);
     QVERIFY(cFixed);
     QCOMPARE(*cFixed, 50.0);
 
@@ -65,7 +65,7 @@ void CommissionTableTest::testCase1()
 
     // quantity creater than max of inserted rows
     auto dQty = 1000001;
-    auto dFixed = comm.fixCommission(dQty);
+    auto dFixed = comm.fixedCommission(dQty);
     QVERIFY(!dFixed);
 
     auto dPercent = comm.percentCommission(dQty);
@@ -94,52 +94,52 @@ void CommissionTableTest::testCase2()
     {
         // One below max in fixed row
         auto aQty = 99;
-        auto aFixed = comm.fixCommission(aQty);
+        auto aFixed = comm.fixedCommission(aQty);
         QVERIFY(aFixed);
         QCOMPARE(*aFixed, 50.0);
 
         auto bQty = 199;
-        auto bFixed = comm.fixCommission(bQty);
+        auto bFixed = comm.fixedCommission(bQty);
         QVERIFY(bFixed);
         QCOMPARE(*bFixed, 51.0);
 
         auto cQty = 299;
-        auto cFixed = comm.fixCommission(cQty);
+        auto cFixed = comm.fixedCommission(cQty);
         QVERIFY(cFixed);
         QCOMPARE(*cFixed, 52.0);
 
         auto dQty = 399;
-        auto dFixed = comm.fixCommission(dQty);
+        auto dFixed = comm.fixedCommission(dQty);
         QVERIFY(dFixed);
         QCOMPARE(*dFixed, 53.0);
 
         // qty greater than max of largest fixed range
         auto eQty = 499;
-        auto eFixed = comm.fixCommission(eQty);
+        auto eFixed = comm.fixedCommission(eQty);
         QVERIFY(!eFixed);
     }
 
     {
         // Equal to max in fixed row
         auto aQty = 100;
-        auto aFixed = comm.fixCommission(aQty);
+        auto aFixed = comm.fixedCommission(aQty);
         QVERIFY(aFixed);
         QCOMPARE(*aFixed, 51.0);
 
         auto bQty = 200;
-        auto bFixed = comm.fixCommission(bQty);
+        auto bFixed = comm.fixedCommission(bQty);
         QVERIFY(bFixed);
         QCOMPARE(*bFixed, 52.0);
 
         auto cQty = 300;
-        auto cFixed = comm.fixCommission(cQty);
+        auto cFixed = comm.fixedCommission(cQty);
         QVERIFY(cFixed);
         QCOMPARE(*cFixed, 53.0);
 
         // qty equal to max of largest fixed range
         // max is exclusive
         auto dQty = 400;
-        auto dFixed = comm.fixCommission(dQty);
+        auto dFixed = comm.fixedCommission(dQty);
         QVERIFY(!dFixed);
     }
 
