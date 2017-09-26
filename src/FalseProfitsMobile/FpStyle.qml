@@ -2,6 +2,8 @@ pragma Singleton
 import QtQuick 2.7
 
 QtObject {
+    property string selector: "touch"
+
     property int appWindowWidth: 360
     property int appWindowHeight: 520
 

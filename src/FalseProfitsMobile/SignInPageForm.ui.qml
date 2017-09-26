@@ -12,6 +12,7 @@ Pane {
     property alias signInButton: signInButton
     property alias passwordField: passwordField
     property alias emailField: emailField
+    property bool _inDesktopMode: FpStyle.selector === "desktop"
 
     ColumnLayout {
         spacing: 20
@@ -22,53 +23,59 @@ Pane {
         anchors.right: parent.right
         anchors.rightMargin: 0
 
-        TextField {
-            id: emailField
-            Layout.fillWidth: true
-            placeholderText: qsTr("Email address")
-            selectByMouse: true
-            inputMethodHints: Qt.ImhEmailCharactersOnly
-            validator: RegExpValidator {
-                // RegExp source: https://stackoverflow.com/a/16148388
-                regExp: /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/
-            }
-
-            Label {
-                text: qsTr("Email")
-                visible: parent.text
-                anchors.bottom: parent.top
-            }
-        }
-
-        TextField {
-            id: passwordField
-            Layout.fillWidth: true
-            placeholderText: qsTr("Password")
-            selectByMouse: true
-            echoMode: FpStyle.passwordEchoMode
-
-            Label {
-                text: qsTr("Password")
-                visible: parent.text
-                anchors.bottom: parent.top
-            }
-        }
-
-        Button {
-            id: signInButton
-            text: qsTr("Sign in")
-            enabled: emailField.text.length > 0 && emailField.acceptableInput
-                     && passwordField.text.length > 0
-            Layout.fillWidth: true
+        ColumnLayout {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        }
+            Layout.maximumWidth: _inDesktopMode ? 480 : parent.width
 
-        Button {
-            id: signupPageButton
-            text: qsTr("Create an account")
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            flat: true
+            TextField {
+                id: emailField
+                Layout.fillWidth: true
+                placeholderText: qsTr("Email address")
+                selectByMouse: true
+                inputMethodHints: Qt.ImhEmailCharactersOnly
+                validator: RegExpValidator {
+                    // RegExp source: https://stackoverflow.com/a/16148388
+                    regExp: /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/
+                }
+
+                Label {
+                    text: qsTr("Email")
+                    visible: parent.text
+                    anchors.bottom: parent.top
+                }
+            }
+
+            TextField {
+                id: passwordField
+                Layout.fillWidth: true
+                placeholderText: qsTr("Password")
+                selectByMouse: true
+                echoMode: FpStyle.passwordEchoMode
+
+                Label {
+                    text: qsTr("Password")
+                    visible: parent.text
+                    anchors.bottom: parent.top
+                }
+            }
+
+            Button {
+                id: signInButton
+                text: qsTr("Sign in")
+                enabled: emailField.text.length > 0
+                         && emailField.acceptableInput
+                         && passwordField.text.length > 0
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            }
+
+            Button {
+                id: signupPageButton
+                text: qsTr("Create an account")
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                flat: true
+            }
         }
     }
 
