@@ -45,6 +45,9 @@ public:
 
     INetworkReply *addSymbolToWatchlist(const QString &watchlistId, const QString &symbol) override;
 
+    INetworkReply *removeSymbolFromWatchlist(const QString &watchlistId,
+                                             const QString &symbol) override;
+
     // TODO(seamus): Extract a request factory
     QPair<QNetworkRequest, QJsonObject>
     createCreateNewUserRequest(const QHash<UserRecordField, QVariant> &params) const;
@@ -62,6 +65,9 @@ public:
 
     QPair<QNetworkRequest, QJsonObject> createAddSymbolToWatchlistRequest(
             const QString &watchlistId, const QString &symbol) const;
+
+    QNetworkRequest createRemoveSymbolFromWatchlistRequest(const QString &watchlistId,
+                                                           const QString &symbol) const;
 
     QNetworkRequest createGetQuotesRequest(const QStringList &symbols) const;
 

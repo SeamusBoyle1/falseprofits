@@ -98,6 +98,13 @@ INetworkReply *InvestorAPIClient::addSymbolToWatchlist(const QString &watchlistI
     return m_requestQueue->post(r.first, r.second);
 }
 
+INetworkReply *InvestorAPIClient::removeSymbolFromWatchlist(const QString &watchlistId,
+                                                            const QString &symbol)
+{
+    return m_requestQueue->deleteResource(createRemoveSymbolFromWatchlistRequest(watchlistId,
+                                                                                 symbol));
+}
+
 QPair<QNetworkRequest, QJsonObject>
 InvestorAPIClient::createCreateNewUserRequest(const QHash<UserRecordField, QVariant> &params) const
 {
@@ -161,6 +168,14 @@ QPair<QNetworkRequest, QJsonObject> InvestorAPIClient::createAddSymbolToWatchlis
     obj.insert(QStringLiteral("symbol"), symbol);
 
     return qMakePair(req, obj);
+}
+
+QNetworkRequest InvestorAPIClient::createRemoveSymbolFromWatchlistRequest(
+        const QString &watchlistId, const QString &symbol) const
+{
+    QUrl url(m_apiUrl + QStringLiteral("/api/1.0/watchlists/") + watchlistId
+                                       + QStringLiteral("/shares/") + symbol);
+    return makeAuthenticatedRequest(url);
 }
 
 QNetworkRequest InvestorAPIClient::createGetQuotesRequest(const QStringList &symbols) const

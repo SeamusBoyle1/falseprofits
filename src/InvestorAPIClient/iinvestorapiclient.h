@@ -76,6 +76,9 @@ public:
     virtual INetworkReply *addSymbolToWatchlist(const QString &watchlistId,
                                                 const QString &symbol) = 0;
 
+    virtual INetworkReply *removeSymbolFromWatchlist(const QString &watchlistId,
+                                                     const QString &symbol) = 0;
+
 Q_SIGNALS:
     void authTokenChanged();
 };

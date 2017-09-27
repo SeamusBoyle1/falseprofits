@@ -124,6 +124,14 @@ public:
         Q_UNUSED(symbol)
         return nullptr;
     }
+
+    INetworkReply *removeSymbolFromWatchlist(const QString &watchlistId,
+                                             const QString &symbol) override
+    {
+        Q_UNUSED(watchlistId)
+        Q_UNUSED(symbol)
+        return nullptr;
+    }
 };
 
 class QNetworkReplyMock : public QNetworkReply
