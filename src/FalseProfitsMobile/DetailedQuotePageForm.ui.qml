@@ -11,6 +11,9 @@ Page {
     property string industryText
     property string bidText
     property string askText
+    property int direction: 0
+    property string changePriceText
+    property string changePercentText
     property string dayLowText
     property string dayHighText
     property alias lastPriceLabel: lastPriceLabel
@@ -97,26 +100,66 @@ Page {
                             Layout.rightMargin: 16
                             columns: 3
 
+                            RowLayout {
+                                Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+                                Layout.rowSpan: 5
+
+                                Label {
+                                    id: changeArrow
+                                    text: direction == 1 ? '▲' : direction == -1 ? '▼' : '='
+                                    color: direction == 1 ? "#0b893e" : direction
+                                                            == -1 ? "#bf1722" : "black"
+                                    font.pixelSize: 32
+                                }
+
+                                Label {
+                                    id: lastPriceLabel
+                                    font.pixelSize: 32
+                                }
+                            }
+
                             Label {
-                                id: lastPriceLabel
-                                Layout.rowSpan: 2
-                                font.pixelSize: 32
+                                text: qsTr("Daily Change")
+                                font.pixelSize: 12
+                                font.capitalization: Font.AllUppercase
+                                Layout.columnSpan: 2
+                            }
+
+                            RowLayout {
+                                Layout.columnSpan: 2
+                                spacing: 12
+
+                                Label {
+                                    text: changePriceText
+                                    Layout.fillWidth: true
+                                    font.pixelSize: 14
+                                }
+                                Label {
+                                    text: changePercentText
+                                    Layout.fillWidth: true
+                                    font.pixelSize: 14
+                                    horizontalAlignment: Text.AlignRight
+                                }
                             }
 
                             Label {
                                 text: qsTr("Bid")
+                                font.pixelSize: 12
                                 font.capitalization: Font.AllUppercase
                             }
                             Label {
                                 text: qsTr("Ask")
+                                font.pixelSize: 12
                                 font.capitalization: Font.AllUppercase
                             }
 
                             Label {
                                 text: bidText
+                                font.pixelSize: 14
                             }
                             Label {
                                 text: askText
+                                font.pixelSize: 14
                             }
                         }
                     }

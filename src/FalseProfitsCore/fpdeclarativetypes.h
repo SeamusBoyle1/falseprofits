@@ -227,6 +227,8 @@ class JsonQuotesQuote
     Q_PROPERTY(QVariant bidSize READ bidSize)
     Q_PROPERTY(QVariant last READ last)
     Q_PROPERTY(QVariant lastSize READ lastSize)
+    Q_PROPERTY(QVariant change READ change)
+    Q_PROPERTY(QVariant changePercent READ changePercent)
     Q_PROPERTY(QVariant dayLow READ dayLow)
     Q_PROPERTY(QVariant dayHigh READ dayHigh)
 public:
@@ -247,6 +249,10 @@ public:
     QVariant last() const { return m_d.value(QLatin1String("last")).toVariant(); }
 
     QVariant lastSize() const { return m_d.value(QLatin1String("lastSize")).toVariant(); }
+
+    QVariant change() const { return m_d.value(QLatin1String("change")).toVariant(); }
+
+    QVariant changePercent() const { return m_d.value(QLatin1String("changePercent")).toVariant(); }
 
     QVariant dayLow() const { return m_d.value(QLatin1String("dayLow")).toVariant(); }
 

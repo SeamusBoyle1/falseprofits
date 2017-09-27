@@ -45,6 +45,8 @@ DetailedQuotePageForm {
         lastPriceLabel.text = ""
         bidText = ""
         askText = ""
+        changePriceText = ""
+        changePercentText = ""
         dayLowText = ""
         dayHighText = ""
     }
@@ -61,6 +63,14 @@ DetailedQuotePageForm {
                     lastPriceLabel.text = quote.last
                     bidText = quote.bid
                     askText = quote.ask
+
+                    var change = quote.change
+                    changePriceText = change ? quote.change : "-"
+                    direction = change > 0 ? 1 : change < 0 ? -1 : 0
+
+                    var pctChange = quote.changePercent
+                    changePercentText = pctChange ? qsTr("%1%").arg(pctChange) : "-"
+
                     dayLowText = quote.dayLow
                     dayHighText = quote.dayHigh
                 }
