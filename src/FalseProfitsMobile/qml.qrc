@@ -23,5 +23,7 @@
         <file>OrderTicketPageForm.ui.qml</file>
         <file>FpStyle.qml</file>
         <file>+desktop/FpStyle.qml</file>
+        <file>TradingAccountsListView.qml</file>
+        <file>TradingAccountsPage.qml</file>
     </qresource>
 </RCC>

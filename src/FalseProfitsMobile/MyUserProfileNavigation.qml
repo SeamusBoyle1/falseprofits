@@ -12,6 +12,10 @@ Page {
 
         MyUserProfilePage {
         }
+
+        TradingAccountsPage {
+
+        }
     }
 
     header: ColumnLayout {
@@ -31,7 +35,7 @@ Page {
                     }
                 }
                 Label {
-                    text: qsTr("Account")
+                    text: qsTr("Profile and Accounts")
                     elide: Label.ElideRight
                     verticalAlignment: Qt.AlignVCenter
                     Layout.fillWidth: true
@@ -46,6 +50,10 @@ Page {
             Layout.fillWidth: true
             TabButton {
                 text: qsTr("Profile")
+            }
+
+            TabButton {
+                text: qsTr("Accounts")
             }
         }
     }
