@@ -2,6 +2,7 @@
 
 #include "investorapiclient.h"
 
+#include <QDebug>
 #include <QNetworkAccessManager>
 #include <QJsonDocument>
 #include <QJsonArray>
@@ -85,6 +86,11 @@ INetworkReply *InvestorAPIClient::sendOrder(const QString &accountId,
     return m_requestQueue->post(r.first, r.second);
 }
 
+INetworkReply *InvestorAPIClient::getWatchlist(const QString &watchlistId)
+{
+    return m_requestQueue->get(createGetWatchlist(watchlistId));
+}
+
 QPair<QNetworkRequest, QJsonObject>
 InvestorAPIClient::createCreateNewUserRequest(const QHash<UserRecordField, QVariant> &params) const
 {
@@ -129,6 +135,12 @@ QNetworkRequest InvestorAPIClient::createGetCommissionsRequest(CommissionSide si
 {
     QUrl url(m_apiUrl + QStringLiteral("/api/1.0/commissions/")
              + (side == CommissionSide::Buy ? QStringLiteral("buy") : QStringLiteral("sell")));
+    return makeAuthenticatedRequest(url);
+}
+
+QNetworkRequest InvestorAPIClient::createGetWatchlist(const QString &watchlistId) const
+{
+    QUrl url(m_apiUrl + QStringLiteral("/api/1.0/watchlists/") + watchlistId);
     return makeAuthenticatedRequest(url);
 }
 

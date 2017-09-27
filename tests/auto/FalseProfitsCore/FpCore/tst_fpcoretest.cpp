@@ -111,6 +111,12 @@ public:
         Q_UNUSED(args)
         return nullptr;
     }
+
+    INetworkReply *getWatchlist(const QString &watchlistId) override
+    {
+        Q_UNUSED(watchlistId)
+        return nullptr;
+    }
 };
 
 class QNetworkReplyMock : public QNetworkReply

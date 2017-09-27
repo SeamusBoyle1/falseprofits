@@ -71,6 +71,8 @@ public:
     };
     virtual INetworkReply *sendOrder(const QString &accountId, const OrderParams &args) = 0;
 
+    virtual INetworkReply *getWatchlist(const QString &watchlistId) = 0;
+
 Q_SIGNALS:
     void authTokenChanged();
 };

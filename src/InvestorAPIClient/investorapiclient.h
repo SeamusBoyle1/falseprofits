@@ -41,6 +41,8 @@ public:
 
     INetworkReply *sendOrder(const QString &accountId, const OrderParams &args) override;
 
+    INetworkReply *getWatchlist(const QString &watchlistId) override;
+
     // TODO(seamus): Extract a request factory
     QPair<QNetworkRequest, QJsonObject>
     createCreateNewUserRequest(const QHash<UserRecordField, QVariant> &params) const;
@@ -53,6 +55,8 @@ public:
     QNetworkRequest createGetUserProfileRequest() const;
 
     QNetworkRequest createGetCommissionsRequest(CommissionSide side) const;
+
+    QNetworkRequest createGetWatchlist(const QString &watchlistId) const;
 
     QNetworkRequest createGetQuotesRequest(const QStringList &symbols) const;
 
