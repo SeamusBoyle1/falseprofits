@@ -74,6 +74,11 @@ INetworkReply *InvestorAPIClient::getQuotes(const QStringList &symbols)
     return m_requestQueue->get(createGetQuotesRequest(symbols));
 }
 
+INetworkReply *InvestorAPIClient::getCandles(const CandlesRequestArgs &args)
+{
+    return m_requestQueue->get(createGetCandlesRequest(args));
+}
+
 INetworkReply *InvestorAPIClient::symbolSearch(const SymbolSearchQuery &query)
 {
     return m_requestQueue->get(createSymbolSearchRequest(query));
@@ -175,6 +180,30 @@ QNetworkRequest InvestorAPIClient::createRemoveSymbolFromWatchlistRequest(
 {
     QUrl url(m_apiUrl + QStringLiteral("/api/1.0/watchlists/") + watchlistId
                                        + QStringLiteral("/shares/") + symbol);
+    return makeAuthenticatedRequest(url);
+}
+
+QNetworkRequest InvestorAPIClient::createGetCandlesRequest(const CandlesRequestArgs &args) const
+{
+    QUrl url(m_apiUrl + QStringLiteral("/api/1.0/shares/") + args.symbol + "/prices");
+
+    QUrlQuery urlQuery;
+
+    if (args.startTime.isValid()) {
+        urlQuery.addQueryItem(QStringLiteral("startTime"), args.startTime.toString(Qt::ISODate));
+    }
+    if (args.endTime.isValid()) {
+        urlQuery.addQueryItem(QStringLiteral("endTime"), args.endTime.toString(Qt::ISODate));
+    }
+    if (!args.interval.isEmpty()) {
+        urlQuery.addQueryItem(QStringLiteral("interval"), args.interval);
+    }
+    if (!args.range.isEmpty()) {
+        urlQuery.addQueryItem(QStringLiteral("range"), args.range);
+    }
+
+    url.setQuery(urlQuery);
+
     return makeAuthenticatedRequest(url);
 }
 

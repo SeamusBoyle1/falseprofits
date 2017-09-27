@@ -99,6 +99,12 @@ public:
         return nullptr;
     }
 
+    INetworkReply *getCandles(const CandlesRequestArgs &args) override
+    {
+        Q_UNUSED(args)
+        return nullptr;
+    }
+
     INetworkReply *symbolSearch(const SymbolSearchQuery &query) override
     {
         Q_UNUSED(query)

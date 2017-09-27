@@ -37,6 +37,8 @@ public:
 
     INetworkReply *getQuotes(const QStringList &symbols) override;
 
+    INetworkReply *getCandles(const CandlesRequestArgs &args) override;
+
     INetworkReply *symbolSearch(const SymbolSearchQuery &query) override;
 
     INetworkReply *sendOrder(const QString &accountId, const OrderParams &args) override;
@@ -68,6 +70,8 @@ public:
 
     QNetworkRequest createRemoveSymbolFromWatchlistRequest(const QString &watchlistId,
                                                            const QString &symbol) const;
+
+    QNetworkRequest createGetCandlesRequest(const CandlesRequestArgs &args) const;
 
     QNetworkRequest createGetQuotesRequest(const QStringList &symbols) const;
 

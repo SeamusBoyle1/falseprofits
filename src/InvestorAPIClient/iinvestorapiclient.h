@@ -54,6 +54,16 @@ public:
 
     virtual INetworkReply *getQuotes(const QStringList &symbols) = 0;
 
+    struct CandlesRequestArgs
+    {
+        QString symbol;
+        QDateTime startTime;
+        QDateTime endTime;
+        QString interval;
+        QString range;
+    };
+    virtual INetworkReply *getCandles(const CandlesRequestArgs &args) = 0;
+
     struct SymbolSearchQuery
     {
         QString searchTerm;
