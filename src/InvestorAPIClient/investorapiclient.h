@@ -43,6 +43,8 @@ public:
 
     INetworkReply *getWatchlist(const QString &watchlistId) override;
 
+    INetworkReply *addSymbolToWatchlist(const QString &watchlistId, const QString &symbol) override;
+
     // TODO(seamus): Extract a request factory
     QPair<QNetworkRequest, QJsonObject>
     createCreateNewUserRequest(const QHash<UserRecordField, QVariant> &params) const;
@@ -57,6 +59,9 @@ public:
     QNetworkRequest createGetCommissionsRequest(CommissionSide side) const;
 
     QNetworkRequest createGetWatchlist(const QString &watchlistId) const;
+
+    QPair<QNetworkRequest, QJsonObject> createAddSymbolToWatchlistRequest(
+            const QString &watchlistId, const QString &symbol) const;
 
     QNetworkRequest createGetQuotesRequest(const QStringList &symbols) const;
 

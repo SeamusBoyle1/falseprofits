@@ -91,6 +91,13 @@ INetworkReply *InvestorAPIClient::getWatchlist(const QString &watchlistId)
     return m_requestQueue->get(createGetWatchlist(watchlistId));
 }
 
+INetworkReply *InvestorAPIClient::addSymbolToWatchlist(const QString &watchlistId,
+                                                       const QString &symbol)
+{
+    auto r = createAddSymbolToWatchlistRequest(watchlistId, symbol);
+    return m_requestQueue->post(r.first, r.second);
+}
+
 QPair<QNetworkRequest, QJsonObject>
 InvestorAPIClient::createCreateNewUserRequest(const QHash<UserRecordField, QVariant> &params) const
 {
@@ -142,6 +149,18 @@ QNetworkRequest InvestorAPIClient::createGetWatchlist(const QString &watchlistId
 {
     QUrl url(m_apiUrl + QStringLiteral("/api/1.0/watchlists/") + watchlistId);
     return makeAuthenticatedRequest(url);
+}
+
+QPair<QNetworkRequest, QJsonObject> InvestorAPIClient::createAddSymbolToWatchlistRequest(
+        const QString &watchlistId, const QString &symbol) const
+{
+    QUrl url(m_apiUrl + QStringLiteral("/api/1.0/watchlists/") + watchlistId
+                                       + QStringLiteral("/shares/") + symbol);
+    auto req = makeAuthenticatedRequest(url);
+    QJsonObject obj;
+    obj.insert(QStringLiteral("symbol"), symbol);
+
+    return qMakePair(req, obj);
 }
 
 QNetworkRequest InvestorAPIClient::createGetQuotesRequest(const QStringList &symbols) const
