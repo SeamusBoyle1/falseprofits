@@ -10,16 +10,6 @@ WatchlistPageForm {
 
     property int busyIndicatorVisibility: 0
 
-    FpWatchlists {
-        id: watchlistsListWrapper
-        coreClient: fpCore
-    }
-
-    FpWatchlistWrapper {
-        id: watchlistWrapper
-        coreClient: fpCore
-    }
-
     FpSymbolSearchWrapper {
         id: symbolSearchWrapper
         coreClient: fpCore

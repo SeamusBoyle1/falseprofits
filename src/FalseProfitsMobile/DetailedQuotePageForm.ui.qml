@@ -8,6 +8,7 @@ Page {
     id: page
     width: 400
     height: 400
+    property alias starButton: starButton
     property string symbolText
     property string companyNameText
     property string industryText
@@ -18,6 +19,7 @@ Page {
     property string changePercentText
     property string dayLowText
     property string dayHighText
+    property bool starred: false
     property alias lastPriceLabel: lastPriceLabel
     property alias orderButton: orderButton
     property alias busyIndicator: busyIndicator
@@ -67,15 +69,35 @@ Page {
                     }
                 }
 
-                Button {
-                    id: orderButton
-                    contentItem: Image {
-                        fillMode: Image.Pad
-                        horizontalAlignment: Image.AlignHCenter
-                        verticalAlignment: Image.AlignVCenter
-                        source: "qrc:/images/" + FpStyle.iconPrimary + "/gavel.png"
+                RowLayout {
+                    Layout.alignment: Qt.AlignRight | Qt.AlignTop
+                    spacing: 0
+
+                    ToolButton {
+                        id: orderButton
+                        contentItem: Image {
+                            fillMode: Image.Pad
+                            horizontalAlignment: Image.AlignHCenter
+                            verticalAlignment: Image.AlignVCenter
+                            source: "qrc:/images/" + FpStyle.iconPrimary + "/gavel.png"
+                        }
+                        flat: true
                     }
-                    flat: true
+
+                    ToolButton {
+                        id: starButton
+                        checkable: true
+                        checked: starred
+                        contentItem: Image {
+                            fillMode: Image.Pad
+                            horizontalAlignment: Image.AlignHCenter
+                            verticalAlignment: Image.AlignVCenter
+                            source: starred ? "qrc:/images/" + FpStyle.iconPrimary
+                                              + "/star.png" : "qrc:/images/"
+                                              + FpStyle.iconPrimary + "/star_border.png"
+                        }
+                        flat: true
+                    }
                 }
             }
 

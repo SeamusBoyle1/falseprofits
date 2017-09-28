@@ -5,6 +5,16 @@ import QtQuick.Layouts 1.3
 import com.example.fpx 1.0
 
 Page {
+    FpWatchlists {
+        id: watchlistsListWrapper
+        coreClient: fpCore
+    }
+
+    FpWatchlistWrapper {
+        id: watchlistWrapper
+        coreClient: fpCore
+    }
+
     FpSymbolSearchWrapper {
         id: symbolSearchWrapper
         coreClient: fpCore

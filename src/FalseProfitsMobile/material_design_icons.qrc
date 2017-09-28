@@ -28,6 +28,14 @@
         <file>images/black/search@2x.png</file>
         <file>images/black/search@3x.png</file>
         <file>images/black/search@4x.png</file>
+        <file>images/black/star.png</file>
+        <file>images/black/star@2.png</file>
+        <file>images/black/star@3.png</file>
+        <file>images/black/star@4.png</file>
+        <file>images/black/star_border.png</file>
+        <file>images/black/star_border@2.png</file>
+        <file>images/black/star_border@3.png</file>
+        <file>images/black/star_border@4.png</file>
         <file>images/white/add.png</file>
         <file>images/white/add@2x.png</file>
         <file>images/white/add@3x.png</file>
@@ -56,5 +64,13 @@
         <file>images/white/search@2x.png</file>
         <file>images/white/search@3x.png</file>
         <file>images/white/search@4x.png</file>
+        <file>images/white/star.png</file>
+        <file>images/white/star@2.png</file>
+        <file>images/white/star@3.png</file>
+        <file>images/white/star@4.png</file>
+        <file>images/white/star_border.png</file>
+        <file>images/white/star_border@2.png</file>
+        <file>images/white/star_border@3.png</file>
+        <file>images/white/star_border@4.png</file>
     </qresource>
 </RCC>

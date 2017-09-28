@@ -15,10 +15,15 @@ DetailedQuotePageForm {
         }
     }
 
+    starButton.onClicked: {
+        toggleStarred()
+    }
+
     onCurrentSymbolChanged: {
         clearQuote()
         symbolText = currentSymbol
         updateQuote()
+        updateStarredState()
     }
 
     Dialog {
@@ -94,6 +99,32 @@ DetailedQuotePageForm {
                 errorDialog.open()
             }
         })
+    }
+
+    function updateStarredState() {
+        starred = watchlistWrapper.model.getRowOfSymbol(currentSymbol) >= 0
+    }
+
+    function toggleStarred() {
+        if (currentSymbol !== "") {
+            if (!starred) {
+                var addNotifier = watchlistWrapper.addSymbol(currentSymbol)
+                incrementBusyIndicatorVisibility()
+                addNotifier.onFinished.connect(function() {
+                    // TODO(seamus): Handle errors
+                    decrementBusyIndicatorVisibility()
+                    updateStarredState()
+                })
+            } else {
+                var removeNotifier = watchlistWrapper.removeSymbol(currentSymbol)
+                incrementBusyIndicatorVisibility()
+                removeNotifier.onFinished.connect(function() {
+                    // TODO(seamus): Handle errors
+                    decrementBusyIndicatorVisibility()
+                    updateStarredState()
+                })
+            }
+        }
     }
 
     function incrementBusyIndicatorVisibility() {
