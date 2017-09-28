@@ -229,6 +229,69 @@ public:
     int totalRowCount() const { return d.value(QLatin1String("totalRowCount")).toInt(); }
 };
 
+class WatchlistResponseShare
+{
+public:
+    QJsonObject d;
+
+    bool isValid() const { return !d.isEmpty() && d.contains(QLatin1String("symbol")); }
+
+    boost::optional<QString> symbol() const
+    {
+        return util::getOptionalString(d, QLatin1String("symbol"));
+    }
+
+    boost::optional<QString> name() const
+    {
+        return util::getOptionalString(d, QLatin1String("name"));
+    }
+
+    boost::optional<double> lastPrice() const
+    {
+        return util::getOptionalDouble(d, QLatin1String("lastPrice"));
+    }
+
+    boost::optional<double> change() const
+    {
+        return util::getOptionalDouble(d, QLatin1String("change"));
+    }
+
+    boost::optional<double> changePercent() const
+    {
+        return util::getOptionalDouble(d, QLatin1String("changePercent"));
+    }
+};
+
+class WatchlistResponseShares
+{
+public:
+    QJsonArray jsonItems;
+
+    bool isEmpty() const { return jsonItems.isEmpty(); }
+
+    int size() const { return jsonItems.size(); }
+
+    WatchlistResponseShare at(int i) const { return { jsonItems.at(i).toObject() }; }
+};
+
+class WatchlistResponse
+{
+public:
+    QJsonObject d;
+
+    boost::optional<QString> id() const { return util::getOptionalString(d, QLatin1String("id")); }
+
+    boost::optional<QString> name() const
+    {
+        return util::getOptionalString(d, QLatin1String("name"));
+    }
+
+    WatchlistResponseShares shares() const
+    {
+        return { d.value(QLatin1String("shares")).toArray() };
+    }
+};
+
 } // namespace JsonObjectWrappers
 
 } // namespace bsmi

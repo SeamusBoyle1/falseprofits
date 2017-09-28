@@ -44,6 +44,7 @@ private Q_SLOTS:
     void userProfileResponseTest();
     void commissionResponseTest();
     void symbolSearchTest();
+    void watchlistResponseTest();
 };
 
 JsonResponseWrappersTest::JsonResponseWrappersTest()
@@ -213,6 +214,51 @@ void JsonResponseWrappersTest::symbolSearchTest()
             }
         }
         QVERIFY(foundBEN);
+    }
+}
+
+void JsonResponseWrappersTest::watchlistResponseTest()
+{
+    using namespace bsmi;
+
+    {
+        QString testFile("watchlistDefault1.json");
+        auto doc = readFileContentsAsJson(srcDirFile(testFile));
+        if (doc.isNull()) {
+            QSKIP("Unable to open test file");
+        }
+
+        JsonObjectWrappers::WatchlistResponse parser;
+        parser.d = doc.object();
+
+        QVERIFY(parser.id());
+        QCOMPARE(*parser.id(), QString("f48f8496-d4be-46e1-9dfa-8a7c90d2cad7"));
+        QVERIFY(parser.name());
+        QCOMPARE(*parser.name(), QString("Default Watchlist"));
+
+        auto sharesParser = parser.shares();
+        QVERIFY(!sharesParser.isEmpty());
+        QCOMPARE(sharesParser.size(), 4);
+
+        auto foundCBA = false;
+        for (auto i = 0, total = 4; i < total; ++i) {
+            auto e = sharesParser.at(i);
+            auto sym = e.symbol();
+            if (sym && *sym == QLatin1String("CBA")) {
+                foundCBA = true;
+                QVERIFY(e.isValid());
+                QVERIFY(e.name());
+                QCOMPARE(*e.name(), QLatin1String("COMMONWEALTH BANK OF AUSTRALIA."));
+                QVERIFY(e.lastPrice());
+                QCOMPARE(*e.lastPrice(), 75.0);
+                QVERIFY(e.change());
+                QCOMPARE(*e.change(), 0.15);
+                QVERIFY(e.changePercent());
+                QCOMPARE(*e.changePercent(), 0.2);
+                break;
+            }
+        }
+        QVERIFY(foundCBA);
     }
 }
 
