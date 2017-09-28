@@ -46,6 +46,7 @@ DetailedQuotePageForm {
         bidText = ""
         askText = ""
         changePriceText = ""
+        direction = 0
         changePercentText = ""
         dayLowText = ""
         dayHighText = ""
