@@ -2,6 +2,8 @@ import QtQuick 2.4
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
+import com.example.fpx 1.0
+
 Page {
     id: page
     width: 400
@@ -34,8 +36,9 @@ Page {
             RowLayout {
                 spacing: 20
                 Layout.fillWidth: true
-                Layout.leftMargin: 16
-                Layout.rightMargin: 16
+                Layout.topMargin: 8
+                Layout.leftMargin: FpStyle.screenEdgeLeftMargin
+                Layout.rightMargin: FpStyle.screenEdgeRightMargin
 
                 ColumnLayout {
                     Layout.fillWidth: true

@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 
 import com.example.fpx 1.0
 
-Pane {
+Page {
     width: 400
     height: 400
     property bool zeroSearchResults: false
@@ -18,6 +18,9 @@ Pane {
 
         RowLayout {
             Layout.fillWidth: true
+            Layout.topMargin: 8
+            Layout.leftMargin: FpStyle.screenEdgeLeftMargin
+            Layout.rightMargin: FpStyle.screenEdgeRightMargin
 
             TextField {
                 id: queryString
