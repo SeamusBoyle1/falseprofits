@@ -13,6 +13,7 @@ Page {
     TradingAccountsListView {
         id: accountsListView
         anchors.fill: parent
+        anchors.topMargin: 8
     }
 
     BusyIndicator {

@@ -2,6 +2,8 @@ import QtQuick 2.4
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
+import com.example.fpx 1.0
+
 Page {
     id: page
     width: 400
@@ -20,16 +22,14 @@ Page {
         ColumnLayout {
             id: mlay
             width: page.width
-
-            Item {
-                Layout.preferredWidth: 20
-                Layout.preferredHeight: 20
-            }
+            spacing: 0
 
             MyUserProfile {
                 id: userDetails
                 Layout.fillWidth: true
-                Layout.margins: 6
+                Layout.topMargin: 8
+                Layout.leftMargin: FpStyle.screenEdgeLeftMargin
+                Layout.rightMargin: FpStyle.screenEdgeRightMargin
             }
 
             Item {
@@ -37,10 +37,13 @@ Page {
                 Layout.preferredHeight: 40
             }
 
-            DelayButton {
-                id: deleteMyAccountButton
-                text: qsTr("Delete my account")
+            ColumnLayout {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+                DelayButton {
+                    id: deleteMyAccountButton
+                    text: qsTr("Delete my account")
+                }
             }
         }
     }

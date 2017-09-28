@@ -2,6 +2,8 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
+import com.example.fpx 1.0
+
 ListView {
     id: listView
     focus: true
@@ -18,7 +20,10 @@ ListView {
             id: delegateContent
 
             ColumnLayout {
-                Layout.margins: 6
+                Layout.leftMargin: FpStyle.screenEdgeLeftMargin
+                Layout.topMargin: 3
+                Layout.rightMargin: FpStyle.screenEdgeRightMargin
+                Layout.bottomMargin: 3
 
                 spacing: 0
 
