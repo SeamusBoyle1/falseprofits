@@ -321,6 +321,25 @@ public:
     }
 };
 
+class InvestorAPIClientRemoveWatchlistSymbolMock : public InvestorAPIClientMock
+{
+    Q_OBJECT
+public:
+    InvestorAPIClientRemoveWatchlistSymbolMock() {}
+
+    NetworkReply *m_nextRemoveWatchlistSymbolReply{ nullptr };
+    QString m_watchlistId;
+    QString m_symbol;
+
+    INetworkReply *removeSymbolFromWatchlist(const QString &watchlistId,
+                                             const QString &symbol) override
+    {
+        m_watchlistId = watchlistId;
+        m_symbol = symbol;
+        return m_nextRemoveWatchlistSymbolReply;
+    }
+};
+
 static bsmi::IInvestorAPIClient *createMockFpCore(QObject *parent = 0)
 {
     return new InvestorAPIClientMock(parent);
@@ -345,6 +364,7 @@ private Q_SLOTS:
     void signOutTest();
     void getWatchlistTest();
     void addSymbolToWatchlistTest();
+    void removeSymbolFromWatchlistTest();
 };
 
 FpCoreTest::FpCoreTest()
@@ -802,6 +822,36 @@ void FpCoreTest::addSymbolToWatchlistTest()
 
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextAddWatchlistSymbolReply->setFinished();
+    }
+}
+
+void FpCoreTest::removeSymbolFromWatchlistTest()
+{
+    {
+        auto client = new InvestorAPIClientRemoveWatchlistSymbolMock;
+        auto fpCoreSettings = new MockFpSettings;
+        auto fpCore = new FpCore(client, fpCoreSettings);
+        client->setParent(fpCore);
+
+        QString watchlistIdA("i_am_a_valid_watchlist_id");
+        QString symbolA("a_symbol");
+
+        // mock success response
+        auto netAuthRep = new QNetworkReplyMock;
+        client->m_nextRemoveWatchlistSymbolReply = new bsmi::INetworkReply(netAuthRep);
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::NotAuthenticatedState);
+        fpCore->setAccessToken("i_am_very_token", QDateTime::currentDateTimeUtc().addDays(7));
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::AuthenticatedState);
+
+        auto resp = fpCore->removeSymbolFromWatchlist(watchlistIdA, symbolA);
+        QVERIFY(resp);
+
+        // Test bsmi::IInvestorAPIClient::deleteUser was called
+        QVERIFY(!client->m_watchlistId.isEmpty());
+        QVERIFY(!client->m_symbol.isEmpty());
+
+        netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
+        client->m_nextRemoveWatchlistSymbolReply->setFinished();
     }
 }
 
