@@ -69,7 +69,12 @@ Page {
 
                 Button {
                     id: orderButton
-                    text: qsTr("Trade")
+                    contentItem: Image {
+                        fillMode: Image.Pad
+                        horizontalAlignment: Image.AlignHCenter
+                        verticalAlignment: Image.AlignVCenter
+                        source: "qrc:/images/" + FpStyle.iconPrimary + "/gavel.png"
+                    }
                     flat: true
                 }
             }
