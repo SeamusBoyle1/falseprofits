@@ -303,6 +303,24 @@ public:
     }
 };
 
+class InvestorAPIClientAddWatchlistSymbolMock : public InvestorAPIClientMock
+{
+    Q_OBJECT
+public:
+    InvestorAPIClientAddWatchlistSymbolMock() {}
+
+    NetworkReply *m_nextAddWatchlistSymbolReply{ nullptr };
+    QString m_watchlistId;
+    QString m_symbol;
+
+    INetworkReply *addSymbolToWatchlist(const QString &watchlistId, const QString &symbol) override
+    {
+        m_watchlistId = watchlistId;
+        m_symbol = symbol;
+        return m_nextAddWatchlistSymbolReply;
+    }
+};
+
 static bsmi::IInvestorAPIClient *createMockFpCore(QObject *parent = 0)
 {
     return new InvestorAPIClientMock(parent);
@@ -326,6 +344,7 @@ private Q_SLOTS:
     void sendOrderTest();
     void signOutTest();
     void getWatchlistTest();
+    void addSymbolToWatchlistTest();
 };
 
 FpCoreTest::FpCoreTest()
@@ -753,6 +772,36 @@ void FpCoreTest::getWatchlistTest()
         QVERIFY(!netAuthRep->m_payload.isEmpty());
         QCOMPARE(QJsonDocument::fromJson(resp->payload()),
                  QJsonDocument::fromJson(netAuthRep->m_payload));
+    }
+}
+
+void FpCoreTest::addSymbolToWatchlistTest()
+{
+    {
+        auto client = new InvestorAPIClientAddWatchlistSymbolMock;
+        auto fpCoreSettings = new MockFpSettings;
+        auto fpCore = new FpCore(client, fpCoreSettings);
+        client->setParent(fpCore);
+
+        QString watchlistIdA("i_am_a_valid_watchlist_id");
+        QString symbolA("a_symbol");
+
+        // mock success response
+        auto netAuthRep = new QNetworkReplyMock;
+        client->m_nextAddWatchlistSymbolReply = new bsmi::INetworkReply(netAuthRep);
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::NotAuthenticatedState);
+        fpCore->setAccessToken("i_am_very_token", QDateTime::currentDateTimeUtc().addDays(7));
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::AuthenticatedState);
+
+        auto resp = fpCore->addSymbolToWatchlist(watchlistIdA, symbolA);
+        QVERIFY(resp);
+
+        // Test bsmi::IInvestorAPIClient::deleteUser was called
+        QVERIFY(!client->m_watchlistId.isEmpty());
+        QVERIFY(!client->m_symbol.isEmpty());
+
+        netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
+        client->m_nextAddWatchlistSymbolReply->setFinished();
     }
 }
 
