@@ -16,7 +16,7 @@ class IRequestQueue;
 
 class InvestorAPIClient : public IInvestorAPIClient
 {
-
+    Q_OBJECT
 public:
     explicit InvestorAPIClient(IRequestQueue *requestQueue, const QString &apiUrl,
                                QObject *parent = nullptr);
