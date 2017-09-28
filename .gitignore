@@ -1,5 +1,11 @@
 /android/gradle.properties
 /android/local.properties
+
+# output from /scripts/gen-gcov-html.sh
+/coverage-gcov-baseline.info
+/coverage-gcov-test.info
+/coverage-gcov-total.info
+/coverage-gcov-unknown-coverage.txt
 /doc/coverage/*
 
 # This file is used to ignore files which are generated
