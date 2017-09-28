@@ -3,6 +3,7 @@
 #ifndef BSMI_JSONOBJECTWRAPPERS_H
 #define BSMI_JSONOBJECTWRAPPERS_H
 
+#include <QDateTime>
 #include <QJsonArray>
 #include <QJsonObject>
 
@@ -21,6 +22,18 @@ inline boost::optional<QString> getOptionalString(const QJsonObject &o, const St
 {
     auto v = o.value(key);
     return boost::make_optional(v.isString(), v.toString());
+}
+
+template <typename String>
+inline boost::optional<QDateTime> getOptionalStringAsDateTime(const QJsonObject &o,
+                                                              const String &key)
+{
+    auto v = o.value(key);
+    if (v.isString()) {
+        auto dt = QDateTime::fromString(v.toString(), Qt::ISODate);
+        return boost::make_optional(dt.isValid(), dt);
+    }
+    return boost::none;
 }
 
 template <typename String>
@@ -317,6 +330,48 @@ public:
     {
         return { d.value(QLatin1String("shares")).toArray() };
     }
+};
+
+class CandleResponse
+{
+public:
+    QJsonObject d;
+
+    bool isValid() const { return !d.isEmpty(); }
+
+    boost::optional<QDateTime> timestamp() const
+    {
+        return util::getOptionalStringAsDateTime(d, QLatin1String("timestamp"));
+    }
+
+    boost::optional<double> open() const
+    {
+        return util::getOptionalDouble(d, QLatin1String("open"));
+    }
+
+    boost::optional<double> high() const
+    {
+        return util::getOptionalDouble(d, QLatin1String("high"));
+    }
+
+    boost::optional<double> low() const { return util::getOptionalDouble(d, QLatin1String("low")); }
+
+    boost::optional<double> close() const
+    {
+        return util::getOptionalDouble(d, QLatin1String("close"));
+    }
+};
+
+class CandlesResponse
+{
+public:
+    QJsonArray jsonItems;
+
+    bool isEmpty() const { return jsonItems.isEmpty(); }
+
+    int size() const { return jsonItems.size(); }
+
+    CandleResponse at(int i) const { return { jsonItems.at(i).toObject() }; }
 };
 
 } // namespace JsonObjectWrappers

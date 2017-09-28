@@ -45,6 +45,7 @@ private Q_SLOTS:
     void commissionResponseTest();
     void symbolSearchTest();
     void watchlistResponseTest();
+    void candlesResponseTest();
 };
 
 JsonResponseWrappersTest::JsonResponseWrappersTest()
@@ -259,6 +260,58 @@ void JsonResponseWrappersTest::watchlistResponseTest()
             }
         }
         QVERIFY(foundCBA);
+    }
+}
+
+void JsonResponseWrappersTest::candlesResponseTest()
+{
+    using namespace bsmi;
+
+    {
+        // JSON is missing high and low values on second candle
+        QByteArray json = "["
+                          "  {"
+                          "    \"timestamp\": \"2017-09-27T02:26:54.048Z\","
+                          "    \"open\": 10.5,"
+                          "    \"high\": 12.5,"
+                          "    \"low\": 9.5,"
+                          "    \"close\": 11.5"
+                          "  },"
+                          "  {"
+                          "    \"timestamp\": \"2017-09-28T02:26:54.048Z\","
+                          "    \"open\": 11.5,"
+                          "    \"close\": 12.5"
+                          "  }"
+                          "]";
+        auto doc = QJsonDocument::fromJson(json);
+
+        JsonObjectWrappers::CandlesResponse parser;
+        parser.jsonItems = doc.array();
+
+        QVERIFY(!parser.isEmpty());
+        QCOMPARE(parser.size(), 2);
+
+        auto cndl1 = parser.at(0);
+        QVERIFY(cndl1.isValid());
+        QCOMPARE(*cndl1.timestamp(),
+                 QDateTime::fromString("2017-09-27T02:26:54.048Z", Qt::ISODate));
+        QCOMPARE(*cndl1.open(), 10.5);
+        QCOMPARE(*cndl1.high(), 12.5);
+        QCOMPARE(*cndl1.low(), 9.5);
+        QCOMPARE(*cndl1.close(), 11.5);
+
+        auto cndl2 = parser.at(1);
+        QVERIFY(cndl2.isValid());
+        QCOMPARE(*cndl2.timestamp(),
+                 QDateTime::fromString("2017-09-28T02:26:54.048Z", Qt::ISODate));
+        QCOMPARE(*cndl2.open(), 11.5);
+        QVERIFY(!cndl2.high());
+        QVERIFY(!cndl2.low());
+        QCOMPARE(*cndl2.close(), 12.5);
+
+        // out-of-range, candle should not be valid
+        auto cndl3 = parser.at(2);
+        QVERIFY(!cndl3.isValid());
     }
 }
 
