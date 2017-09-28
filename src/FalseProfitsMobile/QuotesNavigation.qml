@@ -93,17 +93,33 @@ Page {
 
     function showCompanyInfo(ticker)
     {
-        // TODO(seamus): If loader is already active reuse item
-        companyInfoLoader.active = false
-        companyInfoLoader.tickerSymbol = ticker
-        companyInfoLoader.active = true
+        if (companyInfoLoader.active) {
+            companyInfoLoader.item.currentSymbol = ticker
+            var index = companyInfoLoader.item.StackView.index
+            if (index >= 0) {
+                navPan.pop(companyInfoLoader.item)
+            } else {
+                navPan.push(companyInfoLoader.item)
+            }
+        } else {
+            companyInfoLoader.tickerSymbol = ticker
+            companyInfoLoader.active = true
+        }
     }
 
     function showOrderTicket(ticker)
     {
-        // TODO(seamus): If loader is already active reuse item
-        orderTicketLoader.active = false
-        orderTicketLoader.tickerSymbol = ticker
-        orderTicketLoader.active = true
+        if (orderTicketLoader.active) {
+            orderTicketLoader.item.currentSymbol = ticker
+            var index = orderTicketLoader.item.StackView.index
+            if (index >= 0) {
+                navPan.pop(orderTicketLoader.item)
+            } else {
+                navPan.push(orderTicketLoader.item)
+            }
+        } else {
+            orderTicketLoader.tickerSymbol = ticker
+            orderTicketLoader.active = true
+        }
     }
 }
