@@ -167,7 +167,7 @@ QPair<QNetworkRequest, QJsonObject> InvestorAPIClient::createAddSymbolToWatchlis
         const QString &watchlistId, const QString &symbol) const
 {
     QUrl url(m_apiUrl + QStringLiteral("/api/1.0/watchlists/") + watchlistId
-                                       + QStringLiteral("/shares/") + symbol);
+             + QStringLiteral("/shares"));
     auto req = makeAuthenticatedRequest(url);
     QJsonObject obj;
     obj.insert(QStringLiteral("symbol"), symbol);
