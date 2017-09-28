@@ -13,6 +13,10 @@
 #include <FalseProfitsCore/fpsymbolsearchresultsitemmodel.h>
 #include <FalseProfitsCore/fpsymbolsearchwrapper.h>
 #include <FalseProfitsCore/fptradingaccounts.h>
+#include <FalseProfitsCore/fpwatchlistlistmodel.h>
+#include <FalseProfitsCore/fpwatchlists.h>
+#include <FalseProfitsCore/fpwatchlistslistmodel.h>
+#include <FalseProfitsCore/fpwatchlistwrapper.h>
 #include <InvestorAPIClient/iinvestorapiclient.h>
 
 #include <QDateTime>
@@ -60,6 +64,10 @@ int main(int argc, char *argv[])
                                                     "FpSymbolSearchResultsItemModel");
     qmlRegisterType<FpAccountsListModel>("com.example.fpx", 1, 0, "FpAccountsListModel");
     qmlRegisterType<FpTradingAccounts>("com.example.fpx", 1, 0, "FpTradingAccounts");
+    qmlRegisterType<FpWatchlistListModel>("com.example.fpx", 1, 0, "FpWatchlistListModel");
+    qmlRegisterType<FpWatchlists>("com.example.fpx", 1, 0, "FpWatchlists");
+    qmlRegisterType<FpWatchlistsListModel>("com.example.fpx", 1, 0, "FpWatchlistsListModel");
+    qmlRegisterType<FpWatchlistWrapper>("com.example.fpx", 1, 0, "FpWatchlistWrapper");
 
     // Q_ENUM inside a class using Q_GADGET
     qmlRegisterUncreatableType<OrderParams>("com.example.fpx", 1, 0, "OrderParams",

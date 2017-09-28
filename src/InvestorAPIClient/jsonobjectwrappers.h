@@ -98,6 +98,31 @@ public:
     TradingAccount at(int i) const { return { d.at(i).toObject() }; }
 };
 
+class Watchlist
+{
+public:
+    QJsonObject d;
+
+    boost::optional<QString> id() const { return util::getOptionalString(d, QLatin1String("id")); }
+
+    boost::optional<QString> name() const
+    {
+        return util::getOptionalString(d, QLatin1String("name"));
+    }
+};
+
+class Watchlists
+{
+public:
+    QJsonArray d;
+
+    bool isEmpty() const { return d.isEmpty(); }
+
+    int size() const { return d.size(); }
+
+    Watchlist at(int i) const { return { d.at(i).toObject() }; }
+};
+
 class UserProfileResponse
 {
 public:
@@ -124,6 +149,8 @@ public:
     {
         return { d.value(QLatin1String("accounts")).toArray() };
     }
+
+    Watchlists watchlists() const { return { d.value(QLatin1String("watchlists")).toArray() }; }
 };
 
 class CommissionRange

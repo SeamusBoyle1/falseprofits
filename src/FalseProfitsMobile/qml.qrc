@@ -25,5 +25,8 @@
         <file>+desktop/FpStyle.qml</file>
         <file>TradingAccountsListView.qml</file>
         <file>TradingAccountsPage.qml</file>
+        <file>WatchlistListView.qml</file>
+        <file>WatchlistPage.qml</file>
+        <file>WatchlistPageForm.ui.qml</file>
     </qresource>
 </RCC>

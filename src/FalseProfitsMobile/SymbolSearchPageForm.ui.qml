@@ -49,6 +49,9 @@ Page {
             id: listView
             Layout.fillWidth: true
             Layout.fillHeight: true
+            Layout.minimumHeight: 300
+            Layout.minimumWidth: 300
+            Layout.preferredWidth: 600
 
             ScrollIndicator.vertical: ScrollIndicator {
             }

@@ -29,7 +29,11 @@ SOURCES += \
     fpaccountslistmodel.cpp \
     fpsymbolsearchresultsitemmodel.cpp \
     fpsymbolsearchwrapper.cpp \
-    fptradingaccounts.cpp
+    fptradingaccounts.cpp \
+    fpwatchlistlistmodel.cpp \
+    fpwatchlists.cpp \
+    fpwatchlistslistmodel.cpp \
+    fpwatchlistwrapper.cpp
 
 HEADERS += \
     brokeragecostcalculator.h \
@@ -43,7 +47,11 @@ HEADERS += \
     fpaccountslistmodel.h \
     fpsymbolsearchresultsitemmodel.h \
     fpsymbolsearchwrapper.h \
-    fptradingaccounts.h
+    fptradingaccounts.h \
+    fpwatchlistlistmodel.h \
+    fpwatchlists.h \
+    fpwatchlistslistmodel.h \
+    fpwatchlistwrapper.h
 
 unix {
     target.path = /usr/lib

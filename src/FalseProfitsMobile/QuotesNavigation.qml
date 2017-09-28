@@ -40,6 +40,30 @@ Page {
                 font.pixelSize: 16
                 font.bold: true
             }
+            ToolButton {
+                contentItem: Image {
+                    fillMode: Image.Pad
+                    horizontalAlignment: Image.AlignHCenter
+                    verticalAlignment: Image.AlignVCenter
+                    source: "qrc:/images/" + FpStyle.iconAccent + "/search.png"
+                }
+                enabled: visible
+                visible: symbolSearchPageLoader.item ?
+                             navPan.currentItem !== symbolSearchPageLoader.item : true
+                onClicked: showQuoteLookup()
+            }
+            ToolButton {
+                contentItem: Image {
+                    fillMode: Image.Pad
+                    horizontalAlignment: Image.AlignHCenter
+                    verticalAlignment: Image.AlignVCenter
+                    source: "qrc:/images/" + FpStyle.iconAccent + "/refresh.png"
+                }
+                enabled: visible
+                visible: watchlistPageLoader.item ?
+                             navPan.currentItem === watchlistPageLoader.item : false
+                onClicked: watchlistPageLoader.item.refreshWatchlist()
+            }
         }
     }
 
@@ -51,11 +75,26 @@ Page {
 
         Loader {
             id: symbolSearchPageLoader
-            active: true
+            active: false
             source: "qrc:/SymbolSearchPage.qml"
             anchors.fill: parent
             onLoaded: {
                 item.listView.model = symbolSearchWrapper.model
+                item.onSymbolClicked.connect(showCompanyInfo)
+                if (navPan.currentItem && !(navPan.currentItem == item)) {
+                    navPan.push(item)
+                } else {
+                    navPan.replace(item)
+                }
+            }
+        }
+
+        Loader {
+            id: watchlistPageLoader
+            active: true
+            source: "qrc:/WatchlistPage.qml"
+            anchors.fill: parent
+            onLoaded: {
                 item.onSymbolClicked.connect(showCompanyInfo)
                 if (navPan.currentItem && !(navPan.currentItem == item)) {
                     navPan.push(item)
@@ -120,6 +159,20 @@ Page {
         } else {
             orderTicketLoader.tickerSymbol = ticker
             orderTicketLoader.active = true
+        }
+    }
+
+    function showQuoteLookup()
+    {
+        if (symbolSearchPageLoader.active) {
+            var index = symbolSearchPageLoader.item.StackView.index
+            if (index >= 0) {
+                navPan.pop(symbolSearchPageLoader.item)
+            } else {
+                navPan.push(symbolSearchPageLoader.item)
+            }
+        } else {
+            symbolSearchPageLoader.active = true
         }
     }
 }
