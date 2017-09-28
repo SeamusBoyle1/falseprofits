@@ -26,6 +26,7 @@ private Q_SLOTS:
     void createGetWatchlistTest();
     void createAddSymbolToWatchlistRequestTest();
     void createRemoveSymbolFromWatchlistRequest();
+    void createGetCandlesRequestTest();
 };
 
 RequestFactoryTest::RequestFactoryTest()
@@ -290,6 +291,123 @@ void RequestFactoryTest::createRemoveSymbolFromWatchlistRequest()
         QCOMPARE(resp.url(), QUrl(QLatin1String("http://example.com/api/1.0/watchlists/")
                                   + watchlistId + "/shares/" + symbol));
         QCOMPARE(resp.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+    }
+}
+
+void RequestFactoryTest::createGetCandlesRequestTest()
+{
+    using namespace bsmi;
+
+    // With symbol only
+    {
+        InvestorAPIClient c(nullptr, QStringLiteral("http://example.com"));
+
+        c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 20), QTime(7, 51)));
+
+        IInvestorAPIClient::CandlesRequestArgs args;
+        args.symbol = QString("i_am_a_valid_symbol");
+
+        auto resp = c.createGetCandlesRequest(args);
+        auto const respUrl = resp.url();
+        const QUrlQuery respUrlQuery(respUrl.query());
+        QCOMPARE(
+            QUrl(respUrl.toString(QUrl::RemoveQuery)),
+            QUrl(QLatin1String("http://example.com/api/1.0/shares/") + args.symbol + "/prices"));
+        QCOMPARE(resp.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+        QCOMPARE(resp.rawHeader("Content-Type"), QByteArray("application/json"));
+
+        QVERIFY(!respUrlQuery.hasQueryItem("symbol"));
+        QVERIFY(!respUrlQuery.hasQueryItem("startTime"));
+        QVERIFY(!respUrlQuery.hasQueryItem("endTime"));
+        QVERIFY(!respUrlQuery.hasQueryItem("interval"));
+        QVERIFY(!respUrlQuery.hasQueryItem("range"));
+    }
+
+    // With range=1d and symbol only
+    {
+        InvestorAPIClient c(nullptr, QStringLiteral("http://example.com"));
+
+        c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 20), QTime(7, 51)));
+
+        IInvestorAPIClient::CandlesRequestArgs args;
+        args.symbol = QString("i_am_a_valid_symbol");
+        args.range = "1d";
+
+        auto resp = c.createGetCandlesRequest(args);
+        auto const respUrl = resp.url();
+        const QUrlQuery respUrlQuery(respUrl.query());
+        QCOMPARE(
+            QUrl(respUrl.toString(QUrl::RemoveQuery)),
+            QUrl(QLatin1String("http://example.com/api/1.0/shares/") + args.symbol + "/prices"));
+        QCOMPARE(resp.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+        QCOMPARE(resp.rawHeader("Content-Type"), QByteArray("application/json"));
+
+        QVERIFY(!respUrlQuery.hasQueryItem("symbol"));
+        QVERIFY(!respUrlQuery.hasQueryItem("startTime"));
+        QVERIFY(!respUrlQuery.hasQueryItem("endTime"));
+        QVERIFY(!respUrlQuery.hasQueryItem("interval"));
+        QVERIFY(respUrlQuery.hasQueryItem("range"));
+        QVERIFY(respUrlQuery.queryItemValue("range") == QLatin1String("1d"));
+    }
+
+    // With interval=1m and symbol only
+    {
+        InvestorAPIClient c(nullptr, QStringLiteral("http://example.com"));
+
+        c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 20), QTime(7, 51)));
+
+        IInvestorAPIClient::CandlesRequestArgs args;
+        args.symbol = QString("i_am_a_valid_symbol");
+        args.interval = "1m";
+
+        auto resp = c.createGetCandlesRequest(args);
+        auto const respUrl = resp.url();
+        const QUrlQuery respUrlQuery(respUrl.query());
+        QCOMPARE(
+            QUrl(respUrl.toString(QUrl::RemoveQuery)),
+            QUrl(QLatin1String("http://example.com/api/1.0/shares/") + args.symbol + "/prices"));
+        QCOMPARE(resp.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+        QCOMPARE(resp.rawHeader("Content-Type"), QByteArray("application/json"));
+
+        QVERIFY(!respUrlQuery.hasQueryItem("symbol"));
+        QVERIFY(!respUrlQuery.hasQueryItem("startTime"));
+        QVERIFY(!respUrlQuery.hasQueryItem("endTime"));
+        QVERIFY(respUrlQuery.hasQueryItem("interval"));
+        QVERIFY(respUrlQuery.queryItemValue("interval") == QLatin1String("1m"));
+        QVERIFY(!respUrlQuery.hasQueryItem("range"));
+    }
+
+    // With startDate, endDate, and symbol only
+    {
+        InvestorAPIClient c(nullptr, QStringLiteral("http://example.com"));
+
+        c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 20), QTime(7, 51)));
+
+        IInvestorAPIClient::CandlesRequestArgs args;
+        args.symbol = QString("i_am_a_valid_symbol");
+        args.startTime = QDateTime::currentDateTimeUtc();
+        args.endTime = args.startTime.addDays(5);
+
+        auto resp = c.createGetCandlesRequest(args);
+        auto const respUrl = resp.url();
+        const QUrlQuery respUrlQuery(respUrl.query());
+        QCOMPARE(
+            QUrl(respUrl.toString(QUrl::RemoveQuery)),
+            QUrl(QLatin1String("http://example.com/api/1.0/shares/") + args.symbol + "/prices"));
+        QCOMPARE(resp.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+        QCOMPARE(resp.rawHeader("Content-Type"), QByteArray("application/json"));
+
+        QVERIFY(!respUrlQuery.hasQueryItem("symbol"));
+        QVERIFY(respUrlQuery.hasQueryItem("startTime"));
+        QCOMPARE(QDateTime::fromString(respUrlQuery.queryItemValue("startTime"), Qt::ISODate)
+                     .toString(Qt::ISODate),
+                 args.startTime.toString(Qt::ISODate));
+        QVERIFY(respUrlQuery.hasQueryItem("endTime"));
+        QCOMPARE(QDateTime::fromString(respUrlQuery.queryItemValue("endTime"), Qt::ISODate)
+                     .toString(Qt::ISODate),
+                 args.endTime.toString(Qt::ISODate));
+        QVERIFY(!respUrlQuery.hasQueryItem("interval"));
+        QVERIFY(!respUrlQuery.hasQueryItem("range"));
     }
 }
 
