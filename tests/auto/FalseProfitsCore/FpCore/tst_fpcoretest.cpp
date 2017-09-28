@@ -287,6 +287,22 @@ public:
     }
 };
 
+class InvestorAPIClientGetWatchlistMock : public InvestorAPIClientMock
+{
+    Q_OBJECT
+public:
+    InvestorAPIClientGetWatchlistMock() {}
+
+    NetworkReply *m_nextGetWatchlistReply{ nullptr };
+    QString m_watchlistId;
+
+    INetworkReply *getWatchlist(const QString &watchlistId) override
+    {
+        m_watchlistId = watchlistId;
+        return m_nextGetWatchlistReply;
+    }
+};
+
 static bsmi::IInvestorAPIClient *createMockFpCore(QObject *parent = 0)
 {
     return new InvestorAPIClientMock(parent);
@@ -309,6 +325,7 @@ private Q_SLOTS:
     void symbolSearchTest();
     void sendOrderTest();
     void signOutTest();
+    void getWatchlistTest();
 };
 
 FpCoreTest::FpCoreTest()
@@ -689,6 +706,53 @@ void FpCoreTest::signOutTest()
         QVERIFY(fpCore->authToken().isEmpty());
         QVERIFY(!fpCore->expiry().isValid());
         QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::NotAuthenticatedState);
+    }
+}
+
+void FpCoreTest::getWatchlistTest()
+{
+    {
+        auto client = new InvestorAPIClientGetWatchlistMock;
+        auto fpCoreSettings = new MockFpSettings;
+        auto fpCore = new FpCore(client, fpCoreSettings);
+        client->setParent(fpCore);
+
+        QVERIFY(client->m_watchlistId.isEmpty());
+
+        QString watchlistIdA("i_am_a_valid_watchlist_id");
+
+        // mock success response
+        auto netAuthRep = new QNetworkReplyMock;
+        client->m_nextGetWatchlistReply = new bsmi::INetworkReply(netAuthRep);
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::NotAuthenticatedState);
+        fpCore->setAccessToken("i_am_very_token", QDateTime::currentDateTimeUtc().addDays(7));
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::AuthenticatedState);
+
+        auto resp = fpCore->getWatchlist(watchlistIdA);
+        QVERIFY(resp);
+
+        // Test bsmi::IInvestorAPIClient::getWatchlist was called
+        QVERIFY(!client->m_watchlistId.isEmpty());
+
+        netAuthRep->m_payload = "{"
+                                "  \"shares\": ["
+                                "    {"
+                                "      \"symbol\": \"string\","
+                                "      \"name\": \"string\","
+                                "      \"lastPrice\": 0,"
+                                "      \"change\": 0,"
+                                "      \"changePercent\": 0"
+                                "    }"
+                                "  ],"
+                                "  \"id\": \"string\","
+                                "  \"name\": \"string\""
+                                "}";
+        netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
+        client->m_nextGetWatchlistReply->setFinished();
+
+        QVERIFY(!netAuthRep->m_payload.isEmpty());
+        QCOMPARE(QJsonDocument::fromJson(resp->payload()),
+                 QJsonDocument::fromJson(netAuthRep->m_payload));
     }
 }
 
