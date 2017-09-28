@@ -13,6 +13,7 @@ ListView {
     signal symbolClicked(string symbol)
 
     delegate: ItemDelegate {
+        id: itemDelegate
         height: delegateContent.height
         width: parent.width
 
@@ -36,6 +37,9 @@ ListView {
                     Layout.fillWidth: true
                     text: model.companyName
                     font.pixelSize: 13
+                    elide: Text.ElideRight
+                    Layout.maximumWidth: itemDelegate.width - FpStyle.screenEdgeLeftMargin -
+                                         FpStyle.screenEdgeRightMargin
                 }
                 Label {
                     Layout.fillWidth: true
