@@ -23,6 +23,9 @@ private Q_SLOTS:
     void createGetQuotesRequestTest();
     void createSymbolSearchRequestTest();
     void createSendOrderRequestTest();
+    void createGetWatchlistTest();
+    void createAddSymbolToWatchlistRequestTest();
+    void createRemoveSymbolFromWatchlistRequest();
 };
 
 RequestFactoryTest::RequestFactoryTest()
@@ -229,6 +232,64 @@ void RequestFactoryTest::createSendOrderRequestTest()
         QCOMPARE(resp.second.value("side").toString(), QString(QLatin1String("Buy")));
         QCOMPARE(resp.second.value("quantity").toInt(), 111);
         QCOMPARE(resp.second.value("nonce").toDouble(), double(1505878737000));
+    }
+}
+
+void RequestFactoryTest::createGetWatchlistTest()
+{
+    using namespace bsmi;
+
+    {
+        InvestorAPIClient c(nullptr, QStringLiteral("http://example.com"));
+
+        QString watchlistId("i_am_a_valid_watchlist_id");
+
+        c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 12), QTime(2, 48)));
+
+        auto resp = c.createGetWatchlist(watchlistId);
+        QCOMPARE(resp.url(),
+                 QUrl(QLatin1String("http://example.com/api/1.0/watchlists/") + watchlistId));
+        QCOMPARE(resp.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+    }
+}
+
+void RequestFactoryTest::createAddSymbolToWatchlistRequestTest()
+{
+    using namespace bsmi;
+
+    {
+        InvestorAPIClient c(nullptr, QStringLiteral("http://example.com"));
+
+        QString watchlistId("i_am_a_valid_watchlist_id");
+        QString symbol("i_am_a_valid_symbol");
+
+        c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 12), QTime(2, 48)));
+
+        auto resp = c.createAddSymbolToWatchlistRequest(watchlistId, symbol);
+        QCOMPARE(resp.first.url(), QUrl(QLatin1String("http://example.com/api/1.0/watchlists/")
+                                        + watchlistId + "/shares"));
+        QCOMPARE(resp.first.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+
+        QCOMPARE(resp.second.value("symbol").toString(), symbol);
+    }
+}
+
+void RequestFactoryTest::createRemoveSymbolFromWatchlistRequest()
+{
+    using namespace bsmi;
+
+    {
+        InvestorAPIClient c(nullptr, QStringLiteral("http://example.com"));
+
+        QString watchlistId("i_am_a_valid_watchlist_id");
+        QString symbol("i_am_a_valid_symbol");
+
+        c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 12), QTime(2, 48)));
+
+        auto resp = c.createRemoveSymbolFromWatchlistRequest(watchlistId, symbol);
+        QCOMPARE(resp.url(), QUrl(QLatin1String("http://example.com/api/1.0/watchlists/")
+                                  + watchlistId + "/shares/" + symbol));
+        QCOMPARE(resp.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
     }
 }
 
