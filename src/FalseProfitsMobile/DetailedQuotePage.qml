@@ -35,6 +35,7 @@ DetailedQuotePageForm {
 
         Label {
             id: errorDialogText
+            anchors.fill: parent
             wrapMode: Text.WordWrap
         }
     }

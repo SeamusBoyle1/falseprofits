@@ -106,6 +106,8 @@ OrderTicketPageForm {
 
         Label {
             id: errorDialogText
+            anchors.fill: parent
+            wrapMode: Text.WordWrap
         }
     }
 
@@ -121,6 +123,8 @@ OrderTicketPageForm {
 
         Label {
             id: infoDialogText
+            anchors.fill: parent
+            wrapMode: Text.WordWrap
         }
     }
 

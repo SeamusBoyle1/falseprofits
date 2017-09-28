@@ -56,6 +56,7 @@ Page {
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
         Label {
+            anchors.fill: parent
             wrapMode: Text.WordWrap
             text: qsTr("You're now signed out")
         }

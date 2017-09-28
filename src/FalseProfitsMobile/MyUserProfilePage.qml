@@ -46,6 +46,7 @@ MyUserProfilePageForm {
 
         Label {
             id: errorDialogText
+            anchors.fill: parent
             wrapMode: Text.WordWrap
         }
     }
@@ -63,6 +64,7 @@ MyUserProfilePageForm {
 
         Label {
             id: infoDialogText
+            anchors.fill: parent
             wrapMode: Text.WordWrap
         }
     }
