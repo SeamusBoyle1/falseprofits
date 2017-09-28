@@ -253,6 +253,22 @@ public:
     }
 };
 
+class InvestorAPIClientGetCandlesMock : public InvestorAPIClientMock
+{
+    Q_OBJECT
+public:
+    InvestorAPIClientGetCandlesMock() {}
+
+    NetworkReply *m_nextCandlesReply{ nullptr };
+    CandlesRequestArgs m_args;
+
+    INetworkReply *getCandles(const CandlesRequestArgs &args) override
+    {
+        m_args = args;
+        return m_nextCandlesReply;
+    }
+};
+
 class InvestorAPIClientSymbolSearchMock : public InvestorAPIClientMock
 {
     Q_OBJECT
@@ -359,6 +375,7 @@ private Q_SLOTS:
     void deleteUserTest();
     void getUserProfileTest();
     void getQuotesTest();
+    void getCandlesTest();
     void symbolSearchTest();
     void sendOrderTest();
     void signOutTest();
@@ -610,6 +627,51 @@ void FpCoreTest::getQuotesTest()
                                 "]";
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextQuotesReply->setFinished();
+
+        QVERIFY(!netAuthRep->m_payload.isEmpty());
+        QCOMPARE(QJsonDocument::fromJson(resp->payload()),
+                 QJsonDocument::fromJson(netAuthRep->m_payload));
+    }
+}
+
+void FpCoreTest::getCandlesTest()
+{
+    // Success request using symbol and range params
+    {
+        auto client = new InvestorAPIClientGetCandlesMock;
+        auto fpCoreSettings = new MockFpSettings;
+        auto fpCore = new FpCore(client, fpCoreSettings);
+        client->setParent(fpCore);
+
+        CandlesRequestArgs queryA;
+        queryA.setSymbol("Hello");
+        queryA.setRange("1d");
+
+        // mock success response
+        auto netAuthRep = new QNetworkReplyMock;
+        client->m_nextCandlesReply = new bsmi::INetworkReply(netAuthRep);
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::NotAuthenticatedState);
+        fpCore->setAccessToken("i_am_very_token", QDateTime::currentDateTimeUtc().addDays(7));
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::AuthenticatedState);
+
+        auto resp = fpCore->getCandles(queryA);
+        QVERIFY(resp);
+
+        // Test bsmi::IInvestorAPIClient got args
+        QCOMPARE(client->m_args.symbol, queryA.symbol());
+        QCOMPARE(client->m_args.range, queryA.range());
+
+        netAuthRep->m_payload = "["
+                                "  {"
+                                "    \"timestamp\": \"2017-09-28T02:26:54.048Z\","
+                                "    \"open\": 0,"
+                                "    \"high\": 0,"
+                                "    \"low\": 0,"
+                                "    \"close\": 0"
+                                "  }"
+                                "]";
+        netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
+        client->m_nextCandlesReply->setFinished();
 
         QVERIFY(!netAuthRep->m_payload.isEmpty());
         QCOMPARE(QJsonDocument::fromJson(resp->payload()),

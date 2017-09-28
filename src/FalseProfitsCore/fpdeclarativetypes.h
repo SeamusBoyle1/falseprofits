@@ -5,6 +5,7 @@
 
 #include <QObject>
 
+#include <QDateTime>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QVariant>
@@ -30,6 +31,44 @@ private:
     QString m_displayName;
     QString m_email;
     QString m_password;
+};
+
+class CandlesRequestArgs
+{
+private:
+    Q_GADGET
+    Q_PROPERTY(QString symbol READ symbol WRITE setSymbol)
+    Q_PROPERTY(QDateTime startTime READ startTime WRITE setStartTime)
+    Q_PROPERTY(QDateTime endTime READ endTime WRITE setEndTime)
+    Q_PROPERTY(QString interval READ interval WRITE setInterval)
+    Q_PROPERTY(QString range READ range WRITE setRange)
+public:
+    QString symbol() const { return m_symbol; }
+
+    void setSymbol(QString symbol) { m_symbol = symbol; }
+
+    QDateTime startTime() const { return m_startTime; }
+
+    void setStartTime(QDateTime startTime) { m_startTime = startTime; }
+
+    QDateTime endTime() const { return m_endTime; }
+
+    void setEndTime(QDateTime endTime) { m_endTime = endTime; }
+
+    QString interval() const { return m_interval; }
+
+    void setInterval(QString interval) { m_interval = interval; }
+
+    QString range() const { return m_range; }
+
+    void setRange(QString range) { m_range = range; }
+
+private:
+    QString m_symbol;
+    QDateTime m_startTime;
+    QDateTime m_endTime;
+    QString m_interval;
+    QString m_range;
 };
 
 class SymbolSearchQuery
@@ -347,6 +386,7 @@ private:
 };
 
 Q_DECLARE_METATYPE(NewUserDetails)
+Q_DECLARE_METATYPE(CandlesRequestArgs)
 Q_DECLARE_METATYPE(SymbolSearchQuery)
 Q_DECLARE_METATYPE(OrderParams)
 Q_DECLARE_METATYPE(BrokerCostCalcArgs)
@@ -367,6 +407,7 @@ public:
         : QObject(parent)
     {
         qRegisterMetaType<NewUserDetails>("NewUserDetails");
+        qRegisterMetaType<CandlesRequestArgs>("CandlesRequestArgs");
         qRegisterMetaType<SymbolSearchQuery>("SymbolSearchQuery");
         qRegisterMetaType<OrderParams>("OrderParams");
         qRegisterMetaType<OrderParams::Side>("OrderParams::Side");
@@ -384,6 +425,9 @@ public:
 
     Q_INVOKABLE
     NewUserDetails makeNewUserDetails() { return NewUserDetails{}; }
+
+    Q_INVOKABLE
+    CandlesRequestArgs makeCandlesRequestArgs() { return CandlesRequestArgs{}; }
 
     Q_INVOKABLE
     SymbolSearchQuery makeSymbolSearchQuery() { return SymbolSearchQuery{}; }

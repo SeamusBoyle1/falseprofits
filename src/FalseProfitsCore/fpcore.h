@@ -67,6 +67,9 @@ public:
     GetQuotesResponse *getQuotes(const QStringList &symbols);
 
     Q_INVOKABLE
+    GetCandlesResponse *getCandles(const CandlesRequestArgs &args);
+
+    Q_INVOKABLE
     SymbolSearchResponse *symbolSearch(const SymbolSearchQuery &query);
 
     Q_INVOKABLE

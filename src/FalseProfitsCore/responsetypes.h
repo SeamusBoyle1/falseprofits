@@ -177,6 +177,28 @@ public:
     }
 };
 
+class GetCandlesResponse : public BaseResponse
+{
+    Q_OBJECT
+public:
+    GetCandlesResponse() {}
+    virtual ~GetCandlesResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 401:
+            return "Authorization failed";
+        case 404:
+            return "Share not found.";
+        default:
+            break;
+        }
+        return QString();
+    }
+};
+
 class SymbolSearchResponse : public BaseResponse
 {
     Q_OBJECT

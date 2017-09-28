@@ -227,6 +227,38 @@ GetQuotesResponse *FpCore::getQuotes(const QStringList &symbols)
     return resp;
 }
 
+GetCandlesResponse *FpCore::getCandles(const CandlesRequestArgs &args)
+{
+    QPointer<GetCandlesResponse> resp(new GetCandlesResponse);
+
+    bsmi::IInvestorAPIClient::CandlesRequestArgs v;
+    v.symbol = args.symbol();
+    v.startTime = args.startTime();
+    v.endTime = args.endTime();
+    v.interval = args.interval();
+    v.range = args.range();
+
+    auto rep = m_client->getCandles(v);
+    connect(rep, &bsmi::INetworkReply::finished, this, [resp, rep, this]() {
+        if (!resp) {
+            rep->deleteLater();
+            return;
+        }
+        auto httpStatusCode = readHttpStatusCode(rep);
+        resp->setHttpStatusCode(httpStatusCode);
+        if (rep->error() == QNetworkReply::NoError) {
+            resp->setPayload(rep->readAll());
+        } else {
+            resp->setErrorMessage(readErrorMessage(resp, rep, httpStatusCode));
+        }
+
+        rep->deleteLater();
+        resp->setFinished();
+    });
+
+    return resp;
+}
+
 SymbolSearchResponse *FpCore::symbolSearch(const SymbolSearchQuery &query)
 {
     QPointer<SymbolSearchResponse> resp(new SymbolSearchResponse);
