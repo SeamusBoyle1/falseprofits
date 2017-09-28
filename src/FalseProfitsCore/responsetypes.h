@@ -294,4 +294,74 @@ public:
     }
 };
 
+class GetWatchlistResponse : public BaseResponse
+{
+    Q_OBJECT
+public:
+    GetWatchlistResponse() {}
+    virtual ~GetWatchlistResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 401:
+            return "Authorization failed";
+        case 404:
+            return "Watchlist not found";
+        default:
+            break;
+        }
+        return QString();
+    }
+};
+
+class AddSymbolToWatchlistResponse : public BaseResponse
+{
+    Q_OBJECT
+public:
+    AddSymbolToWatchlistResponse() {}
+    virtual ~AddSymbolToWatchlistResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 201:
+            return "Share successfully added to watchlist.";
+        case 400:
+            return "Request failed validation.";
+        case 401:
+            return "Authorization failed";
+        default:
+            break;
+        }
+        return QString();
+    }
+};
+
+class RemoveSymbolFromWatchlistResponse : public BaseResponse
+{
+    Q_OBJECT
+public:
+    RemoveSymbolFromWatchlistResponse() {}
+    virtual ~RemoveSymbolFromWatchlistResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 201:
+            return "Share successfully removed from watchlist.";
+        case 400:
+            return "Request failed validation.";
+        case 401:
+            return "Authorization failed";
+        default:
+            break;
+        }
+        return QString();
+    }
+};
+
 #endif // RESPONSETYPES_H

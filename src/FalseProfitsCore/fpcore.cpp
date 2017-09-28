@@ -345,6 +345,83 @@ SendOrderResponse *FpCore::sendOrder(const QString &accountId, const OrderParams
     return resp;
 }
 
+GetWatchlistResponse *FpCore::getWatchlist(const QString &watchlistId)
+{
+    QPointer<GetWatchlistResponse> resp(new GetWatchlistResponse);
+
+    auto rep = m_client->getWatchlist(watchlistId);
+    connect(rep, &bsmi::INetworkReply::finished, this, [resp, rep, this]() {
+        if (!resp) {
+            rep->deleteLater();
+            return;
+        }
+        auto httpStatusCode = readHttpStatusCode(rep);
+        resp->setHttpStatusCode(httpStatusCode);
+        if (rep->error() == QNetworkReply::NoError) {
+            resp->setPayload(rep->readAll());
+        } else {
+            resp->setErrorMessage(readErrorMessage(resp, rep, httpStatusCode));
+        }
+
+        rep->deleteLater();
+        resp->setFinished();
+    });
+
+    return resp;
+}
+
+AddSymbolToWatchlistResponse *FpCore::addSymbolToWatchlist(const QString &watchlistId,
+                                                           const QString &symbol)
+{
+    QPointer<AddSymbolToWatchlistResponse> resp(new AddSymbolToWatchlistResponse);
+
+    auto rep = m_client->addSymbolToWatchlist(watchlistId, symbol);
+    connect(rep, &bsmi::INetworkReply::finished, this, [resp, rep, this]() {
+        if (!resp) {
+            rep->deleteLater();
+            return;
+        }
+        auto httpStatusCode = readHttpStatusCode(rep);
+        resp->setHttpStatusCode(httpStatusCode);
+        if (rep->error() == QNetworkReply::NoError) {
+            resp->setPayload(rep->readAll());
+        } else {
+            resp->setErrorMessage(readErrorMessage(resp, rep, httpStatusCode));
+        }
+
+        rep->deleteLater();
+        resp->setFinished();
+    });
+
+    return resp;
+}
+
+RemoveSymbolFromWatchlistResponse *FpCore::removeSymbolFromWatchlist(const QString &watchlistId,
+                                                                     const QString &symbol)
+{
+    QPointer<RemoveSymbolFromWatchlistResponse> resp(new RemoveSymbolFromWatchlistResponse);
+
+    auto rep = m_client->removeSymbolFromWatchlist(watchlistId, symbol);
+    connect(rep, &bsmi::INetworkReply::finished, this, [resp, rep, this]() {
+        if (!resp) {
+            rep->deleteLater();
+            return;
+        }
+        auto httpStatusCode = readHttpStatusCode(rep);
+        resp->setHttpStatusCode(httpStatusCode);
+        if (rep->error() == QNetworkReply::NoError) {
+            resp->setPayload(rep->readAll());
+        } else {
+            resp->setErrorMessage(readErrorMessage(resp, rep, httpStatusCode));
+        }
+
+        rep->deleteLater();
+        resp->setFinished();
+    });
+
+    return resp;
+}
+
 Fpx::AuthenticationState FpCore::authState() const
 {
     return m_authenticationState;

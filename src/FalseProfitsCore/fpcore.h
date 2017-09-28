@@ -75,6 +75,17 @@ public:
     Q_INVOKABLE
     SendOrderResponse *sendOrder(const QString &accountId, const OrderParams &args);
 
+    Q_INVOKABLE
+    GetWatchlistResponse *getWatchlist(const QString &watchlistId);
+
+    Q_INVOKABLE
+    AddSymbolToWatchlistResponse *addSymbolToWatchlist(const QString &watchlistId,
+                                                       const QString &symbol);
+
+    Q_INVOKABLE
+    RemoveSymbolFromWatchlistResponse *removeSymbolFromWatchlist(const QString &watchlistId,
+                                                                 const QString &symbol);
+
     Fpx::AuthenticationState authState() const;
 
     void loadLaunchSettings();
