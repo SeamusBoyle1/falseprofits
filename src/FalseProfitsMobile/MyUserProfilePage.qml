@@ -5,6 +5,12 @@ import QtQuick.Layouts 1.3
 import com.example.fpx 1.0
 
 MyUserProfilePageForm {
+    Connections {
+        target: fpCore
+        onAuthStateChanged: {
+            reloadUserProfile()
+        }
+    }
 
     Component.onCompleted: {
         reloadUserProfile()

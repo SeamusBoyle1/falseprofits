@@ -22,9 +22,21 @@ Page {
         visible: false
     }
 
+    Connections {
+        target: fpCore
+        onAuthStateChanged: {
+            if (fpCore.authState === Fpx.AuthenticatedState) {
+                updateAccounts()
+            }
+        }
+    }
+
     Component.onCompleted: {
         accountsListView.model = myTradingAccounts.model
-        updateAccounts()
+
+        if (fpCore.authState === Fpx.AuthenticatedState) {
+            updateAccounts()
+        }
     }
 
     function updateAccounts() {

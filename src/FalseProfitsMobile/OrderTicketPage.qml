@@ -20,10 +20,23 @@ OrderTicketPageForm {
         coreClient: fpCore
     }
 
+    Connections {
+        target: fpCore
+        onAuthStateChanged: {
+            if (fpCore.authState === Fpx.AuthenticatedState) {
+                updateAccounts()
+                updateCommissionTables()
+            }
+        }
+    }
+
     Component.onCompleted: {
         accountsComboBox.model = myTradingAccounts.model
-        updateAccounts()
-        updateCommissionTables()
+
+        if (fpCore.authState === Fpx.AuthenticatedState) {
+            updateAccounts()
+            updateCommissionTables()
+        }
     }
 
     placeOrderButton.onClicked: {
