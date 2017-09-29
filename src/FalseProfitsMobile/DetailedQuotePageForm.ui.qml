@@ -8,6 +8,8 @@ Page {
     id: page
     width: 400
     height: 400
+    property alias rangeButtonGroup: rangeButtonGroup
+    property alias priceLineChart: priceLineChart
     property alias starButton: starButton
     property string symbolText
     property string companyNameText
@@ -20,9 +22,15 @@ Page {
     property string dayLowText
     property string dayHighText
     property bool starred: false
+    property bool maybeHasChartData: true
     property alias lastPriceLabel: lastPriceLabel
     property alias orderButton: orderButton
     property alias busyIndicator: busyIndicator
+
+    ButtonGroup2 {
+        id: rangeButtonGroup
+        buttons: rangeButtons.children
+    }
 
     Flickable {
         id: flickable
@@ -192,12 +200,93 @@ Page {
                                 font.pixelSize: 14
                             }
                         }
+
+                        ColumnLayout {
+                            spacing: 0
+
+                            Flickable {
+                                id: flickable2
+                                Layout.fillHeight: true
+                                Layout.fillWidth: true
+                                Layout.minimumHeight: rangeButtons.implicitHeight
+                                contentWidth: rangeButtons.implicitWidth
+                                contentHeight: rangeButtons.implicitHeight
+                                clip: true
+
+                                RowLayout {
+                                    id: rangeButtons
+                                    Layout.bottomMargin: 0
+                                    spacing: 0
+
+                                    ToolButton {
+                                        text: qsTr("1d")
+                                        checkable: true
+                                        checked: true
+                                    }
+                                    ToolButton {
+                                        text: qsTr("5d")
+                                        checkable: true
+                                        checked: false
+                                    }
+                                    ToolButton {
+                                        text: qsTr("1mo")
+                                        checkable: true
+                                        checked: false
+                                    }
+                                    ToolButton {
+                                        text: qsTr("6mo")
+                                        checkable: true
+                                        checked: false
+                                    }
+                                    ToolButton {
+                                        text: qsTr("ytd")
+                                        checkable: true
+                                        checked: false
+                                    }
+                                    ToolButton {
+                                        text: qsTr("1y")
+                                        checkable: true
+                                        checked: false
+                                    }
+                                    ToolButton {
+                                        text: qsTr("5y")
+                                        checkable: true
+                                        checked: false
+                                    }
+                                    ToolButton {
+                                        text: qsTr("max")
+                                        checkable: true
+                                        checked: false
+                                    }
+                                }
+                            }
+
+                            FpLineChartWidget {
+                                id: priceLineChart
+                                Layout.minimumHeight: 300
+                                Layout.maximumHeight: 800 * 0.5625
+                                Layout.preferredHeight: width * 0.5625
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                                backgroundRoundness: 0
+                                lineSeries.visible: maybeHasChartData
+                            }
+
+                            Label {
+                                text: qsTr("No chart data")
+                                visible: !busyIndicator.visible
+                                         && !maybeHasChartData
+                                anchors.centerIn: priceLineChart
+                            }
+                        }
                     }
                 }
 
                 Page {
                     ColumnLayout {
-                        anchors.fill: parent
+                        anchors.top: parent.top
+                        anchors.left: parent.left
+                        anchors.right: parent.right
 
                         GridLayout {
                             rowSpacing: 20

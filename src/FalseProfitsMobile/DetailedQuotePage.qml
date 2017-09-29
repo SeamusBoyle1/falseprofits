@@ -7,7 +7,17 @@ DetailedQuotePageForm {
     signal tradeButtonClicked(string symbol)
 
     property string currentSymbol
+    property string chartDataRange: "1d"
+    property string chartInterval: "2m"
     property int busyIndicatorVisibility: 0
+
+    FpChartDataWrapper {
+        id: chartDataWrapper
+    }
+
+    Component.onCompleted: {
+        chartDataWrapper.hackMargin(priceLineChart.lineSeries)
+    }
 
     orderButton.onClicked: {
         if (currentSymbol !== "") {
@@ -24,6 +34,22 @@ DetailedQuotePageForm {
         symbolText = currentSymbol
         updateQuote()
         updateStarredState()
+        fillChart()
+    }
+
+    rangeButtonGroup.onClicked2: {
+        chartDataRange = button.text
+
+        if (chartDataRange == "1d") {chartInterval = "2m"}
+        else if (chartDataRange == "5d") {chartInterval = "15m"}
+        else if (chartDataRange == "1mo") {chartInterval = "1h"}
+        else if (chartDataRange == "6mo") {chartInterval = "1d"}
+        else if (chartDataRange == "ytd") {chartInterval = "1d"}
+        else if (chartDataRange == "1y")  {chartInterval = "1wk"}
+        else if (chartDataRange == "1yo") {chartInterval = "1mo"}
+        else if (chartDataRange == "max") {chartInterval = "1mo"}
+
+        fillChart()
     }
 
     Dialog {
@@ -137,5 +163,50 @@ DetailedQuotePageForm {
         if (busyIndicatorVisibility == 0) {
             busyIndicator.visible = false
         }
+    }
+
+    function fillChart() {
+        var reqArgs = fpType.makeCandlesRequestArgs()
+        reqArgs.symbol = currentSymbol
+        reqArgs.range = chartDataRange
+        reqArgs.interval = chartInterval
+
+        var candlesResp = chartDataWrapper.getCandlesFromYahoo(reqArgs)
+        incrementBusyIndicatorVisibility()
+        candlesResp.onFinished.connect(function() {
+            decrementBusyIndicatorVisibility()
+            var hist = chartDataWrapper.makeCloseLineSeries(candlesResp.payload());
+            maybeHasChartData = hist.xData.length > 0
+            chartDataWrapper.updateSeries(priceLineChart.lineSeries, hist)
+
+            // TODO return struct from C++ containing all min max for x&y
+            var minPrice = chartDataWrapper.minPrice(hist)
+            var maxPrice = chartDataWrapper.maxPrice(hist)
+            if (maxPrice === 0) {
+                maxPrice = 1000
+            }
+            var padding = (maxPrice - minPrice) * 0.05
+            minPrice -= padding
+            maxPrice += padding
+            priceLineChart.yAxis.min = minPrice
+            priceLineChart.yAxis.max = maxPrice
+            priceLineChart.xAxis.min = new Date(chartDataWrapper.minDate(hist))
+            var maxDate = chartDataWrapper.maxDate(hist)
+            priceLineChart.xAxis.max = maxDate !== 0 ? new Date(maxDate) : new Date()
+
+            if (reqArgs.range === "1d" || reqArgs.interval === "1m" || reqArgs.interval === "2m") {
+                priceLineChart.xAxis.format = "hh:mm"
+                if (reqArgs.range === "1d") {
+                    var regSession = chartDataWrapper.latestTradingSession(hist)
+                    priceLineChart.xAxis.min = new Date(regSession[0])
+                    priceLineChart.xAxis.max = regSession[1] !== 0 ?
+                                new Date(regSession[1]) : new Date()
+                }
+            } else if (reqArgs.interval === "1h") {
+                priceLineChart.xAxis.format = "dd MMM"
+            } else {
+                priceLineChart.xAxis.format = "dd MMM yy"
+            }
+        })
     }
 }

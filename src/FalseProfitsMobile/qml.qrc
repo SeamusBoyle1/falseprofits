@@ -28,5 +28,7 @@
         <file>WatchlistListView.qml</file>
         <file>WatchlistPage.qml</file>
         <file>WatchlistPageForm.ui.qml</file>
+        <file>FpLineChartWidget.qml</file>
+        <file>ButtonGroup2.qml</file>
     </qresource>
 </RCC>

@@ -1,6 +1,6 @@
 // Copyright 2017
 
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 
 #include <FalseProfitsCore/brokeragecostcalculator.h>
@@ -17,6 +17,7 @@
 #include <FalseProfitsCore/fpwatchlists.h>
 #include <FalseProfitsCore/fpwatchlistslistmodel.h>
 #include <FalseProfitsCore/fpwatchlistwrapper.h>
+#include <FalseProfitsMobile/fpchartdatawrapper.h>
 #include <InvestorAPIClient/iinvestorapiclient.h>
 
 #include <QDateTime>
@@ -42,7 +43,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain(QStringLiteral("student.rmit.edu.au"));
     QCoreApplication::setApplicationName(QStringLiteral("FalseProfits"));
 
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     qmlRegisterSingletonType(QUrl("qrc:/FpStyle.qml"), "com.example.fpx", 1, 0, "FpStyle");
 
@@ -64,6 +65,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<FpSymbolSearchResultsItemModel>("com.example.fpx", 1, 0,
                                                     "FpSymbolSearchResultsItemModel");
     qmlRegisterType<FpAccountsListModel>("com.example.fpx", 1, 0, "FpAccountsListModel");
+    qmlRegisterType<FpChartDataWrapper>("com.example.fpx", 1, 0, "FpChartDataWrapper");
     qmlRegisterType<FpTradingAccounts>("com.example.fpx", 1, 0, "FpTradingAccounts");
     qmlRegisterType<FpWatchlistListModel>("com.example.fpx", 1, 0, "FpWatchlistListModel");
     qmlRegisterType<FpWatchlists>("com.example.fpx", 1, 0, "FpWatchlists");
