@@ -18,6 +18,28 @@ class CandlesRequestArgs;
 class FpCore;
 class GetCandlesResponse;
 
+class FpChartCandleSeriesData
+{
+    Q_GADGET
+    Q_PROPERTY(QVector<qreal> xData READ xData)
+    Q_PROPERTY(QVector<qreal> open READ open)
+    Q_PROPERTY(QVector<qreal> high READ high)
+    Q_PROPERTY(QVector<qreal> low READ low)
+    Q_PROPERTY(QVector<qreal> close READ close)
+public:
+    QVector<qreal> m_x;
+    QVector<qreal> m_open;
+    QVector<qreal> m_high;
+    QVector<qreal> m_low;
+    QVector<qreal> m_close;
+
+    QVector<qreal> xData() const { return m_x; }
+    QVector<qreal> open() const { return m_open; }
+    QVector<qreal> high() const { return m_high; }
+    QVector<qreal> low() const { return m_low; }
+    QVector<qreal> close() const { return m_close; }
+};
+
 class FpChartLineSeriesData
 {
     Q_GADGET
@@ -59,7 +81,30 @@ public:
     }
 
     Q_INVOKABLE
+    FpChartCandleSeriesData makeCandleSeries(const QByteArray &json) const;
+
+    Q_INVOKABLE
     FpChartLineSeriesData makeCloseLineSeries(const QByteArray &json) const;
+
+    Q_INVOKABLE
+    QStringList makeDateCategoryLabels(const FpChartCandleSeriesData &data, int tickCount,
+                                       const QString &dateFormat) const;
+
+    enum class CandleOpenMode { FirstTick, PrevClose };
+    void updateCandleSeries(QAbstractSeries *series, const FpChartCandleSeriesData &data,
+                            CandleOpenMode mode) const;
+
+    Q_INVOKABLE
+    void updateSeriesFirstTick(QAbstractSeries *series, const FpChartCandleSeriesData &data) const
+    {
+        updateCandleSeries(series, data, CandleOpenMode::FirstTick);
+    }
+
+    Q_INVOKABLE
+    void updateSeriesPrevClose(QAbstractSeries *series, const FpChartCandleSeriesData &data) const
+    {
+        updateCandleSeries(series, data, CandleOpenMode::PrevClose);
+    }
 
     Q_INVOKABLE
     void updateSeries(QAbstractSeries *series, const FpChartLineSeriesData &data) const;
@@ -74,6 +119,9 @@ public:
     }
 
     Q_INVOKABLE
+    double minPrice(const FpChartCandleSeriesData &data) const { return minPrice(data.m_low); }
+
+    Q_INVOKABLE
     double minPrice(const FpChartLineSeriesData &data) const { return minPrice(data.m_y); }
 
     Q_INVOKABLE
@@ -84,6 +132,9 @@ public:
             return *it;
         return 0;
     }
+
+    Q_INVOKABLE
+    double maxPrice(const FpChartCandleSeriesData &data) const { return maxPrice(data.m_high); }
 
     Q_INVOKABLE
     double maxPrice(const FpChartLineSeriesData &data) const { return maxPrice(data.m_y); }
@@ -97,6 +148,9 @@ public:
     }
 
     Q_INVOKABLE
+    double minDate(const FpChartCandleSeriesData &data) const { return minDate(data.m_x); }
+
+    Q_INVOKABLE
     double minDate(const FpChartLineSeriesData &data) const { return minDate(data.m_x); }
 
     Q_INVOKABLE
@@ -108,10 +162,16 @@ public:
     }
 
     Q_INVOKABLE
+    double maxDate(const FpChartCandleSeriesData &data) const { return maxDate(data.m_x); }
+
+    Q_INVOKABLE
     double maxDate(const FpChartLineSeriesData &data) const { return maxDate(data.m_x); }
 
     Q_INVOKABLE
     void hackMargin(QAbstractSeries *s) const;
+
+    Q_INVOKABLE
+    void hackCandlestickSeriesPen(QAbstractSeries *s, const QPen &pen) const;
 
 signals:
 
@@ -122,6 +182,7 @@ private:
     QNetworkAccessManager *m_network{ nullptr };
 };
 
+Q_DECLARE_METATYPE(FpChartCandleSeriesData)
 Q_DECLARE_METATYPE(FpChartLineSeriesData)
 
 #endif // FPCHARTDATAWRAPPER_H

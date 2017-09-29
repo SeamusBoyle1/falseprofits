@@ -123,6 +123,7 @@ Page {
             onLoaded: {
                 item.currentSymbol = tickerSymbol
                 item.onTradeButtonClicked.connect(showOrderTicket)
+                item.onChartButtonClicked.connect(showBigChart)
                 navPan.push(item)
             }
         }
@@ -135,6 +136,22 @@ Page {
             anchors.fill: parent
             onLoaded: {
                 item.currentSymbol = tickerSymbol
+                navPan.push(item)
+            }
+        }
+
+        Loader {
+            id: bigChartLoader
+            property string tickerSymbol
+            property string interval
+            property string dataRange
+            active: false
+            source: "qrc:/BigChartPage.qml"
+            anchors.fill: parent
+            onLoaded: {
+                item.currentSymbol = tickerSymbol
+                item.chartInterval = interval
+                item.chartDataRange = dataRange
                 navPan.push(item)
             }
         }
@@ -183,6 +200,26 @@ Page {
             }
         } else {
             symbolSearchPageLoader.active = true
+        }
+    }
+
+    function showBigChart(ticker, interval, dataRange)
+    {
+        if (bigChartLoader.active) {
+            bigChartLoader.item.currentSymbol = ticker
+            bigChartLoader.item.chartInterval = interval
+            bigChartLoader.item.chartDataRange = dataRange
+            var index = bigChartLoader.item.StackView.index
+            if (index >= 0) {
+                navPan.pop(bigChartLoader.item)
+            } else {
+                navPan.push(bigChartLoader.item)
+            }
+        } else {
+            bigChartLoader.tickerSymbol = ticker
+            bigChartLoader.interval = interval
+            bigChartLoader.dataRange = dataRange
+            bigChartLoader.active = true
         }
     }
 }

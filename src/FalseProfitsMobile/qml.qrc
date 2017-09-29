@@ -30,5 +30,8 @@
         <file>WatchlistPageForm.ui.qml</file>
         <file>FpLineChartWidget.qml</file>
         <file>ButtonGroup2.qml</file>
+        <file>FpCandleChartWidget.qml</file>
+        <file>BigChartPage.qml</file>
+        <file>BigChartPageForm.ui.qml</file>
     </qresource>
 </RCC>

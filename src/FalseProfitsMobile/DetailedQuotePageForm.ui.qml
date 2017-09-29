@@ -8,6 +8,7 @@ Page {
     id: page
     width: 400
     height: 400
+    property alias chartFullScreenButton: chartFullScreenButton
     property alias rangeButtonGroup: rangeButtonGroup
     property alias priceLineChart: priceLineChart
     property alias starButton: starButton
@@ -257,6 +258,24 @@ Page {
                                         text: qsTr("max")
                                         checkable: true
                                         ButtonGroup.group: rangeButtonGroup
+                                    }
+
+                                    ToolSeparator {
+                                    }
+
+                                    ToolButton {
+                                        id: chartFullScreenButton
+                                        contentItem: Image {
+                                            fillMode: Image.Pad
+                                            horizontalAlignment: Image.AlignHCenter
+                                            verticalAlignment: Image.AlignVCenter
+                                            source: "qrc:/images/" + FpStyle.iconPrimary
+                                                    + "/fullscreen.png"
+                                        }
+                                        flat: true
+
+                                        ToolTip.visible: hovered
+                                        ToolTip.text: qsTr("Fullscreen")
                                     }
                                 }
                             }

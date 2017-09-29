@@ -5,6 +5,7 @@ import com.example.fpx 1.0
 
 DetailedQuotePageForm {
     signal tradeButtonClicked(string symbol)
+    signal chartButtonClicked(string symbol, string interval, string dataRange)
 
     property string currentSymbol
     property string chartDataRange: "1d"
@@ -50,6 +51,12 @@ DetailedQuotePageForm {
         else if (chartDataRange == "max") {chartInterval = "1mo"}
 
         fillChart()
+    }
+
+    chartFullScreenButton.onClicked: {
+        if (currentSymbol !== "") {
+            chartButtonClicked(currentSymbol, chartInterval, chartDataRange)
+        }
     }
 
     Dialog {

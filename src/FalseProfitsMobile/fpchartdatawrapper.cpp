@@ -6,6 +6,8 @@
 #include <FalseProfitsCore/fpdeclarativetypes.h>
 #include <FalseProfitsCore/responsetypes.h>
 
+#include <QCandlestickSeries>
+#include <QCandlestickSet>
 #include <QChart>
 #include <QDateTime>
 #include <QGraphicsLayout>
@@ -21,12 +23,15 @@
 #include <QUrlQuery>
 #include <QXYSeries>
 
+#include <boost/polymorphic_cast.hpp>
+
 #include <algorithm>
 
 FpChartDataWrapper::FpChartDataWrapper(QObject *parent)
     : QObject(parent)
     , m_network{ new QNetworkAccessManager(this) }
 {
+    qRegisterMetaType<FpChartCandleSeriesData>();
     qRegisterMetaType<FpChartLineSeriesData>();
 }
 
@@ -157,6 +162,54 @@ QList<qreal> FpChartDataWrapper::latestTradingSession(const QVector<qreal> &xDat
     return { double(start.toMSecsSinceEpoch()), double(end.toMSecsSinceEpoch()) };
 }
 
+FpChartCandleSeriesData FpChartDataWrapper::makeCandleSeries(const QByteArray &json) const
+{
+    auto doc = QJsonDocument::fromJson(json);
+    auto const arr = doc.array();
+
+    FpChartCandleSeriesData r;
+    r.m_x.reserve(arr.size());
+    r.m_open.reserve(arr.size());
+    r.m_high.reserve(arr.size());
+    r.m_low.reserve(arr.size());
+    r.m_close.reserve(arr.size());
+
+    for (auto const &in : arr) {
+        auto const sample = in.toObject();
+        auto sampleTs = sample.value(QLatin1String("timestamp"));
+        if (!sampleTs.isString()) {
+            continue;
+        }
+        auto sampleTsDt = QDateTime::fromString(sampleTs.toString(), Qt::ISODate);
+        if (!sampleTsDt.isValid()) {
+            continue;
+        }
+        auto sampleOpen = sample.value(QLatin1String("open"));
+        if (!sampleOpen.isDouble()) {
+            continue;
+        }
+        auto sampleHigh = sample.value(QLatin1String("high"));
+        if (!sampleHigh.isDouble()) {
+            continue;
+        }
+        auto sampleLow = sample.value(QLatin1String("low"));
+        if (!sampleLow.isDouble()) {
+            continue;
+        }
+        auto sampleClose = sample.value(QLatin1String("close"));
+        if (!sampleClose.isDouble()) {
+            continue;
+        }
+        r.m_x.append(sampleTsDt.toMSecsSinceEpoch());
+        r.m_open.append(sampleOpen.toDouble());
+        r.m_high.append(sampleHigh.toDouble());
+        r.m_low.append(sampleLow.toDouble());
+        r.m_close.append(sampleClose.toDouble());
+    }
+
+    return r;
+}
+
 FpChartLineSeriesData FpChartDataWrapper::makeCloseLineSeries(const QByteArray &json) const
 {
     auto doc = QJsonDocument::fromJson(json);
@@ -185,6 +238,70 @@ FpChartLineSeriesData FpChartDataWrapper::makeCloseLineSeries(const QByteArray &
     }
 
     return r;
+}
+
+QStringList FpChartDataWrapper::makeDateCategoryLabels(const FpChartCandleSeriesData &data,
+                                                       int tickCount,
+                                                       const QString &dateFormat) const
+{
+    QStringList r;
+    if (data.m_x.isEmpty()) {
+        return r;
+    }
+
+    if (tickCount == 1) {
+        auto middle = qRound(double(data.m_x.size()) * 0.5);
+        middle = qBound(0, middle, data.m_x.size() - 1);
+        r.append(QDateTime::fromMSecsSinceEpoch(qint64(data.m_x.at(middle))).toString(dateFormat));
+        return r;
+    }
+
+    // NOTE: category labels are center aligned, so the value in the middle
+    // of each tick is used.
+    auto ticksEvery = qRound(double(data.m_x.size()) / (tickCount));
+    auto atPos = ticksEvery / 2;
+    for (auto i = 0; i < tickCount; ++i, atPos = atPos + ticksEvery) {
+        r.append(
+            QDateTime::fromMSecsSinceEpoch(qint64(data.m_x.value(atPos))).toString(dateFormat));
+    }
+
+    return r;
+}
+
+void FpChartDataWrapper::updateCandleSeries(QAbstractSeries *series,
+                                            const FpChartCandleSeriesData &data,
+                                            FpChartDataWrapper::CandleOpenMode mode) const
+{
+    if (series == nullptr) {
+        return;
+    }
+
+    //
+    // TODO(seamus): Rewrite to avoid allocations
+    //
+
+    auto candleSeries = boost::polymorphic_downcast<QCandlestickSeries *>(series);
+    candleSeries->clear();
+
+    QList<QCandlestickSet *> sets;
+    sets.reserve(data.m_x.size());
+    if (mode == CandleOpenMode::FirstTick) {
+        for (auto i = 0, total = data.m_x.size(); i < total; ++i) {
+            auto candlestickSet = new QCandlestickSet(data.m_open.at(i), data.m_high.at(i),
+                                                      data.m_low.at(i), data.m_close.at(i), i);
+            sets.append(candlestickSet);
+        }
+    } else if (mode == CandleOpenMode::PrevClose) {
+        auto prevClose = data.m_open.value(0);
+        for (auto i = 0, total = data.m_x.size(); i < total; ++i) {
+            auto candlestickSet = new QCandlestickSet(prevClose, data.m_high.at(i),
+                                                      data.m_low.at(i), data.m_close.at(i), i);
+            sets.append(candlestickSet);
+            prevClose = data.m_close.at(i);
+        }
+    }
+
+    candleSeries->append(sets);
 }
 
 void FpChartDataWrapper::updateSeries(QAbstractSeries *series,
@@ -216,4 +333,10 @@ void FpChartDataWrapper::hackMargin(QAbstractSeries *s) const
         chart->layout()->setContentsMargins(0, 0, 0, 0);
         chart->setBackgroundRoundness(0);
     }
+}
+
+void FpChartDataWrapper::hackCandlestickSeriesPen(QAbstractSeries *s, const QPen &pen) const
+{
+    auto candleSeries = boost::polymorphic_downcast<QCandlestickSeries *>(s);
+    candleSeries->setPen(pen);
 }
