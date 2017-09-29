@@ -263,9 +263,8 @@ Page {
 
                             FpLineChartWidget {
                                 id: priceLineChart
-                                Layout.minimumHeight: 300
-                                Layout.maximumHeight: 800 * 0.5625
-                                Layout.preferredHeight: width * 0.5625
+                                Layout.minimumHeight: 215
+                                Layout.maximumWidth: parent.width < 1260 ? -1 : 420
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
                                 backgroundRoundness: 0
