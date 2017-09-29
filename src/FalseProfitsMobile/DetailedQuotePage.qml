@@ -10,6 +10,7 @@ DetailedQuotePageForm {
     property string currentSymbol
     property string chartDataRange: "1d"
     property string chartInterval: "2m"
+    property int candlesRequestId: 0
     property int busyIndicatorVisibility: 0
 
     FpChartDataWrapper {
@@ -180,9 +181,16 @@ DetailedQuotePageForm {
         reqArgs.interval = chartInterval
 
         var candlesResp = chartDataWrapper.getCandlesFromYahoo(reqArgs)
+        var thisRequestId = candlesRequestId + 1
+        candlesRequestId = thisRequestId
         incrementBusyIndicatorVisibility()
         candlesResp.onFinished.connect(function() {
             decrementBusyIndicatorVisibility()
+
+            if (thisRequestId < candlesRequestId) {
+                return
+            }
+
             var hist = chartDataWrapper.makeCloseLineSeries(candlesResp.payload());
             maybeHasChartData = hist.xData.length > 0
             chartDataWrapper.updateSeries(priceLineChart.lineSeries, hist)
