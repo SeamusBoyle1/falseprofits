@@ -47,7 +47,7 @@ DetailedQuotePageForm {
         else if (chartDataRange == "6mo") {chartInterval = "1d"}
         else if (chartDataRange == "ytd") {chartInterval = "1d"}
         else if (chartDataRange == "1y")  {chartInterval = "1wk"}
-        else if (chartDataRange == "1yo") {chartInterval = "1mo"}
+        else if (chartDataRange == "5y")  {chartInterval = "1mo"}
         else if (chartDataRange == "max") {chartInterval = "1mo"}
 
         fillChart()
