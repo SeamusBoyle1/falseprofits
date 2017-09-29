@@ -304,6 +304,25 @@ void FpChartDataWrapper::updateCandleSeries(QAbstractSeries *series,
     candleSeries->append(sets);
 }
 
+void FpChartDataWrapper::updateCloseSeries(QAbstractSeries *series,
+                                           const FpChartCandleSeriesData &data) const
+{
+    if (series == nullptr) {
+        return;
+    }
+
+    auto xySeries = boost::polymorphic_downcast<QXYSeries *>(series);
+
+    QVector<QPointF> points(data.m_x.size());
+    for (auto i = 0, total = data.m_x.size(); i < total; ++i) {
+        points[i].rx() = i;
+        points[i].ry() = data.m_close.at(i);
+    }
+
+    // Use replace instead of clear + append, it's optimized for performance
+    xySeries->replace(points);
+}
+
 void FpChartDataWrapper::updateSeries(QAbstractSeries *series,
                                       const FpChartLineSeriesData &data) const
 {

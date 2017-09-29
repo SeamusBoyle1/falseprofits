@@ -107,6 +107,9 @@ public:
     }
 
     Q_INVOKABLE
+    void updateCloseSeries(QAbstractSeries *series, const FpChartCandleSeriesData &data) const;
+
+    Q_INVOKABLE
     void updateSeries(QAbstractSeries *series, const FpChartLineSeriesData &data) const;
 
     Q_INVOKABLE

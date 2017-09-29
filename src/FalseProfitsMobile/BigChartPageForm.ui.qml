@@ -5,6 +5,9 @@ import QtQuick.Controls 2.2
 Page {
     width: 400
     height: 400
+    property alias chartTypeButtonGroup: chartTypeButtonGroup
+    property alias candleCharTypeButton: candleCharTypeButton
+    property alias lineChartTypeButton: lineChartTypeButton
     property alias rangeButtonGroup: rangeButtonGroup
     property string symbolText
     property string intervalText
@@ -16,11 +19,14 @@ Page {
         id: rangeButtonGroup
     }
 
+    ButtonGroup2 {
+        id: chartTypeButtonGroup
+    }
+
     FpCandleChartWidget {
         anchors.fill: parent
         id: bigChartView
         backgroundRoundness: 0
-        candleSeries.visible: maybeHasChartData
     }
 
     Label {
@@ -98,6 +104,23 @@ Page {
                         text: qsTr("max")
                         checkable: true
                         ButtonGroup.group: rangeButtonGroup
+                    }
+
+                    ToolSeparator {
+                    }
+
+                    ToolButton {
+                        id: candleCharTypeButton
+                        text: qsTr("Candle")
+                        checkable: true
+                        ButtonGroup.group: chartTypeButtonGroup
+                    }
+                    ToolButton {
+                        id: lineChartTypeButton
+                        text: qsTr("Line")
+                        checkable: true
+                        checked: true
+                        ButtonGroup.group: chartTypeButtonGroup
                     }
                 }
             }

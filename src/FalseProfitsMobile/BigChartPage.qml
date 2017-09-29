@@ -20,6 +20,7 @@ BigChartPageForm {
     Component.onCompleted: {
         chartDataWrapper.hackMargin(bigChartView.candleSeries)
         chartDataWrapper.hackCandlestickSeriesPen(bigChartView.candleSeries, "#000")
+        bigChartView.candleSeries.visible = candleCharTypeButton.checked
 
         intervalText = chartInterval.toUpperCase()
     }
@@ -59,6 +60,32 @@ BigChartPageForm {
     onTickCountForWidthChanged: {
         bigChartView.xAxis.tickCount = tickCountForWidth
         updateTickLabels()
+    }
+
+    chartTypeButtonGroup.onClicked2: {
+        bigChartView.lineSeries.visible = lineChartTypeButton.checked
+        bigChartView.candleSeries.visible = candleCharTypeButton.checked
+    }
+
+    bigChartView.candleSeries.onVisibleChanged: {
+        if (!bigChartView.candleSeries.visible) {
+            bigChartView.candleSeries.clear()
+            updateLineSeries()
+        } else {
+            updateCandleSeries()
+        }
+    }
+
+    function updateLineSeries() {
+        chartDataWrapper.updateCloseSeries(bigChartView.lineSeries, historyData)
+    }
+
+    function updateCandleSeries() {
+        if (candleOpenMode === 1) {
+            chartDataWrapper.updateSeriesPrevClose(bigChartView.candleSeries, historyData)
+        } else {
+            chartDataWrapper.updateSeriesFirstTick(bigChartView.candleSeries, historyData)
+        }
     }
 
     function incrementBusyIndicatorVisibility() {
@@ -145,10 +172,11 @@ BigChartPageForm {
             historyData = hist
             maybeHasChartData = hist.xData.length > 0
 
-            if (candleOpenMode === 1) {
-                chartDataWrapper.updateSeriesPrevClose(bigChartView.candleSeries, hist)
-            } else {
-                chartDataWrapper.updateSeriesFirstTick(bigChartView.candleSeries, hist)
+            if (bigChartView.candleSeries.visible) {
+                updateCandleSeries()
+            }
+            if (bigChartView.lineSeries.visible) {
+                updateLineSeries()
             }
 
             fitDataRange()
