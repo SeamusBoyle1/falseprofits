@@ -107,6 +107,7 @@ DetailedQuotePageForm {
                     var change = quote.change
                     changePriceText = change ? quote.change : "-"
                     direction = change > 0 ? 1 : change < 0 ? -1 : 0
+                    priceLineChart.lineSeries.color = direction > 0 ? "#00a95d" : "#f0162f"
 
                     var pctChange = quote.changePercent
                     changePercentText = pctChange ? qsTr("%1%").arg(pctChange) : "-"
