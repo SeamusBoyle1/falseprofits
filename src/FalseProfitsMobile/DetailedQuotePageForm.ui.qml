@@ -29,7 +29,6 @@ Page {
 
     ButtonGroup2 {
         id: rangeButtonGroup
-        buttons: rangeButtons.children
     }
 
     Flickable {
@@ -222,41 +221,42 @@ Page {
                                         text: qsTr("1d")
                                         checkable: true
                                         checked: true
+                                        ButtonGroup.group: rangeButtonGroup
                                     }
                                     ToolButton {
                                         text: qsTr("5d")
                                         checkable: true
-                                        checked: false
+                                        ButtonGroup.group: rangeButtonGroup
                                     }
                                     ToolButton {
                                         text: qsTr("1mo")
                                         checkable: true
-                                        checked: false
+                                        ButtonGroup.group: rangeButtonGroup
                                     }
                                     ToolButton {
                                         text: qsTr("6mo")
                                         checkable: true
-                                        checked: false
+                                        ButtonGroup.group: rangeButtonGroup
                                     }
                                     ToolButton {
                                         text: qsTr("ytd")
                                         checkable: true
-                                        checked: false
+                                        ButtonGroup.group: rangeButtonGroup
                                     }
                                     ToolButton {
                                         text: qsTr("1y")
                                         checkable: true
-                                        checked: false
+                                        ButtonGroup.group: rangeButtonGroup
                                     }
                                     ToolButton {
                                         text: qsTr("5y")
                                         checkable: true
-                                        checked: false
+                                        ButtonGroup.group: rangeButtonGroup
                                     }
                                     ToolButton {
                                         text: qsTr("max")
                                         checkable: true
-                                        checked: false
+                                        ButtonGroup.group: rangeButtonGroup
                                     }
                                 }
                             }
