@@ -11,6 +11,12 @@ ApplicationWindow {
     height: FpStyle.appWindowHeight
     title: qsTr("Hello World")
 
+    Shortcut {
+        sequence: StandardKey.Quit
+        context: Qt.ApplicationShortcut
+        onActivated: Qt.quit()
+    }
+
     StackView {
         id: appNavStack
         anchors.fill: parent
