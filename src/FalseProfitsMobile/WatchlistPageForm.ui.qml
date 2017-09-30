@@ -43,7 +43,7 @@ Page {
             verticalAlignment: Image.AlignVCenter
             source: "qrc:/images/" + FpStyle.iconAccent + "/add.png"
         }
-        visible: !listView.removalMode
+        visible: !busyIndicator.visible
         highlighted: true
         width: 56
         height: 56
