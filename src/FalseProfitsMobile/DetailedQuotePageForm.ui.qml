@@ -90,6 +90,10 @@ Page {
                             source: "qrc:/images/" + FpStyle.iconPrimary + "/gavel.png"
                         }
                         flat: true
+                        hoverEnabled: true
+
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Place a buy or sell order")
                     }
 
                     ToolButton {
@@ -105,6 +109,11 @@ Page {
                                               + FpStyle.iconPrimary + "/star_border.png"
                         }
                         flat: true
+                        hoverEnabled: true
+
+                        ToolTip.visible: hovered
+                        ToolTip.text: starred ? qsTr("Remove from watchlist") : qsTr(
+                                                    "Add to watchlist")
                     }
                 }
             }
