@@ -16,6 +16,7 @@ ListView {
         id: itemDelegate
         height: delegateContent.height
         width: parent.width
+        hoverEnabled: true
 
         ColumnLayout {
             id: delegateContent

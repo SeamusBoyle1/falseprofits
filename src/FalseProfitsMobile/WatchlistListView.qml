@@ -17,6 +17,7 @@ ListView {
         id: swipeDelegate
         //height: delegateContent.height
         width: parent.width
+        hoverEnabled: true
 
         ListView.onRemove: SequentialAnimation {
             PropertyAction {
