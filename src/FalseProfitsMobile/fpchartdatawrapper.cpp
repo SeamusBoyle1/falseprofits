@@ -359,3 +359,11 @@ void FpChartDataWrapper::hackCandlestickSeriesPen(QAbstractSeries *s, const QPen
     auto candleSeries = boost::polymorphic_downcast<QCandlestickSeries *>(s);
     candleSeries->setPen(pen);
 }
+
+void FpChartDataWrapper::hackCandlestickSeriesPen(QAbstractSeries *s, const QColor &color,
+                                                  qreal width, bool cosmetic) const
+{
+    QPen pen(color, width);
+    pen.setCosmetic(cosmetic);
+    hackCandlestickSeriesPen(s, pen);
+}

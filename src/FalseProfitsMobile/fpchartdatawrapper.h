@@ -176,6 +176,10 @@ public:
     Q_INVOKABLE
     void hackCandlestickSeriesPen(QAbstractSeries *s, const QPen &pen) const;
 
+    Q_INVOKABLE
+    void hackCandlestickSeriesPen(QAbstractSeries *s, const QColor &color, qreal width,
+                                  bool cosmetic) const;
+
 signals:
 
 public slots:

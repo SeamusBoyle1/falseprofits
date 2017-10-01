@@ -19,7 +19,7 @@ BigChartPageForm {
 
     Component.onCompleted: {
         chartDataWrapper.hackMargin(bigChartView.candleSeries)
-        chartDataWrapper.hackCandlestickSeriesPen(bigChartView.candleSeries, "#000")
+        chartDataWrapper.hackCandlestickSeriesPen(bigChartView.candleSeries, "#000", 1.0, true)
         bigChartView.candleSeries.visible = candleCharTypeButton.checked
 
         intervalText = chartInterval.toUpperCase()
