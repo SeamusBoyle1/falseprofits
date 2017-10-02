@@ -1,0 +1,37 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>SignupPage.qml</file>
+        <file>SignupPageForm.ui.qml</file>
+        <file>SignInPage.qml</file>
+        <file>SignInPageForm.ui.qml</file>
+        <file>SignOutPage.qml</file>
+        <file>MyUserProfileNavigation.qml</file>
+        <file>MyUserProfile.qml</file>
+        <file>MyUserProfileForm.ui.qml</file>
+        <file>SignInNavigation.qml</file>
+        <file>MyUserProfilePage.qml</file>
+        <file>MyUserProfilePageForm.ui.qml</file>
+        <file>QuotesNavigation.qml</file>
+        <file>SymbolSearchListView.qml</file>
+        <file>SymbolSearchPage.qml</file>
+        <file>SymbolSearchPageForm.ui.qml</file>
+        <file>DetailedQuotePage.qml</file>
+        <file>DetailedQuotePageForm.ui.qml</file>
+        <file>OrderTicketPage.qml</file>
+        <file>OrderTicketPageForm.ui.qml</file>
+        <file>FpStyle.qml</file>
+        <file>+desktop/FpStyle.qml</file>
+        <file>TradingAccountsListView.qml</file>
+        <file>TradingAccountsPage.qml</file>
+        <file>WatchlistListView.qml</file>
+        <file>WatchlistPage.qml</file>
+        <file>WatchlistPageForm.ui.qml</file>
+        <file>FpLineChartWidget.qml</file>
+        <file>ButtonGroup2.qml</file>
+        <file>FpCandleChartWidget.qml</file>
+        <file>BigChartPage.qml</file>
+        <file>BigChartPageForm.ui.qml</file>
+    </qresource>
+</RCC>

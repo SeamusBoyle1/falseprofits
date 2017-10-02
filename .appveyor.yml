@@ -1,0 +1,59 @@
+version: 0.2.0.{build}
+image: Visual Studio 2017
+environment:
+  BOOST_ROOT: C:\Libraries\boost_1_64_0
+  matrix:
+  - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    QTDIR: C:\Qt\5.9.1\msvc2017_64
+    VCVARS_BAT: C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat
+    OPENSSL_ROOT: C:\OpenSSL-Win64
+build_script:
+- cmd: >-
+    set /p VERSION=<VERSION
+
+    set VERSION=%VERSION%.%APPVEYOR_BUILD_NUMBER%
+
+
+    git describe > GIT_DESCRIBE
+
+    set /p GIT_DESCRIBE=<GIT_DESCRIBE
+
+    del GIT_DESCRIBE
+
+
+    set APP_DIR="%cd%\FalseProfitsMobile-%GIT_DESCRIBE%-%APPVEYOR_BUILD_NUMBER%-x86_64"
+
+    set APP_TARGET=FalseProfitsMobile.exe
+
+    set APP_DISTDIR=src\FalseProfitsMobile\release
+
+    set APP_QMLDIR="src\FalseProfitsMobile"
+
+    set APP_BIN=FalseProfitsMobile.exe
+
+
+    set PATH=%QTDIR%\bin;%PATH%
+
+    call "%VCVARS_BAT%"
+
+    qmake -r
+
+    nmake
+
+    nmake check
+
+    md %APP_DIR%
+
+    xcopy %OPENSSL_ROOT%\bin\ssleay32.dll %APP_DIR%
+
+    xcopy %OPENSSL_ROOT%\bin\libeay32.dll %APP_DIR%
+
+    echo F | xcopy %APP_DISTDIR%\%APP_TARGET% %APP_DIR%\%APP_BIN%
+
+    windeployqt --qmldir=%APP_QMLDIR% %APP_DIR%\%APP_BIN%
+
+    7z a -tzip %APP_DIR%.zip %APP_DIR%
+
+    appveyor PushArtifact %APP_DIR%.zip -DeploymentName xcopy-deploy
+test_script:
+- cmd:

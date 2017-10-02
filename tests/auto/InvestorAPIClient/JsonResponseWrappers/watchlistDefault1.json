@@ -1,0 +1,34 @@
+{
+    "id": "f48f8496-d4be-46e1-9dfa-8a7c90d2cad7",
+    "name": "Default Watchlist",
+    "shares": [
+        {
+            "change": -0.125,
+            "changePercent": -0.484,
+            "lastPrice": 25.705,
+            "name": "BHP BILLITON LIMITED",
+            "symbol": "BHP"
+        },
+        {
+            "change": 0.15,
+            "changePercent": 0.2,
+            "lastPrice": 75.0,
+            "name": "COMMONWEALTH BANK OF AUSTRALIA.",
+            "symbol": "CBA"
+        },
+        {
+            "change": 0.01,
+            "changePercent": 0.29,
+            "lastPrice": 3.49,
+            "name": "TELSTRA CORPORATION LIMITED.",
+            "symbol": "TLS"
+        },
+        {
+            "change": -0.12,
+            "changePercent": -0.48,
+            "lastPrice": 25.11,
+            "name": "WOOLWORTHS LIMITED",
+            "symbol": "WOW"
+        }
+    ]
+}

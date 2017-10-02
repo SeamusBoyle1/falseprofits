@@ -1,0 +1,13 @@
+{
+    "accounts": [
+        {
+            "balance": 1000000.0,
+            "id": "44c6deeb-5b9e-40fe-aace-cf11b63359ff",
+            "name": "Initial Account"
+        }
+    ],
+    "displayName": "Seamus",
+    "email": "seamus@example.com",
+    "id": "51d3b0f3-acb3-4f9b-a4f8-9d3d31a420fb",
+    "level": "Investor"
+}

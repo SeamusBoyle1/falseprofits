@@ -1,0 +1,100 @@
+sudo: true
+language: c++
+compiler: gcc
+dist: trusty
+
+os:
+    - linux
+    - osx
+
+cache:
+    directories:
+        - downloads
+
+addons:
+    apt:
+        packages:
+            - git
+            - make
+            # a Qt dependency
+            - mesa-common-dev
+
+before_install:
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+          sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+       && sudo apt-get update -qq
+       ;
+      fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ ! -e Qt/5.9.1 ]] ; then
+          rm -rf Qt ;
+          cd downloads ;
+          wget -c http://download.qt.io/official_releases/qt/5.9/5.9.1/qt-opensource-linux-x64-5.9.1.run ;
+          chmod +x ./qt-opensource-linux-x64-5.9.1.run ;
+          cd .. ;
+          ln ./downloads/qt-opensource-linux-x64-5.9.1.run . ;
+          ./qt-opensource-linux-x64-5.9.1.run --platform minimal --script qt-installer-noninteractive.qs --no-force-installations ;
+      fi
+      # TestPreferences uses gui calls, so run a xvfb so it has something to talk to
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+          export DISPLAY=":99.0" ;
+          sh -e /etc/init.d/xvfb start ;
+      fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update          ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install qt5; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ ! -e boost_1_65_1 ]] ; then
+          cd downloads ;
+          wget -c https://dl.bintray.com/boostorg/release/1.65.1/source/boost_1_65_1.tar.bz2 ;
+          cd .. ;
+          tar -xjf downloads/boost_1_65_1.tar.bz2 ;
+      fi
+    #- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install boost; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ ! -e boost_1_65_1 ]] ; then
+          if [ ! -f downloads/boost_1_65_1.tar.bz2 ]; then
+              cd downloads ;
+              wget https://dl.bintray.com/boostorg/release/1.65.1/source/boost_1_65_1.tar.bz2 ;
+              cd .. ;
+          fi ;
+          tar -xjf downloads/boost_1_65_1.tar.bz2 ;
+      fi
+      # Codecov
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]] || [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+          sudo pip install codecov
+       ;
+      fi
+
+install:
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+          sudo apt-get install -qq g++-4.9
+       && sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 90 --slave /usr/bin/g++ g++ /usr/bin/g++-4.9
+       && sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-4.9 90
+       ;
+      fi
+
+script:
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+          gcc --version ;
+          export BOOST_ROOT=$PWD/boost_1_65_1 ;
+          export PATH=$PWD/Qt/5.9.1/gcc_64/bin:$PATH ;
+          qmake -r "CONFIG+=gcov"
+       && make
+       && make check
+       && ./get_code_cov.sh
+       && codecov
+       ;
+      fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+          export BOOST_ROOT=$PWD/boost_1_65_1 ;
+          export QTDIR="/usr/local/opt/qt5" ;
+          export PATH="$QTDIR/bin:$PATH" ;
+          qmake -r "CONFIG+=gcov"
+       && make
+       && make check
+       && codecov
+       ;
+      fi
+
+after_success:
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]] || [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+          bash <(curl -s https://codecov.io/bash)
+       ;
+      fi

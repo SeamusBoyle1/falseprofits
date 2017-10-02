@@ -1,0 +1,32 @@
+{
+    "items": [
+        {
+            "name": "ASIAN DEVELOPMENT BANK",
+            "symbol": "ATB"
+        },
+        {
+            "industry": "Banks",
+            "name": "AUSTRALIA AND NEW ZEALAND BANKING GROUP LIMITED",
+            "symbol": "ANZ"
+        },
+        {
+            "industry": "Banks",
+            "name": "AUSWIDE BANK LTD",
+            "symbol": "ABA"
+        },
+        {
+            "industry": "Banks",
+            "name": "BANK OF QUEENSLAND LIMITED.",
+            "symbol": "BOQ"
+        },
+        {
+            "industry": "Banks",
+            "name": "BENDIGO AND ADELAIDE BANK LIMITED",
+            "symbol": "BEN"
+        }
+    ],
+    "pageNumber": 1,
+    "pageSize": 5,
+    "totalPageCount": 4,
+    "totalRowCount": 16
+}
