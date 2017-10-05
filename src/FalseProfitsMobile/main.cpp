@@ -15,6 +15,8 @@
 #include <FalseProfitsCore/fpsymbolsearchresultsitemmodel.h>
 #include <FalseProfitsCore/fpsymbolsearchwrapper.h>
 #include <FalseProfitsCore/fptradingaccounts.h>
+#include <FalseProfitsCore/fptransactionslistmodel.h>
+#include <FalseProfitsCore/fptransactionswrapper.h>
 #include <FalseProfitsCore/fpwatchlistlistmodel.h>
 #include <FalseProfitsCore/fpwatchlists.h>
 #include <FalseProfitsCore/fpwatchlistslistmodel.h>
@@ -73,6 +75,8 @@ int main(int argc, char *argv[])
     qmlRegisterType<FpPortfolioWrapper>("com.example.fpx", 1, 0, "FpPortfolioWrapper");
     qmlRegisterType<FpChartDataWrapper>("com.example.fpx", 1, 0, "FpChartDataWrapper");
     qmlRegisterType<FpTradingAccounts>("com.example.fpx", 1, 0, "FpTradingAccounts");
+    qmlRegisterType<FpTransactionsListModel>("com.example.fpx", 1, 0, "FpTransactionsListModel");
+    qmlRegisterType<FpTransactionsWrapper>("com.example.fpx", 1, 0, "FpTransactionsWrapper");
     qmlRegisterType<FpWatchlistListModel>("com.example.fpx", 1, 0, "FpWatchlistListModel");
     qmlRegisterType<FpWatchlists>("com.example.fpx", 1, 0, "FpWatchlists");
     qmlRegisterType<FpWatchlistsListModel>("com.example.fpx", 1, 0, "FpWatchlistsListModel");

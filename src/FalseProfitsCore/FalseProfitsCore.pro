@@ -32,6 +32,8 @@ SOURCES += \
     fpsymbolsearchresultsitemmodel.cpp \
     fpsymbolsearchwrapper.cpp \
     fptradingaccounts.cpp \
+    fptransactionslistmodel.cpp \
+    fptransactionswrapper.cpp \
     fpwatchlistlistmodel.cpp \
     fpwatchlists.cpp \
     fpwatchlistslistmodel.cpp \
@@ -52,6 +54,8 @@ HEADERS += \
     fpsymbolsearchresultsitemmodel.h \
     fpsymbolsearchwrapper.h \
     fptradingaccounts.h \
+    fptransactionslistmodel.h \
+    fptransactionswrapper.h \
     fpwatchlistlistmodel.h \
     fpwatchlists.h \
     fpwatchlistslistmodel.h \
