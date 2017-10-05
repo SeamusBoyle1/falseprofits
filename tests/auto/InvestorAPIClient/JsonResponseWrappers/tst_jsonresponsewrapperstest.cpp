@@ -43,6 +43,7 @@ private Q_SLOTS:
     void errorMessageResponseTest();
     void userProfileResponseTest();
     void commissionResponseTest();
+    void positionsResponseTest();
     void symbolSearchTest();
     void watchlistResponseTest();
     void candlesResponseTest();
@@ -175,6 +176,47 @@ void JsonResponseWrappersTest::commissionResponseTest()
         QCOMPARE(*percentRange1.max(), 1000000);
         QVERIFY(percentRange1.value());
         QCOMPARE(*percentRange1.value(), 0.25);
+    }
+}
+
+void JsonResponseWrappersTest::positionsResponseTest()
+{
+    using namespace bsmi;
+
+    {
+        QString testFile("accountInfoPositions1.json");
+        auto doc = readFileContentsAsJson(srcDirFile(testFile));
+        if (doc.isNull()) {
+            QSKIP("Unable to open test file");
+        }
+
+        JsonObjectWrappers::PositionsResponse parser;
+        parser.d = doc.object();
+
+        QCOMPARE(*parser.id(), QString("cbb4bc3e-d3a1-4563-bc19-deb1a9e04918"));
+        QCOMPARE(*parser.name(), QString("Default Account"));
+        QCOMPARE(*parser.balance(), 928139.5);
+
+        auto itemParser = parser.positions();
+        QVERIFY(!itemParser.isEmpty());
+        QCOMPARE(itemParser.size(), 2);
+
+        auto foundWBC = false;
+        for (auto i = 0, total = 5; i < total; ++i) {
+            auto e = itemParser.at(i);
+            auto sym = e.symbol();
+            if (sym && *sym == QLatin1String("WBC")) {
+                foundWBC = true;
+                QCOMPARE(*e.name(), QLatin1String("WESTPAC BANKING CORPORATION"));
+                QCOMPARE(*e.quantity(), 1000);
+                QCOMPARE(*e.averagePrice(), 31.78);
+                QCOMPARE(*e.lastPrice(), 31.81);
+                QCOMPARE(*e.change(), -0.05);
+                QCOMPARE(*e.changePercent(), -0.16);
+                break;
+            }
+        }
+        QVERIFY(foundWBC);
     }
 }
 

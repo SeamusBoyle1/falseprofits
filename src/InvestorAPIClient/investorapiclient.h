@@ -35,6 +35,8 @@ public:
 
     INetworkReply *getCommissions(CommissionSide side) override;
 
+    INetworkReply *getPositions(const QString &accountId) override;
+
     INetworkReply *getQuotes(const QStringList &symbols) override;
 
     INetworkReply *getCandles(const CandlesRequestArgs &args) override;
@@ -62,6 +64,8 @@ public:
     QNetworkRequest createGetUserProfileRequest() const;
 
     QNetworkRequest createGetCommissionsRequest(CommissionSide side) const;
+
+    QNetworkRequest createGetPositionsRequest(const QString &accountId) const;
 
     QNetworkRequest createGetWatchlist(const QString &watchlistId) const;
 

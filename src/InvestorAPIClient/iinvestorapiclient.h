@@ -52,6 +52,8 @@ public:
     };
     virtual INetworkReply *getCommissions(CommissionSide side) = 0;
 
+    virtual INetworkReply *getPositions(const QString &accountId) = 0;
+
     virtual INetworkReply *getQuotes(const QStringList &symbols) = 0;
 
     struct CandlesRequestArgs

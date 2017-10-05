@@ -93,6 +93,12 @@ public:
         return nullptr;
     }
 
+    INetworkReply *getPositions(const QString &accountId) override
+    {
+        Q_UNUSED(accountId)
+        return nullptr;
+    }
+
     INetworkReply *getQuotes(const QStringList &symbols) override
     {
         Q_UNUSED(symbols)

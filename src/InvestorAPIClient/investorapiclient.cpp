@@ -69,6 +69,11 @@ INetworkReply *InvestorAPIClient::getCommissions(IInvestorAPIClient::CommissionS
     return m_requestQueue->get(createGetCommissionsRequest(side));
 }
 
+INetworkReply *InvestorAPIClient::getPositions(const QString &accountId)
+{
+    return m_requestQueue->get(createGetPositionsRequest(accountId));
+}
+
 INetworkReply *InvestorAPIClient::getQuotes(const QStringList &symbols)
 {
     return m_requestQueue->get(createGetQuotesRequest(symbols));
@@ -154,6 +159,12 @@ QNetworkRequest InvestorAPIClient::createGetCommissionsRequest(CommissionSide si
 {
     QUrl url(m_apiUrl + QStringLiteral("/api/1.0/commissions/")
              + (side == CommissionSide::Buy ? QStringLiteral("buy") : QStringLiteral("sell")));
+    return makeAuthenticatedRequest(url);
+}
+
+QNetworkRequest InvestorAPIClient::createGetPositionsRequest(const QString &accountId) const
+{
+    QUrl url(m_apiUrl + QStringLiteral("/api/1.0/accounts/") + accountId);
     return makeAuthenticatedRequest(url);
 }
 

@@ -20,6 +20,7 @@ private Q_SLOTS:
     void createDeleteUserRequestTest();
     void createGetUserProfileRequestTest();
     void createGetCommissionsRequestTest();
+    void createGetPositionsRequestTest();
     void createGetQuotesRequestTest();
     void createSymbolSearchRequestTest();
     void createSendOrderRequestTest();
@@ -127,6 +128,21 @@ void RequestFactoryTest::createGetCommissionsRequestTest()
 
         auto resp = c.createGetCommissionsRequest(IInvestorAPIClient::CommissionSide::Sell);
         QCOMPARE(resp.url(), QUrl(QLatin1String("http://example.com/api/1.0/commissions/sell")));
+        QCOMPARE(resp.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+    }
+}
+
+void RequestFactoryTest::createGetPositionsRequestTest()
+{
+    using namespace bsmi;
+
+    {
+        InvestorAPIClient c(nullptr, QStringLiteral("http://example.com"));
+
+        c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 12), QTime(2, 48)));
+
+        auto resp = c.createGetPositionsRequest("fakeAccId");
+        QCOMPARE(resp.url(), QUrl(QLatin1String("http://example.com/api/1.0/accounts/fakeAccId")));
         QCOMPARE(resp.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
     }
 }
