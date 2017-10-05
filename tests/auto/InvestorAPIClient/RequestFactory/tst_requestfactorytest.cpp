@@ -21,6 +21,7 @@ private Q_SLOTS:
     void createGetUserProfileRequestTest();
     void createGetCommissionsRequestTest();
     void createGetPositionsRequestTest();
+    void createGetTransactionsRequestTest();
     void createGetQuotesRequestTest();
     void createSymbolSearchRequestTest();
     void createSendOrderRequestTest();
@@ -144,6 +145,86 @@ void RequestFactoryTest::createGetPositionsRequestTest()
         auto resp = c.createGetPositionsRequest("fakeAccId");
         QCOMPARE(resp.url(), QUrl(QLatin1String("http://example.com/api/1.0/accounts/fakeAccId")));
         QCOMPARE(resp.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+    }
+}
+
+void RequestFactoryTest::createGetTransactionsRequestTest()
+{
+    using namespace bsmi;
+
+    // Without paging
+    {
+        InvestorAPIClient c(nullptr, QStringLiteral("http://example.com"));
+
+        c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 20), QTime(7, 51)));
+
+        IInvestorAPIClient::GetTransactionsArgs query;
+        query.accountId = "valid-fake-id";
+
+        auto resp = c.createGetTransactionsRequest(query);
+        auto const respUrl = resp.url();
+        const QUrlQuery respUrlQuery(respUrl.query());
+        QCOMPARE(
+            QUrl(respUrl.toString(QUrl::RemoveQuery)),
+            QUrl(QLatin1String("http://example.com/api/1.0/accounts/valid-fake-id/transactions")));
+        QCOMPARE(resp.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+        QCOMPARE(resp.rawHeader("Content-Type"), QByteArray("application/json"));
+        QVERIFY(!respUrlQuery.hasQueryItem("pageNumber"));
+        QVERIFY(!respUrlQuery.hasQueryItem("pageSize"));
+    }
+
+    // With paging
+    {
+        InvestorAPIClient c(nullptr, QStringLiteral("http://example.com"));
+
+        c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 20), QTime(7, 51)));
+
+        IInvestorAPIClient::GetTransactionsArgs query;
+        query.accountId = "valid-fake-id";
+        query.pageNumber = 2;
+        query.pageSize = 20;
+
+        auto resp = c.createGetTransactionsRequest(query);
+        auto const respUrl = resp.url();
+        const QUrlQuery respUrlQuery(respUrl.query());
+        QCOMPARE(
+            QUrl(respUrl.toString(QUrl::RemoveQuery)),
+            QUrl(QLatin1String("http://example.com/api/1.0/accounts/valid-fake-id/transactions")));
+        QCOMPARE(resp.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+        QCOMPARE(resp.rawHeader("Content-Type"), QByteArray("application/json"));
+        QVERIFY(respUrlQuery.hasQueryItem("pageNumber"));
+        QVERIFY(respUrlQuery.queryItemValue("pageNumber") == QLatin1String("2"));
+        QVERIFY(respUrlQuery.hasQueryItem("pageSize"));
+        QVERIFY(respUrlQuery.queryItemValue("pageSize") == QLatin1String("20"));
+    }
+
+    // Without dates in local timespec
+    {
+        InvestorAPIClient c(nullptr, QStringLiteral("http://example.com"));
+
+        c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 20), QTime(7, 51)));
+
+        IInvestorAPIClient::GetTransactionsArgs query;
+        query.accountId = "valid-fake-id";
+        query.startDate = QDateTime(QDate(2011, 1, 1), QTime(), Qt::LocalTime);
+        query.endDate = QDateTime(QDate(2011, 2, 1), QTime(), Qt::LocalTime);
+
+        auto resp = c.createGetTransactionsRequest(query);
+        auto const respUrl = resp.url();
+        const QUrlQuery respUrlQuery(respUrl.query());
+        QCOMPARE(
+            QUrl(respUrl.toString(QUrl::RemoveQuery)),
+            QUrl(QLatin1String("http://example.com/api/1.0/accounts/valid-fake-id/transactions")));
+        QCOMPARE(resp.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+        QCOMPARE(resp.rawHeader("Content-Type"), QByteArray("application/json"));
+        QVERIFY(!respUrlQuery.hasQueryItem("pageNumber"));
+        QVERIFY(!respUrlQuery.hasQueryItem("pageSize"));
+        QVERIFY(respUrlQuery.hasQueryItem("startDate"));
+        QCOMPARE(QDateTime::fromString(respUrlQuery.queryItemValue("startDate"), Qt::ISODate),
+                 query.startDate);
+        QVERIFY(respUrlQuery.hasQueryItem("endDate"));
+        QCOMPARE(QDateTime::fromString(respUrlQuery.queryItemValue("endDate"), Qt::ISODate),
+                 query.endDate);
     }
 }
 

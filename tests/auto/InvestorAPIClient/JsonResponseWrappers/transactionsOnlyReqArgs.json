@@ -1,0 +1,57 @@
+{
+    "items": [
+        {
+            "amount": -50.0,
+            "balance": 928139.5,
+            "description": "Commission",
+            "timestampUtc": "2017-10-04T23:49:48.512235",
+            "type": "Commission"
+        },
+        {
+            "amount": -392.7,
+            "balance": 928189.5,
+            "description": "Commission 1.00%",
+            "timestampUtc": "2017-10-04T23:49:48.512213",
+            "type": "Commission"
+        },
+        {
+            "amount": -39270.0,
+            "balance": 928582.2,
+            "description": "Purchased 1500 shares of BHP for $26.18 each",
+            "timestampUtc": "2017-10-04T23:49:48.512186",
+            "type": "Buy"
+        },
+        {
+            "amount": -50.0,
+            "balance": 967852.2,
+            "description": "Commission",
+            "timestampUtc": "2017-10-04T23:49:29.410944",
+            "type": "Commission"
+        },
+        {
+            "amount": -317.8,
+            "balance": 967902.2,
+            "description": "Commission 1.00%",
+            "timestampUtc": "2017-10-04T23:49:29.410918",
+            "type": "Commission"
+        },
+        {
+            "amount": -31780.0,
+            "balance": 968220.0,
+            "description": "Purchased 1000 shares of WBC for $31.78 each",
+            "timestampUtc": "2017-10-04T23:49:29.41083",
+            "type": "Buy"
+        },
+        {
+            "amount": 1000000.0,
+            "balance": 1000000.0,
+            "description": "Account opened",
+            "timestampUtc": "2017-09-28T22:44:18.140666",
+            "type": "Transfer"
+        }
+    ],
+    "pageNumber": 1,
+    "pageSize": 100,
+    "totalPageCount": 1,
+    "totalRowCount": 7
+}

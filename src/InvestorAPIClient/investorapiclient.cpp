@@ -74,6 +74,12 @@ INetworkReply *InvestorAPIClient::getPositions(const QString &accountId)
     return m_requestQueue->get(createGetPositionsRequest(accountId));
 }
 
+INetworkReply *
+InvestorAPIClient::getTransactions(const IInvestorAPIClient::GetTransactionsArgs &query)
+{
+    return m_requestQueue->get(createGetTransactionsRequest(query));
+}
+
 INetworkReply *InvestorAPIClient::getQuotes(const QStringList &symbols)
 {
     return m_requestQueue->get(createGetQuotesRequest(symbols));
@@ -165,6 +171,33 @@ QNetworkRequest InvestorAPIClient::createGetCommissionsRequest(CommissionSide si
 QNetworkRequest InvestorAPIClient::createGetPositionsRequest(const QString &accountId) const
 {
     QUrl url(m_apiUrl + QStringLiteral("/api/1.0/accounts/") + accountId);
+    return makeAuthenticatedRequest(url);
+}
+
+QNetworkRequest InvestorAPIClient::createGetTransactionsRequest(
+    const IInvestorAPIClient::GetTransactionsArgs &query) const
+{
+    QUrl url(m_apiUrl + QStringLiteral("/api/1.0/accounts/") + query.accountId + "/transactions");
+
+    QUrlQuery urlQuery;
+
+    if (query.startDate.isValid()) {
+        urlQuery.addQueryItem(QStringLiteral("startDate"),
+                              query.startDate.toUTC().toString(Qt::ISODate));
+    }
+    if (query.endDate.isValid()) {
+        urlQuery.addQueryItem(QStringLiteral("endDate"),
+                              query.endDate.toUTC().toString(Qt::ISODate));
+    }
+    if (query.pageNumber > 0) {
+        urlQuery.addQueryItem(QStringLiteral("pageNumber"), QString::number(query.pageNumber));
+    }
+    if (query.pageSize > 0) {
+        urlQuery.addQueryItem(QStringLiteral("pageSize"), QString::number(query.pageSize));
+    }
+
+    url.setQuery(urlQuery);
+
     return makeAuthenticatedRequest(url);
 }
 

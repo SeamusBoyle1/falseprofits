@@ -284,6 +284,74 @@ public:
     }
 };
 
+class TransactionsResponseItem
+{
+public:
+    QJsonObject d;
+
+    bool isValid() const { return !d.isEmpty(); }
+
+    boost::optional<QDateTime> timestampUtc() const
+    {
+        return util::getOptionalStringAsDateTime(d, QLatin1String("timestampUtc"));
+    }
+
+    boost::optional<QString> type() const
+    {
+        return util::getOptionalString(d, QLatin1String("type"));
+    }
+
+    boost::optional<QString> description() const
+    {
+        return util::getOptionalString(d, QLatin1String("description"));
+    }
+
+    boost::optional<double> amount() const
+    {
+        return util::getOptionalDouble(d, QLatin1String("amount"));
+    }
+
+    boost::optional<double> balance() const
+    {
+        return util::getOptionalDouble(d, QLatin1String("balance"));
+    }
+};
+
+class TransactionsResponseItems
+{
+public:
+    QJsonArray jsonItems;
+
+    bool isEmpty() const { return jsonItems.isEmpty(); }
+
+    int size() const { return jsonItems.size(); }
+
+    TransactionsResponseItem at(int i) const { return { jsonItems.at(i).toObject() }; }
+};
+
+class TransactionsResponse
+{
+public:
+    TransactionsResponse(QJsonObject obj)
+        : d{ std::move(obj) }
+    {
+        jsonItems = obj.value(QLatin1String("items")).toArray();
+    }
+
+    TransactionsResponseItems items() const { return { jsonItems }; }
+
+    QJsonObject d;
+    QJsonArray jsonItems;
+
+    int pageNumber() const { return d.value(QLatin1String("pageNumber")).toInt(); }
+
+    int pageSize() const { return d.value(QLatin1String("pageSize")).toInt(); }
+
+    int totalPageCount() const { return d.value(QLatin1String("totalPageCount")).toInt(); }
+
+    int totalRowCount() const { return d.value(QLatin1String("totalRowCount")).toInt(); }
+};
+
 class SymbolSearchResponseItem
 {
 public:

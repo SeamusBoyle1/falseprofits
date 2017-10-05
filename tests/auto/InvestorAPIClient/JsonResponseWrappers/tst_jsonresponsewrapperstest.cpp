@@ -44,6 +44,7 @@ private Q_SLOTS:
     void userProfileResponseTest();
     void commissionResponseTest();
     void positionsResponseTest();
+    void transactionsResponseTest();
     void symbolSearchTest();
     void watchlistResponseTest();
     void candlesResponseTest();
@@ -217,6 +218,51 @@ void JsonResponseWrappersTest::positionsResponseTest()
             }
         }
         QVERIFY(foundWBC);
+    }
+}
+
+void JsonResponseWrappersTest::transactionsResponseTest()
+{
+    using namespace bsmi;
+
+    {
+        QString testFile("transactionsOnlyReqArgs.json");
+        auto doc = readFileContentsAsJson(srcDirFile(testFile));
+        if (doc.isNull()) {
+            QSKIP("Unable to open test file");
+        }
+
+        auto parser = JsonObjectWrappers::TransactionsResponse(doc.object());
+
+        QCOMPARE(parser.pageNumber(), 1);
+        QCOMPARE(parser.pageSize(), 100);
+        QCOMPARE(parser.totalPageCount(), 1);
+        QCOMPARE(parser.totalRowCount(), 7);
+
+        auto itemParser = parser.items();
+        QVERIFY(!itemParser.isEmpty());
+        QCOMPARE(itemParser.size(), 7);
+
+        auto foundBHP = false;
+        for (auto i = 0, total = 5; i < total; ++i) {
+            auto e = itemParser.at(i);
+            auto desc = e.description();
+            if (desc && *desc == QLatin1String("Purchased 1500 shares of BHP for $26.18 each")) {
+                foundBHP = true;
+                QVERIFY(e.isValid());
+                QVERIFY(e.amount());
+                QCOMPARE(*e.amount(), -39270.0);
+                QVERIFY(e.balance());
+                QCOMPARE(*e.balance(), 928582.2);
+                QVERIFY(e.timestampUtc());
+                QCOMPARE(*e.timestampUtc(),
+                         QDateTime::fromString("2017-10-04T23:49:48.512186", Qt::ISODate));
+                QVERIFY(e.type());
+                QCOMPARE(*e.type(), QLatin1String("Buy"));
+                break;
+            }
+        }
+        QVERIFY(foundBHP);
     }
 }
 

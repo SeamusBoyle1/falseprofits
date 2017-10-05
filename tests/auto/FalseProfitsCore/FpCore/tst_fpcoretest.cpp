@@ -99,6 +99,12 @@ public:
         return nullptr;
     }
 
+    INetworkReply *getTransactions(const GetTransactionsArgs &query) override
+    {
+        Q_UNUSED(query)
+        return nullptr;
+    }
+
     INetworkReply *getQuotes(const QStringList &symbols) override
     {
         Q_UNUSED(symbols)
