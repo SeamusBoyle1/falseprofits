@@ -69,7 +69,7 @@ public:
     Q_INVOKABLE
     GetCandlesResponse *getCandlesFromYahoo(const CandlesRequestArgs &args);
 
-    QJsonDocument convertYahooData(const QByteArray &json) const;
+    QJsonDocument convertYahooData(const QByteArray &json, const QString &range) const;
 
     Q_INVOKABLE
     QList<qreal> latestTradingSession(const QVector<qreal> &xData) const;

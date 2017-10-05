@@ -65,7 +65,7 @@ GetCandlesResponse *FpChartDataWrapper::getCandlesFromYahoo(const CandlesRequest
     url.setQuery(urlQuery);
 
     auto rep = m_network->get(QNetworkRequest(url));
-    connect(rep, &QNetworkReply::finished, this, [resp, rep, this]() {
+    connect(rep, &QNetworkReply::finished, this, [args, resp, rep, this]() {
         if (!resp) {
             rep->deleteLater();
             return;
@@ -73,7 +73,7 @@ GetCandlesResponse *FpChartDataWrapper::getCandlesFromYahoo(const CandlesRequest
         auto httpStatusCode = rep->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
         resp->setHttpStatusCode(httpStatusCode);
         if (rep->error() == QNetworkReply::NoError) {
-            auto converted = convertYahooData(rep->readAll());
+            auto converted = convertYahooData(rep->readAll(), args.range());
             resp->setPayload(converted.toJson(QJsonDocument::Compact));
         } else {
             resp->setErrorMessage(rep->errorString() + QString("(code: %1)").arg(httpStatusCode));
@@ -86,12 +86,13 @@ GetCandlesResponse *FpChartDataWrapper::getCandlesFromYahoo(const CandlesRequest
     return resp;
 }
 
-QJsonDocument FpChartDataWrapper::convertYahooData(const QByteArray &ba) const
+QJsonDocument FpChartDataWrapper::convertYahooData(const QByteArray &ba, const QString &range) const
 {
     auto doc = QJsonDocument::fromJson(ba);
     auto obj = doc.object().value("chart").toObject();
     auto resultObj = obj.value("result").toArray().at(0).toObject();
     auto meta = resultObj.value("meta").toObject();
+    auto interval = meta.value(QLatin1String("dataGranularity")).toString();
     auto timestamps = resultObj.value("timestamp").toArray();
     auto indicators = resultObj.value("indicators").toObject();
     auto quotes = indicators.value("quote").toArray().at(0).toObject();
@@ -102,11 +103,11 @@ QJsonDocument FpChartDataWrapper::convertYahooData(const QByteArray &ba) const
 
     QJsonArray r;
 
-    QString kTimestamp("timestamp");
-    QString kOpen("open");
-    QString kHigh("high");
-    QString kLow("low");
-    QString kClose("close");
+    QString kTimestamp("t");
+    QString kOpen("o");
+    QString kHigh("h");
+    QString kLow("l");
+    QString kClose("c");
 
     for (auto i = 0, total = timestamps.size(); i < total; ++i) {
         auto jsonOpenVal = opens.at(i);
@@ -144,7 +145,15 @@ QJsonDocument FpChartDataWrapper::convertYahooData(const QByteArray &ba) const
         r.append(bar);
     }
 
-    return QJsonDocument(r);
+    QJsonObject wrapObj;
+    if (!range.isEmpty()) {
+        wrapObj.insert(QStringLiteral("range"), range);
+    }
+    if (!interval.isEmpty()) {
+        wrapObj.insert(QStringLiteral("interval"), interval);
+    }
+    wrapObj.insert(QStringLiteral("prices"), r);
+    return QJsonDocument(wrapObj);
 }
 
 QList<qreal> FpChartDataWrapper::latestTradingSession(const QVector<qreal> &xData) const
@@ -165,7 +174,8 @@ QList<qreal> FpChartDataWrapper::latestTradingSession(const QVector<qreal> &xDat
 FpChartCandleSeriesData FpChartDataWrapper::makeCandleSeries(const QByteArray &json) const
 {
     auto doc = QJsonDocument::fromJson(json);
-    auto const arr = doc.array();
+    auto const obj = doc.object();
+    auto const arr = obj.value(QLatin1String("prices")).toArray();
 
     FpChartCandleSeriesData r;
     r.m_x.reserve(arr.size());
@@ -176,7 +186,7 @@ FpChartCandleSeriesData FpChartDataWrapper::makeCandleSeries(const QByteArray &j
 
     for (auto const &in : arr) {
         auto const sample = in.toObject();
-        auto sampleTs = sample.value(QLatin1String("timestamp"));
+        auto sampleTs = sample.value(QLatin1String("t"));
         if (!sampleTs.isString()) {
             continue;
         }
@@ -184,19 +194,19 @@ FpChartCandleSeriesData FpChartDataWrapper::makeCandleSeries(const QByteArray &j
         if (!sampleTsDt.isValid()) {
             continue;
         }
-        auto sampleOpen = sample.value(QLatin1String("open"));
+        auto sampleOpen = sample.value(QLatin1String("o"));
         if (!sampleOpen.isDouble()) {
             continue;
         }
-        auto sampleHigh = sample.value(QLatin1String("high"));
+        auto sampleHigh = sample.value(QLatin1String("h"));
         if (!sampleHigh.isDouble()) {
             continue;
         }
-        auto sampleLow = sample.value(QLatin1String("low"));
+        auto sampleLow = sample.value(QLatin1String("l"));
         if (!sampleLow.isDouble()) {
             continue;
         }
-        auto sampleClose = sample.value(QLatin1String("close"));
+        auto sampleClose = sample.value(QLatin1String("c"));
         if (!sampleClose.isDouble()) {
             continue;
         }
@@ -213,7 +223,8 @@ FpChartCandleSeriesData FpChartDataWrapper::makeCandleSeries(const QByteArray &j
 FpChartLineSeriesData FpChartDataWrapper::makeCloseLineSeries(const QByteArray &json) const
 {
     auto doc = QJsonDocument::fromJson(json);
-    auto const arr = doc.array();
+    auto const obj = doc.object();
+    auto const arr = obj.value(QLatin1String("prices")).toArray();
 
     FpChartLineSeriesData r;
     r.m_x.reserve(arr.size());
@@ -221,7 +232,7 @@ FpChartLineSeriesData FpChartDataWrapper::makeCloseLineSeries(const QByteArray &
 
     for (auto const &in : arr) {
         auto const sample = in.toObject();
-        auto sampleTs = sample.value(QLatin1String("timestamp"));
+        auto sampleTs = sample.value(QLatin1String("t"));
         if (!sampleTs.isString()) {
             continue;
         }
@@ -229,7 +240,7 @@ FpChartLineSeriesData FpChartDataWrapper::makeCloseLineSeries(const QByteArray &
         if (!sampleTsDt.isValid()) {
             continue;
         }
-        auto sampleClose = sample.value(QLatin1String("close"));
+        auto sampleClose = sample.value(QLatin1String("c"));
         if (!sampleClose.isDouble()) {
             continue;
         }
