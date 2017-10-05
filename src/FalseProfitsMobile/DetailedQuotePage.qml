@@ -15,6 +15,7 @@ DetailedQuotePageForm {
 
     FpChartDataWrapper {
         id: chartDataWrapper
+        coreClient: fpCore
     }
 
     Component.onCompleted: {
@@ -180,7 +181,7 @@ DetailedQuotePageForm {
         reqArgs.range = chartDataRange
         reqArgs.interval = chartInterval
 
-        var candlesResp = chartDataWrapper.getCandlesFromYahoo(reqArgs)
+        var candlesResp = chartDataWrapper.getCandles(reqArgs)
         var thisRequestId = candlesRequestId + 1
         candlesRequestId = thisRequestId
         incrementBusyIndicatorVisibility()
