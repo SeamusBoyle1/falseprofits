@@ -27,6 +27,8 @@ SOURCES += \
     fpsettings.cpp \
     fpcore.cpp \
     fpaccountslistmodel.cpp \
+    fpportfoliowrapper.cpp \
+    fppositionslistmodel.cpp \
     fpsymbolsearchresultsitemmodel.cpp \
     fpsymbolsearchwrapper.cpp \
     fptradingaccounts.cpp \
@@ -44,6 +46,8 @@ HEADERS += \
     fpcore.h \
     fpdeclarativetypes.h \
     fpcore_interfaces.h \
+    fpportfoliowrapper.h \
+    fppositionslistmodel.h \
     fpaccountslistmodel.h \
     fpsymbolsearchresultsitemmodel.h \
     fpsymbolsearchwrapper.h \

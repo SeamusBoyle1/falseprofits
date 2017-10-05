@@ -9,6 +9,8 @@
 #include <FalseProfitsCore/fpcore.h>
 #include <FalseProfitsCore/fpdeclarativetypes.h>
 #include <FalseProfitsCore/responsetypes.h>
+#include <FalseProfitsCore/fppositionslistmodel.h>
+#include <FalseProfitsCore/fpportfoliowrapper.h>
 #include <FalseProfitsCore/fpsettings.h>
 #include <FalseProfitsCore/fpsymbolsearchresultsitemmodel.h>
 #include <FalseProfitsCore/fpsymbolsearchwrapper.h>
@@ -65,6 +67,8 @@ int main(int argc, char *argv[])
     qmlRegisterType<FpSymbolSearchResultsItemModel>("com.example.fpx", 1, 0,
                                                     "FpSymbolSearchResultsItemModel");
     qmlRegisterType<FpAccountsListModel>("com.example.fpx", 1, 0, "FpAccountsListModel");
+    qmlRegisterType<FpPositionsListModel>("com.example.fpx", 1, 0, "FpPositionsListModel");
+    qmlRegisterType<FpPortfolioWrapper>("com.example.fpx", 1, 0, "FpPortfolioWrapper");
     qmlRegisterType<FpChartDataWrapper>("com.example.fpx", 1, 0, "FpChartDataWrapper");
     qmlRegisterType<FpTradingAccounts>("com.example.fpx", 1, 0, "FpTradingAccounts");
     qmlRegisterType<FpWatchlistListModel>("com.example.fpx", 1, 0, "FpWatchlistListModel");
