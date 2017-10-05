@@ -202,7 +202,7 @@ DetailedQuotePageForm {
             if (maxPrice === 0) {
                 maxPrice = 1000
             }
-            var padding = (maxPrice - minPrice) * 0.05
+            var padding = maxPrice !== minPrice ? ((maxPrice - minPrice) * 0.05) : 0.01
             minPrice -= padding
             maxPrice += padding
             priceLineChart.yAxis.min = minPrice
