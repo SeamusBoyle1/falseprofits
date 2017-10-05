@@ -180,12 +180,14 @@ Page {
                                     text: changePriceText
                                     Layout.fillWidth: true
                                     font.pixelSize: 14
+                                    Layout.minimumWidth: implicitWidth
                                 }
                                 Label {
                                     text: changePercentText
                                     Layout.fillWidth: true
                                     font.pixelSize: 14
                                     horizontalAlignment: Text.AlignRight
+                                    Layout.minimumWidth: implicitWidth
                                 }
                             }
 
