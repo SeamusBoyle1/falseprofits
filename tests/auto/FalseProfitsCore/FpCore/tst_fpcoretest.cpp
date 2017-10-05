@@ -243,6 +243,22 @@ public:
     }
 };
 
+class InvestorAPIClientGetPositionsMock : public InvestorAPIClientMock
+{
+    Q_OBJECT
+public:
+    InvestorAPIClientGetPositionsMock() {}
+
+    NetworkReply *m_nextGetPositionsReply{ nullptr };
+    QString m_accountId;
+
+    INetworkReply *getPositions(const QString &accountId) override
+    {
+        m_accountId = accountId;
+        return m_nextGetPositionsReply;
+    }
+};
+
 class InvestorAPIClientGetQuotesMock : public InvestorAPIClientMock
 {
     Q_OBJECT
@@ -380,6 +396,7 @@ private Q_SLOTS:
     void authenticateTest();
     void deleteUserTest();
     void getUserProfileTest();
+    void getPositionsTest();
     void getQuotesTest();
     void getCandlesTest();
     void symbolSearchTest();
@@ -590,6 +607,56 @@ void FpCoreTest::getUserProfileTest()
                                 "};";
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextUserProfileReply->setFinished();
+
+        QVERIFY(!netAuthRep->m_payload.isEmpty());
+        QCOMPARE(QJsonDocument::fromJson(resp->payload()),
+                 QJsonDocument::fromJson(netAuthRep->m_payload));
+    }
+}
+
+void FpCoreTest::getPositionsTest()
+{
+    {
+        auto client = new InvestorAPIClientGetPositionsMock;
+        auto fpCoreSettings = new MockFpSettings;
+        auto fpCore = new FpCore(client, fpCoreSettings);
+        client->setParent(fpCore);
+
+        QVERIFY(client->m_accountId.isEmpty());
+
+        QString accIda("valid-fake-id");
+
+        // mock success response
+        auto netAuthRep = new QNetworkReplyMock;
+        client->m_nextGetPositionsReply = new bsmi::INetworkReply(netAuthRep);
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::NotAuthenticatedState);
+        fpCore->setAccessToken("i_am_very_token", QDateTime::currentDateTimeUtc().addDays(7));
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::AuthenticatedState);
+
+        auto resp = fpCore->getPositions(accIda);
+        QVERIFY(resp);
+
+        // Test bsmi::IInvestorAPIClient::getPositions was called
+        QVERIFY(!client->m_accountId.isEmpty());
+
+        netAuthRep->m_payload = "{"
+                                "  \"positions\": ["
+                                "    {"
+                                "      \"symbol\": \"string\","
+                                "      \"name\": \"string\","
+                                "      \"quantity\": 0,"
+                                "      \"averagePrice\": 0,"
+                                "      \"lastPrice\": 0,"
+                                "      \"change\": 0,"
+                                "      \"changePercent\": 0"
+                                "    }"
+                                "  ],"
+                                "  \"id\": \"string\","
+                                "  \"name\": \"string\","
+                                "  \"balance\": 0"
+                                "}";
+        netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
+        client->m_nextGetPositionsReply->setFinished();
 
         QVERIFY(!netAuthRep->m_payload.isEmpty());
         QCOMPARE(QJsonDocument::fromJson(resp->payload()),

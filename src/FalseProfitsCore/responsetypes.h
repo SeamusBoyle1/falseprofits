@@ -157,6 +157,28 @@ public:
     }
 };
 
+class GetPositionsResponse : public BaseResponse
+{
+    Q_OBJECT
+public:
+    GetPositionsResponse() {}
+    virtual ~GetPositionsResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 401:
+            return "Authorization failed";
+        case 404:
+            return "Account not found";
+        default:
+            break;
+        }
+        return QString();
+    }
+};
+
 class GetQuotesResponse : public BaseResponse
 {
     Q_OBJECT

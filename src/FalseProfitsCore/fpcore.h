@@ -64,6 +64,9 @@ public:
     GetCommissionsResponse *getCommissions(Fpx::CommissionSide side);
 
     Q_INVOKABLE
+    GetPositionsResponse *getPositions(const QString &accountId);
+
+    Q_INVOKABLE
     GetQuotesResponse *getQuotes(const QStringList &symbols);
 
     Q_INVOKABLE
