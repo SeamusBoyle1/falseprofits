@@ -179,6 +179,30 @@ public:
     }
 };
 
+class GetTransactionsResponse : public BaseResponse
+{
+    Q_OBJECT
+public:
+    GetTransactionsResponse() {}
+    virtual ~GetTransactionsResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 401:
+            return "User not authenticated";
+        case 403:
+            return "User not authorized";
+        case 404:
+            return "Account not found";
+        default:
+            break;
+        }
+        return QString();
+    }
+};
+
 class GetQuotesResponse : public BaseResponse
 {
     Q_OBJECT

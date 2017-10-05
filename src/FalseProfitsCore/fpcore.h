@@ -67,6 +67,9 @@ public:
     GetPositionsResponse *getPositions(const QString &accountId);
 
     Q_INVOKABLE
+    GetTransactionsResponse *getTransactions(const TransactionsQuery &query);
+
+    Q_INVOKABLE
     GetQuotesResponse *getQuotes(const QStringList &symbols);
 
     Q_INVOKABLE

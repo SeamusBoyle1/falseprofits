@@ -56,6 +56,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<DeleteUserResponse>("FpResponses", 1, 0, "DeleteUserResponse");
     qmlRegisterType<GetUserProfileResponse>("FpResponses", 1, 0, "GetUserProfileResponse");
     qmlRegisterType<GetPositionsResponse>("FpResponses", 1, 0, "GetPositionsResponse");
+    qmlRegisterType<GetTransactionsResponse>("FpResponses", 1, 0, "GetTransactionsResponse");
     qmlRegisterType<GetQuotesResponse>("FpResponses", 1, 0, "GetQuotesResponse");
     qmlRegisterType<GetCandlesResponse>("FpResponses", 1, 0, "GetCandlesResponse");
     qmlRegisterType<SymbolSearchResponse>("FpResponses", 1, 0, "SymbolSearchResponse");

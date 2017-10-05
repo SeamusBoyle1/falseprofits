@@ -265,6 +265,22 @@ public:
     }
 };
 
+class InvestorAPIClientGetTransactionsMock : public InvestorAPIClientMock
+{
+    Q_OBJECT
+public:
+    InvestorAPIClientGetTransactionsMock() {}
+
+    NetworkReply *m_nextTransactionsReply{ nullptr };
+    GetTransactionsArgs m_query;
+
+    INetworkReply *getTransactions(const GetTransactionsArgs &query) override
+    {
+        m_query = query;
+        return m_nextTransactionsReply;
+    }
+};
+
 class InvestorAPIClientGetQuotesMock : public InvestorAPIClientMock
 {
     Q_OBJECT
@@ -403,6 +419,7 @@ private Q_SLOTS:
     void deleteUserTest();
     void getUserProfileTest();
     void getPositionsTest();
+    void getTransactionsTest();
     void getQuotesTest();
     void getCandlesTest();
     void symbolSearchTest();
@@ -663,6 +680,62 @@ void FpCoreTest::getPositionsTest()
                                 "}";
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextGetPositionsReply->setFinished();
+
+        QVERIFY(!netAuthRep->m_payload.isEmpty());
+        QCOMPARE(QJsonDocument::fromJson(resp->payload()),
+                 QJsonDocument::fromJson(netAuthRep->m_payload));
+    }
+}
+
+void FpCoreTest::getTransactionsTest()
+{
+    {
+        auto client = new InvestorAPIClientGetTransactionsMock;
+        auto fpCoreSettings = new MockFpSettings;
+        auto fpCore = new FpCore(client, fpCoreSettings);
+        client->setParent(fpCore);
+
+        TransactionsQuery queryA;
+        queryA.setAccountId("valid-fake-id");
+        queryA.setStartDate(QDateTime(QDate(2017, 1, 1), QTime(), Qt::LocalTime));
+        queryA.setEndDate(QDateTime(QDate(2017, 2, 1), QTime(), Qt::LocalTime));
+        queryA.setPageSize(20);
+        queryA.setPageNumber(2);
+
+        // mock success response
+        auto netAuthRep = new QNetworkReplyMock;
+        client->m_nextTransactionsReply = new bsmi::INetworkReply(netAuthRep);
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::NotAuthenticatedState);
+        fpCore->setAccessToken("i_am_very_token", QDateTime::currentDateTimeUtc().addDays(7));
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::AuthenticatedState);
+
+        auto resp = fpCore->getTransactions(queryA);
+        QVERIFY(resp);
+
+        // Test bsmi::IInvestorAPIClient got args
+        QCOMPARE(client->m_query.accountId, queryA.accountId());
+        QCOMPARE(client->m_query.startDate, queryA.startDate());
+        QCOMPARE(client->m_query.endDate, queryA.endDate());
+        QCOMPARE(client->m_query.pageSize, queryA.pageSize());
+        QCOMPARE(client->m_query.pageNumber, queryA.pageNumber());
+
+        netAuthRep->m_payload = "{"
+                                "  \"items\": ["
+                                "    {"
+                                "      \"timestampUtc\": \"2017-10-04T23:48:48.848Z\","
+                                "      \"type\": \"Transfer\","
+                                "      \"description\": \"string\","
+                                "      \"amount\": 0,"
+                                "      \"balance\": 0"
+                                "    }"
+                                "  ],"
+                                "  \"pageNumber\": 0,"
+                                "  \"pageSize\": 0,"
+                                "  \"totalPageCount\": 0,"
+                                "  \"totalRowCount\": 0"
+                                "}";
+        netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
+        client->m_nextTransactionsReply->setFinished();
 
         QVERIFY(!netAuthRep->m_payload.isEmpty());
         QCOMPARE(QJsonDocument::fromJson(resp->payload()),
