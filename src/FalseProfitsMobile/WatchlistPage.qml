@@ -49,6 +49,7 @@ WatchlistPageForm {
         notifier.onFinished.connect(function() {
             // TODO(seamus): Handle errors
             decrementBusyIndicatorVisibility()
+            watchlistEmpty = listView.count == 0
         })
     }
 
