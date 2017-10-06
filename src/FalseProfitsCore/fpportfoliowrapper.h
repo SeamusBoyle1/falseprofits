@@ -21,7 +21,7 @@ public:
     explicit FpPortfolioWrapper(QObject *parent = nullptr);
 
     FpCore *coreClient() const { return m_fpCore; }
-    void setCoreClient(FpCore *core) { m_fpCore = core; }
+    void setCoreClient(FpCore *core);
 
     FpPositionsListModel *model() const { return m_model; }
 
@@ -45,6 +45,7 @@ signals:
     void balanceChanged(double balance);
 
 public slots:
+    void unloadPortfolio();
 
     void setMarketValue(double marketValue);
 

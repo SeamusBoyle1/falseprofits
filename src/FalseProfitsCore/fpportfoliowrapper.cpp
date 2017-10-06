@@ -17,6 +17,19 @@ FpPortfolioWrapper::FpPortfolioWrapper(QObject *parent)
 {
 }
 
+void FpPortfolioWrapper::setCoreClient(FpCore *core)
+{
+    if (m_fpCore) {
+        disconnect(m_fpCore, &FpCore::authStateChanged, this, &FpPortfolioWrapper::unloadPortfolio);
+    }
+
+    m_fpCore = core;
+
+    if (core) {
+        connect(core, &FpCore::authStateChanged, this, &FpPortfolioWrapper::unloadPortfolio);
+    }
+}
+
 FinishNotifier *FpPortfolioWrapper::refreshPositions()
 {
     Q_ASSERT(m_fpCore);
@@ -60,6 +73,14 @@ double FpPortfolioWrapper::marketValue() const
 double FpPortfolioWrapper::balance() const
 {
     return m_balance;
+}
+
+void FpPortfolioWrapper::unloadPortfolio()
+{
+    m_model->resetWithData(QVector<PositionItem>{});
+    m_currentAccountId.clear();
+    setMarketValue(0.0);
+    setBalance(0.0);
 }
 
 void FpPortfolioWrapper::setMarketValue(double marketValue)

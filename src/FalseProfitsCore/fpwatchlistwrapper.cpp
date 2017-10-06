@@ -18,6 +18,19 @@ FpWatchlistWrapper::FpWatchlistWrapper(QObject *parent)
 {
 }
 
+void FpWatchlistWrapper::setCoreClient(FpCore *core)
+{
+    if (m_fpCore) {
+        disconnect(m_fpCore, &FpCore::authStateChanged, this, &FpWatchlistWrapper::unloadWatchlist);
+    }
+
+    m_fpCore = core;
+
+    if (core) {
+        connect(core, &FpCore::authStateChanged, this, &FpWatchlistWrapper::unloadWatchlist);
+    }
+}
+
 FinishNotifier *FpWatchlistWrapper::refreshWatchlist()
 {
     Q_ASSERT(m_fpCore);
@@ -115,6 +128,12 @@ FinishNotifier *FpWatchlistWrapper::removeSymbol(const QString &symbol)
 #endif
 
     return notifier;
+}
+
+void FpWatchlistWrapper::unloadWatchlist()
+{
+    m_model->resetWithData(QVector<WatchlistItem>{});
+    m_currentWatchlistId.clear();
 }
 
 void FpWatchlistWrapper::onGetResponseReceived(GetWatchlistResponse *reply)

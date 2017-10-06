@@ -18,6 +18,20 @@ FpTransactionsWrapper::FpTransactionsWrapper(QObject *parent)
 {
 }
 
+void FpTransactionsWrapper::setCoreClient(FpCore *core)
+{
+    if (m_fpCore) {
+        disconnect(m_fpCore, &FpCore::authStateChanged, this,
+                   &FpTransactionsWrapper::unloadTransactions);
+    }
+
+    m_fpCore = core;
+
+    if (core) {
+        connect(core, &FpCore::authStateChanged, this, &FpTransactionsWrapper::unloadTransactions);
+    }
+}
+
 FinishNotifier *FpTransactionsWrapper::refreshTransactions()
 {
     Q_ASSERT(m_fpCore);
@@ -113,6 +127,14 @@ void FpTransactionsWrapper::setDateRangeLocal(QDate start, QDate end)
 {
     m_startDate = QDateTime(start, QTime(), Qt::LocalTime);
     m_endDate = QDateTime(end, QTime(), Qt::LocalTime);
+}
+
+void FpTransactionsWrapper::unloadTransactions()
+{
+    m_model->resetWithData(QVector<TransactionInfo>{});
+    m_pageNumber = 0;
+    m_totalPageCount = 0;
+    m_currentAccountId.clear();
 }
 
 void FpTransactionsWrapper::onTransactionsReceived(GetTransactionsResponse *reply, bool append)

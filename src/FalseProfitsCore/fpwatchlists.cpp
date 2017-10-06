@@ -18,6 +18,19 @@ FpWatchlists::FpWatchlists(QObject *parent)
 {
 }
 
+void FpWatchlists::setCoreClient(FpCore *core)
+{
+    if (m_fpCore) {
+        disconnect(m_fpCore, &FpCore::authStateChanged, this, &FpWatchlists::unloadWatchlistList);
+    }
+
+    m_fpCore = core;
+
+    if (core) {
+        connect(core, &FpCore::authStateChanged, this, &FpWatchlists::unloadWatchlistList);
+    }
+}
+
 FinishNotifier *FpWatchlists::updateWatchlistList()
 {
     Q_ASSERT(m_fpCore);
@@ -34,6 +47,11 @@ FinishNotifier *FpWatchlists::updateWatchlistList()
     });
 
     return notifier;
+}
+
+void FpWatchlists::unloadWatchlistList()
+{
+    m_model->resetWithData(QVector<WatchlistListItem>());
 }
 
 void FpWatchlists::onResponseReceived(GetUserProfileResponse *reply)
