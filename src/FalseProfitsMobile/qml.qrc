@@ -38,5 +38,8 @@
         <file>PortfolioListView.qml</file>
         <file>HomePage.qml</file>
         <file>HomePageForm.ui.qml</file>
+        <file>TransactionsPage.qml</file>
+        <file>TransactionsPageForm.ui.qml</file>
+        <file>TransactionsListView.qml</file>
     </qresource>
 </RCC>
