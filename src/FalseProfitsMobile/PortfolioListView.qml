@@ -15,7 +15,7 @@ ListView {
 
     delegate: SwipeDelegate {
         id: swipeDelegate
-        //height: delegateContent.height
+        height: delegateContent.height
         width: parent.width
         hoverEnabled: true
 
