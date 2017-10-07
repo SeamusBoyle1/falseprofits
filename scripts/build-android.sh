@@ -8,6 +8,21 @@ fi
 
 source "$1"
 
+if [ -z "$KEY_FILE" ]; then
+    echo "KEY_FILE environment variable needs to be set"
+    exit 1
+fi
+
+if [ -z "$CERT_ALIAS" ]; then
+    echo "CERT_ALIAS environment variable needs to be set"
+    exit 1
+fi
+
+if [ -z "$KEYSTORE_PASS" ]; then
+    echo "KEYSTORE_PASS environment variable needs to be set"
+    exit 1
+fi
+
 if [ -z "$BOOST_ROOT" ]; then
     echo "BOOST_ROOT environment variable needs to be set"
     exit 1
@@ -84,5 +99,5 @@ androiddeployqt \
     --deployment bundled \
     --android-platform android-26 \
     --gradle \
-    --release
-
+    --sign "$KEY_FILE" "$CERT_ALIAS" \
+    --storepass "$KEYSTORE_PASS"
