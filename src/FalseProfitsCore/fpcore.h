@@ -105,6 +105,7 @@ public:
 Q_SIGNALS:
     void launchSettingsLoaded();
     void authStateChanged(Fpx::AuthenticationState);
+    void positionsChanged();
 
 public Q_SLOTS:
     void signOut();

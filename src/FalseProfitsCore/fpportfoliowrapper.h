@@ -15,6 +15,7 @@ class FpPortfolioWrapper : public QObject
     Q_OBJECT
     Q_PROPERTY(FpCore *coreClient READ coreClient WRITE setCoreClient)
     Q_PROPERTY(FpPositionsListModel *model READ model)
+    Q_PROPERTY(bool isDirty READ isDirty WRITE setDirty NOTIFY dirtyChanged)
     Q_PROPERTY(double marketValue READ marketValue WRITE setMarketValue NOTIFY marketValueChanged)
     Q_PROPERTY(double balance READ balance WRITE setBalance NOTIFY balanceChanged)
 public:
@@ -34,6 +35,8 @@ public:
     Q_INVOKABLE
     FinishNotifier *loadPositions(const QString &accountId);
 
+    bool isDirty() const;
+
     double marketValue() const;
 
     double balance() const;
@@ -44,14 +47,20 @@ signals:
 
     void balanceChanged(double balance);
 
+    void dirtyChanged(bool dirty);
+
 public slots:
     void unloadPortfolio();
+
+    void setDirty(bool dirty);
 
     void setMarketValue(double marketValue);
 
     void setBalance(double balance);
 
 private:
+    void slotPositionsChanged();
+
     void onPositionsReceived(GetPositionsResponse *reply);
 
     FpPositionsListModel *m_model;
@@ -59,6 +68,7 @@ private:
     QString m_currentAccountId;
     double m_marketValue{ 0.0 };
     double m_balance{ 0.0 };
+    bool m_dirty{ true };
 };
 
 #endif // FPPORTFOLIOWRAPPER_H

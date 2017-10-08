@@ -423,6 +423,8 @@ SendOrderResponse *FpCore::sendOrder(const QString &accountId, const OrderParams
         resp->setHttpStatusCode(httpStatusCode);
         if (rep->error() == QNetworkReply::NoError) {
             resp->setPayload(rep->readAll());
+
+            QMetaObject::invokeMethod(this, "positionsChanged", Qt::QueuedConnection);
         } else {
             resp->setErrorMessage(readErrorMessage(resp, rep, httpStatusCode));
         }

@@ -34,6 +34,13 @@ PortfolioPageForm {
 
     Connections {
         target: portfolioWrapper
+
+        onDirtyChanged: {
+            if (portfolioWrapper.isDirty) {
+                refreshPositions()
+            }
+        }
+
         onMarketValueChanged: {
             marketValueValue = portfolioWrapper.marketValue.toFixed(2)
         }
@@ -121,7 +128,6 @@ PortfolioPageForm {
         resp.onFinished.connect(function() {
             decrementBusyIndicatorVisibility()
             if (!resp.hasError()) {
-                refreshPositions()
             } else {
                 errorDialogText.text = resp.errorMessage()
                 errorDialog.open()

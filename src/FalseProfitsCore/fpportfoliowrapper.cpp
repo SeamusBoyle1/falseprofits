@@ -21,12 +21,15 @@ void FpPortfolioWrapper::setCoreClient(FpCore *core)
 {
     if (m_fpCore) {
         disconnect(m_fpCore, &FpCore::authStateChanged, this, &FpPortfolioWrapper::unloadPortfolio);
+        disconnect(m_fpCore, &FpCore::positionsChanged, this,
+                   &FpPortfolioWrapper::slotPositionsChanged);
     }
 
     m_fpCore = core;
 
     if (core) {
         connect(core, &FpCore::authStateChanged, this, &FpPortfolioWrapper::unloadPortfolio);
+        connect(core, &FpCore::positionsChanged, this, &FpPortfolioWrapper::slotPositionsChanged);
     }
 }
 
@@ -50,6 +53,8 @@ FinishNotifier *FpPortfolioWrapper::refreshPositions()
         }
     });
 
+    setDirty(false);
+
     return notifier;
 }
 
@@ -63,6 +68,11 @@ FinishNotifier *FpPortfolioWrapper::loadPositions(const QString &accountId)
     m_model->resetWithData(QVector<PositionItem>{});
     m_currentAccountId = accountId;
     return refreshPositions();
+}
+
+bool FpPortfolioWrapper::isDirty() const
+{
+    return m_dirty;
 }
 
 double FpPortfolioWrapper::marketValue() const
@@ -83,6 +93,15 @@ void FpPortfolioWrapper::unloadPortfolio()
     setBalance(0.0);
 }
 
+void FpPortfolioWrapper::setDirty(bool dirty)
+{
+    if (m_dirty == dirty)
+        return;
+
+    m_dirty = dirty;
+    emit dirtyChanged(m_dirty);
+}
+
 void FpPortfolioWrapper::setMarketValue(double marketValue)
 {
     if (qFuzzyCompare(m_marketValue, marketValue))
@@ -99,6 +118,11 @@ void FpPortfolioWrapper::setBalance(double balance)
 
     m_balance = balance;
     emit balanceChanged(m_balance);
+}
+
+void FpPortfolioWrapper::slotPositionsChanged()
+{
+    setDirty(true);
 }
 
 void FpPortfolioWrapper::onPositionsReceived(GetPositionsResponse *reply)
