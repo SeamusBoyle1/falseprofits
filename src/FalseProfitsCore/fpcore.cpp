@@ -467,7 +467,7 @@ AddSymbolToWatchlistResponse *FpCore::addSymbolToWatchlist(const QString &watchl
     QPointer<AddSymbolToWatchlistResponse> resp(new AddSymbolToWatchlistResponse);
 
     auto rep = m_client->addSymbolToWatchlist(watchlistId, symbol);
-    connect(rep, &bsmi::INetworkReply::finished, this, [resp, rep, this]() {
+    connect(rep, &bsmi::INetworkReply::finished, this, [watchlistId, symbol, resp, rep, this]() {
         if (!resp) {
             rep->deleteLater();
             return;
@@ -476,6 +476,10 @@ AddSymbolToWatchlistResponse *FpCore::addSymbolToWatchlist(const QString &watchl
         resp->setHttpStatusCode(httpStatusCode);
         if (rep->error() == QNetworkReply::NoError) {
             resp->setPayload(rep->readAll());
+
+            QMetaObject::invokeMethod(this, "watchlistChanged", Qt::QueuedConnection,
+                                      Q_ARG(QString, watchlistId), Q_ARG(QString, symbol),
+                                      Q_ARG(bool, true));
         } else {
             resp->setErrorMessage(readErrorMessage(resp, rep, httpStatusCode));
         }
@@ -493,7 +497,7 @@ RemoveSymbolFromWatchlistResponse *FpCore::removeSymbolFromWatchlist(const QStri
     QPointer<RemoveSymbolFromWatchlistResponse> resp(new RemoveSymbolFromWatchlistResponse);
 
     auto rep = m_client->removeSymbolFromWatchlist(watchlistId, symbol);
-    connect(rep, &bsmi::INetworkReply::finished, this, [resp, rep, this]() {
+    connect(rep, &bsmi::INetworkReply::finished, this, [watchlistId, symbol, resp, rep, this]() {
         if (!resp) {
             rep->deleteLater();
             return;
@@ -502,6 +506,10 @@ RemoveSymbolFromWatchlistResponse *FpCore::removeSymbolFromWatchlist(const QStri
         resp->setHttpStatusCode(httpStatusCode);
         if (rep->error() == QNetworkReply::NoError) {
             resp->setPayload(rep->readAll());
+
+            QMetaObject::invokeMethod(this, "watchlistChanged", Qt::QueuedConnection,
+                                      Q_ARG(QString, watchlistId), Q_ARG(QString, symbol),
+                                      Q_ARG(bool, false));
         } else {
             resp->setErrorMessage(readErrorMessage(resp, rep, httpStatusCode));
         }

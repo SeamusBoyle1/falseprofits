@@ -106,6 +106,7 @@ Q_SIGNALS:
     void launchSettingsLoaded();
     void authStateChanged(Fpx::AuthenticationState);
     void positionsChanged();
+    void watchlistChanged(const QString watchlistId, const QString &symbol, bool added);
 
 public Q_SLOTS:
     void signOut();

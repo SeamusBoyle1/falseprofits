@@ -22,12 +22,15 @@ void FpWatchlistWrapper::setCoreClient(FpCore *core)
 {
     if (m_fpCore) {
         disconnect(m_fpCore, &FpCore::authStateChanged, this, &FpWatchlistWrapper::unloadWatchlist);
+        disconnect(m_fpCore, &FpCore::watchlistChanged, this,
+                   &FpWatchlistWrapper::slotWatchlistChanged);
     }
 
     m_fpCore = core;
 
     if (core) {
         connect(core, &FpCore::authStateChanged, this, &FpWatchlistWrapper::unloadWatchlist);
+        connect(core, &FpCore::watchlistChanged, this, &FpWatchlistWrapper::slotWatchlistChanged);
     }
 }
 
@@ -54,6 +57,8 @@ FinishNotifier *FpWatchlistWrapper::refreshWatchlist()
 #else
     QMetaObject::invokeMethod(notifier.data(), "setFinished", Qt::QueuedConnection);
 #endif
+
+    setDirty(false);
 
     return notifier;
 }
@@ -130,10 +135,36 @@ FinishNotifier *FpWatchlistWrapper::removeSymbol(const QString &symbol)
     return notifier;
 }
 
+bool FpWatchlistWrapper::isDirty() const
+{
+    return m_dirty;
+}
+
 void FpWatchlistWrapper::unloadWatchlist()
 {
     m_model->resetWithData(QVector<WatchlistItem>{});
     m_currentWatchlistId.clear();
+}
+
+void FpWatchlistWrapper::setDirty(bool dirty)
+{
+    if (m_dirty == dirty)
+        return;
+
+    m_dirty = dirty;
+    emit dirtyChanged(m_dirty);
+}
+
+void FpWatchlistWrapper::slotWatchlistChanged(const QString watchlistId, const QString &symbol,
+                                              bool added)
+{
+    Q_UNUSED(symbol)
+    if (m_currentWatchlistId != watchlistId)
+        return;
+
+    if (added) {
+        setDirty(true);
+    }
 }
 
 void FpWatchlistWrapper::onGetResponseReceived(GetWatchlistResponse *reply)

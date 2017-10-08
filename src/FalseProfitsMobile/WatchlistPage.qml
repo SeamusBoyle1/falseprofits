@@ -27,6 +27,16 @@ WatchlistPageForm {
         }
     }
 
+    Connections {
+        target: watchlistWrapper
+
+        onDirtyChanged: {
+            if (watchlistWrapper.isDirty) {
+                refreshWatchlist()
+            }
+        }
+    }
+
     Component.onCompleted: {
         listView.symbolClicked.connect(symbolClicked)
         listView.triggerRemoveSymbol.connect(removeSymbol)
