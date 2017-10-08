@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import QtQuick.Controls.Material 2.2
 
 import com.example.fpx 1.0
 
@@ -13,15 +14,17 @@ ListView {
     Component {
         id: sectionHeading
         RowLayout {
+            height: 48
+
             Label {
                 width: listView.width
                 Layout.leftMargin: FpStyle.screenEdgeLeftMargin
-                Layout.topMargin: 3
                 Layout.rightMargin: FpStyle.screenEdgeRightMargin
-                Layout.bottomMargin: 16
+                color: Material.primary
 
                 text: section
-                font.pixelSize: 12
+                font.pixelSize: 14
+                font.weight: Font.Medium
             }
         }
     }
