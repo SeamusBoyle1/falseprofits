@@ -109,5 +109,5 @@ androiddeployqt \
     --storepass "$KEYSTORE_PASS"
 
 pushd "$OUT_DIR/android-build/build/outputs/apk" && \
-ln android-build-release-signed.apk "FalseProfitsMobile-$GIT_DESCRIBE-android-armv7.apk"
+ln android-build-release-signed.apk "$OUT_DIR/FalseProfitsMobile-$GIT_DESCRIBE-android-armv7.apk"
 popd
