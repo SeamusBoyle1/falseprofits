@@ -59,6 +59,10 @@ SCRIPT_DIR_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 SOURCE_DIR="$SCRIPT_DIR_PATH/.."
 OUT_DIR=$PWD
 
+pushd "$SOURCE_DIR" && \
+GIT_DESCRIBE=$(git describe)
+popd
+
 qmake -r "$SOURCE_DIR"
 make
 #make check
@@ -93,6 +97,8 @@ if [[ ! -f "$OPENSSL_ROOT/libcrypto.so" ]] || [[ ! -f "$OPENSSL_ROOT/libssl.so" 
     )
 fi
 
+rm -rf "$OUT_DIR/android-build/build/outputs/apk/android-build-*.apk"
+
 androiddeployqt \
     --input "$OUT_DIR/src/FalseProfitsMobile/android-libFalseProfitsMobile.so-deployment-settings.json" \
     --output "$OUT_DIR/android-build" \
@@ -101,3 +107,7 @@ androiddeployqt \
     --gradle \
     --sign "$KEY_FILE" "$CERT_ALIAS" \
     --storepass "$KEYSTORE_PASS"
+
+pushd "$OUT_DIR/android-build/build/outputs/apk" && \
+ln android-build-release-signed.apk "FalseProfitsMobile-$GIT_DESCRIBE-android-armv7.apk"
+popd
