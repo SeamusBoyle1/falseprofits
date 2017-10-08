@@ -35,6 +35,7 @@ DetailedQuotePageForm {
     onCurrentSymbolChanged: {
         clearQuote()
         symbolText = currentSymbol
+        newsFeedPage.currentSymbol = currentSymbol
         updateQuote()
         updateStarredState()
         fillChart()

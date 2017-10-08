@@ -26,6 +26,7 @@ Page {
     property bool maybeHasChartData: true
     property alias lastPriceLabel: lastPriceLabel
     property alias orderButton: orderButton
+    property alias newsFeedPage: newsFeedPage
     property alias busyIndicator: busyIndicator
 
     ButtonGroup2 {
@@ -127,6 +128,9 @@ Page {
                 }
                 TabButton {
                     text: qsTr("Key stats")
+                }
+                TabButton {
+                    text: qsTr("News")
                 }
             }
 
@@ -353,6 +357,10 @@ Page {
                             }
                         }
                     }
+                }
+
+                SymbolNewsFeedPage {
+                    id: newsFeedPage
                 }
             }
         }
