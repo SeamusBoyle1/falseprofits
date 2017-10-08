@@ -118,11 +118,6 @@ FinishNotifier *FpTransactionsWrapper::loadTransactions(const QString &accountId
     return refreshTransactions();
 }
 
-QDate FpTransactionsWrapper::makeDateFromString(const QString &dt, const QString &format) const
-{
-    return QDate::fromString(dt, format);
-}
-
 void FpTransactionsWrapper::setDateRangeLocal(QDate start, QDate end)
 {
     m_startDate = QDateTime(start, QTime(), Qt::LocalTime);

@@ -148,8 +148,8 @@ TransactionsPageForm {
         }
 
         onAccepted: {
-            var start = transactionsWrapper.makeDateFromString(startDateInput.text, "yyyy-M-d")
-            var end = transactionsWrapper.makeDateFromString(endDateInput.text, "yyyy-M-d")
+            var start = utilityFunctions.makeDateFromString(startDateInput.text, "yyyy-M-d")
+            var end = utilityFunctions.makeDateFromString(endDateInput.text, "yyyy-M-d")
             transactionsWrapper.setDateRangeLocal(start, end)
             refreshTransactions()
         }

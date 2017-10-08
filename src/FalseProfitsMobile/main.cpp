@@ -21,6 +21,7 @@
 #include <FalseProfitsCore/fpwatchlists.h>
 #include <FalseProfitsCore/fpwatchlistslistmodel.h>
 #include <FalseProfitsCore/fpwatchlistwrapper.h>
+#include <FalseProfitsCore/utilityfunctionswrapper.h>
 #include <FalseProfitsMobile/fpchartdatawrapper.h>
 #include <InvestorAPIClient/iinvestorapiclient.h>
 
@@ -95,6 +96,8 @@ int main(int argc, char *argv[])
     QSettings::setDefaultFormat(QSettings::IniFormat);
 #endif
 
+    UtilityFunctionsWrapper utilityFunctions;
+
     auto client = bsmi::InvestorAPIClientFactory::create(
         QStringLiteral("https://investor-api.herokuapp.com"));
     FpSettings fpCoreSettings;
@@ -106,6 +109,7 @@ int main(int argc, char *argv[])
     if (!(isHostMobile() || app.arguments().contains(QLatin1String("-touch")))) {
         QQmlFileSelector::get(&engine)->setExtraSelectors({ QLatin1String("desktop") });
     }
+    engine.rootContext()->setContextProperty("utilityFunctions", &utilityFunctions);
     engine.rootContext()->setContextProperty("fpCore", &fpCore);
     engine.rootContext()->setContextProperty("fpType", &fpTypes);
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));

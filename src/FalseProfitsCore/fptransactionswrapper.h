@@ -41,9 +41,6 @@ public:
     FinishNotifier *loadTransactions(const QString &accountId);
 
     Q_INVOKABLE
-    QDate makeDateFromString(const QString &dt, const QString &format) const;
-
-    Q_INVOKABLE
     void setDateRangeLocal(QDate start, QDate end);
 
 signals:

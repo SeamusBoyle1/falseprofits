@@ -37,7 +37,8 @@ SOURCES += \
     fpwatchlistlistmodel.cpp \
     fpwatchlists.cpp \
     fpwatchlistslistmodel.cpp \
-    fpwatchlistwrapper.cpp
+    fpwatchlistwrapper.cpp \
+    utilityfunctionswrapper.cpp
 
 HEADERS += \
     brokeragecostcalculator.h \
@@ -59,7 +60,8 @@ HEADERS += \
     fpwatchlistlistmodel.h \
     fpwatchlists.h \
     fpwatchlistslistmodel.h \
-    fpwatchlistwrapper.h
+    fpwatchlistwrapper.h \
+    utilityfunctionswrapper.h
 
 unix {
     target.path = /usr/lib
