@@ -256,7 +256,7 @@ void JsonResponseWrappersTest::transactionsResponseTest()
                 QCOMPARE(*e.balance(), 928582.2);
                 QVERIFY(e.timestampUtc());
                 QCOMPARE(*e.timestampUtc(),
-                         QDateTime::fromString("2017-10-04T23:49:48.512186", Qt::ISODate));
+                         QDateTime::fromString("2017-10-04T23:49:48Z", Qt::ISODate));
                 QVERIFY(e.type());
                 QCOMPARE(*e.type(), QLatin1String("Buy"));
                 break;
