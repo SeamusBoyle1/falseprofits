@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/programmingproject1-org/falseprofits.svg?branch=develop)](https://travis-ci.org/programmingproject1-org/falseprofits)
 [![codecov](https://codecov.io/gh/programmingproject1-org/falseprofits/branch/develop/graph/badge.svg)](https://codecov.io/gh/programmingproject1-org/falseprofits)
 
-FalseProfits is an Android and iOS sharemarket game where players are
+FalseProfits is a sharemarket game where players are
 given $1 million dollars to trade stocks listed on the Australian stock
 market. Players compete to become Top Trader.
 
