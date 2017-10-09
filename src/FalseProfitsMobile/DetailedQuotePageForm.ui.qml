@@ -364,6 +364,9 @@ Page {
                 }
             }
         }
+
+        ScrollIndicator.vertical: ScrollIndicator {
+        }
     }
 
     BusyIndicator {
