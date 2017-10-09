@@ -47,6 +47,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationName(QStringLiteral("QtHelloWorld"));
     QCoreApplication::setOrganizationDomain(QStringLiteral("student.rmit.edu.au"));
     QCoreApplication::setApplicationName(QStringLiteral("FalseProfits"));
+    QGuiApplication::setApplicationDisplayName(QObject::tr("False Profits"));
 
     QApplication app(argc, argv);
 

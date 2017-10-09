@@ -9,7 +9,6 @@ ApplicationWindow {
     visible: true
     width: FpStyle.appWindowWidth
     height: FpStyle.appWindowHeight
-    title: qsTr("Hello World")
 
     Shortcut {
         sequence: StandardKey.Quit
