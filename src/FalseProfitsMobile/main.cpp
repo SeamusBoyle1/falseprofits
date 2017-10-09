@@ -9,14 +9,19 @@
 #include <FalseProfitsCore/fpcore.h>
 #include <FalseProfitsCore/fpdeclarativetypes.h>
 #include <FalseProfitsCore/responsetypes.h>
+#include <FalseProfitsCore/fppositionslistmodel.h>
+#include <FalseProfitsCore/fpportfoliowrapper.h>
 #include <FalseProfitsCore/fpsettings.h>
 #include <FalseProfitsCore/fpsymbolsearchresultsitemmodel.h>
 #include <FalseProfitsCore/fpsymbolsearchwrapper.h>
 #include <FalseProfitsCore/fptradingaccounts.h>
+#include <FalseProfitsCore/fptransactionslistmodel.h>
+#include <FalseProfitsCore/fptransactionswrapper.h>
 #include <FalseProfitsCore/fpwatchlistlistmodel.h>
 #include <FalseProfitsCore/fpwatchlists.h>
 #include <FalseProfitsCore/fpwatchlistslistmodel.h>
 #include <FalseProfitsCore/fpwatchlistwrapper.h>
+#include <FalseProfitsCore/utilityfunctionswrapper.h>
 #include <FalseProfitsMobile/fpchartdatawrapper.h>
 #include <InvestorAPIClient/iinvestorapiclient.h>
 
@@ -42,6 +47,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationName(QStringLiteral("QtHelloWorld"));
     QCoreApplication::setOrganizationDomain(QStringLiteral("student.rmit.edu.au"));
     QCoreApplication::setApplicationName(QStringLiteral("FalseProfits"));
+    QGuiApplication::setApplicationDisplayName(QObject::tr("False Profits"));
 
     QApplication app(argc, argv);
 
@@ -53,6 +59,8 @@ int main(int argc, char *argv[])
     qmlRegisterType<AuthenticateResponse>("FpResponses", 1, 0, "AuthenticateResponse");
     qmlRegisterType<DeleteUserResponse>("FpResponses", 1, 0, "DeleteUserResponse");
     qmlRegisterType<GetUserProfileResponse>("FpResponses", 1, 0, "GetUserProfileResponse");
+    qmlRegisterType<GetPositionsResponse>("FpResponses", 1, 0, "GetPositionsResponse");
+    qmlRegisterType<GetTransactionsResponse>("FpResponses", 1, 0, "GetTransactionsResponse");
     qmlRegisterType<GetQuotesResponse>("FpResponses", 1, 0, "GetQuotesResponse");
     qmlRegisterType<GetCandlesResponse>("FpResponses", 1, 0, "GetCandlesResponse");
     qmlRegisterType<SymbolSearchResponse>("FpResponses", 1, 0, "SymbolSearchResponse");
@@ -65,8 +73,12 @@ int main(int argc, char *argv[])
     qmlRegisterType<FpSymbolSearchResultsItemModel>("com.example.fpx", 1, 0,
                                                     "FpSymbolSearchResultsItemModel");
     qmlRegisterType<FpAccountsListModel>("com.example.fpx", 1, 0, "FpAccountsListModel");
+    qmlRegisterType<FpPositionsListModel>("com.example.fpx", 1, 0, "FpPositionsListModel");
+    qmlRegisterType<FpPortfolioWrapper>("com.example.fpx", 1, 0, "FpPortfolioWrapper");
     qmlRegisterType<FpChartDataWrapper>("com.example.fpx", 1, 0, "FpChartDataWrapper");
     qmlRegisterType<FpTradingAccounts>("com.example.fpx", 1, 0, "FpTradingAccounts");
+    qmlRegisterType<FpTransactionsListModel>("com.example.fpx", 1, 0, "FpTransactionsListModel");
+    qmlRegisterType<FpTransactionsWrapper>("com.example.fpx", 1, 0, "FpTransactionsWrapper");
     qmlRegisterType<FpWatchlistListModel>("com.example.fpx", 1, 0, "FpWatchlistListModel");
     qmlRegisterType<FpWatchlists>("com.example.fpx", 1, 0, "FpWatchlists");
     qmlRegisterType<FpWatchlistsListModel>("com.example.fpx", 1, 0, "FpWatchlistsListModel");
@@ -85,6 +97,8 @@ int main(int argc, char *argv[])
     QSettings::setDefaultFormat(QSettings::IniFormat);
 #endif
 
+    UtilityFunctionsWrapper utilityFunctions;
+
     auto client = bsmi::InvestorAPIClientFactory::create(
         QStringLiteral("https://investor-api.herokuapp.com"));
     FpSettings fpCoreSettings;
@@ -96,6 +110,7 @@ int main(int argc, char *argv[])
     if (!(isHostMobile() || app.arguments().contains(QLatin1String("-touch")))) {
         QQmlFileSelector::get(&engine)->setExtraSelectors({ QLatin1String("desktop") });
     }
+    engine.rootContext()->setContextProperty("utilityFunctions", &utilityFunctions);
     engine.rootContext()->setContextProperty("fpCore", &fpCore);
     engine.rootContext()->setContextProperty("fpType", &fpTypes);
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));

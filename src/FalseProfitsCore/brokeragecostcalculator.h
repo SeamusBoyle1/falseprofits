@@ -48,7 +48,7 @@ public:
     explicit BrokerageCostCalculator(QObject *parent = nullptr);
 
     FpCore *coreClient() const { return m_fpCore; }
-    void setCoreClient(FpCore *core) { m_fpCore = core; }
+    void setCoreClient(FpCore *core);
 
     Q_INVOKABLE
     FinishNotifier *updateBuyCommission();
@@ -58,6 +58,9 @@ public:
 
     Q_INVOKABLE
     BrokerCostCalcResult calcBrokerageCost(const BrokerCostCalcArgs &args) const;
+
+public Q_SLOTS:
+    void unloadCommissions();
 
 private:
     FinishNotifier *updateCommission(bool buyNotSell);

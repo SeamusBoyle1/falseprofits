@@ -52,6 +52,18 @@ public:
     };
     virtual INetworkReply *getCommissions(CommissionSide side) = 0;
 
+    virtual INetworkReply *getPositions(const QString &accountId) = 0;
+
+    struct GetTransactionsArgs
+    {
+        QString accountId;
+        QDateTime startDate;
+        QDateTime endDate;
+        int pageNumber{ -1 };
+        int pageSize{ -1 };
+    };
+    virtual INetworkReply *getTransactions(const GetTransactionsArgs &query) = 0;
+
     virtual INetworkReply *getQuotes(const QStringList &symbols) = 0;
 
     struct CandlesRequestArgs

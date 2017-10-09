@@ -202,6 +202,63 @@ GetCommissionsResponse *FpCore::getCommissions(Fpx::CommissionSide side)
     return resp;
 }
 
+GetPositionsResponse *FpCore::getPositions(const QString &accountId)
+{
+    QPointer<GetPositionsResponse> resp(new GetPositionsResponse);
+
+    auto rep = m_client->getPositions(accountId);
+    connect(rep, &bsmi::INetworkReply::finished, this, [resp, rep, this]() {
+        if (!resp) {
+            rep->deleteLater();
+            return;
+        }
+        auto httpStatusCode = readHttpStatusCode(rep);
+        resp->setHttpStatusCode(httpStatusCode);
+        if (rep->error() == QNetworkReply::NoError) {
+            resp->setPayload(rep->readAll());
+        } else {
+            resp->setErrorMessage(readErrorMessage(resp, rep, httpStatusCode));
+        }
+
+        rep->deleteLater();
+        resp->setFinished();
+    });
+
+    return resp;
+}
+
+GetTransactionsResponse *FpCore::getTransactions(const TransactionsQuery &query)
+{
+    QPointer<GetTransactionsResponse> resp(new GetTransactionsResponse);
+
+    bsmi::IInvestorAPIClient::GetTransactionsArgs v;
+    v.accountId = query.accountId();
+    v.startDate = query.startDate();
+    v.endDate = query.endDate();
+    v.pageNumber = query.pageNumber();
+    v.pageSize = query.pageSize();
+
+    auto rep = m_client->getTransactions(v);
+    connect(rep, &bsmi::INetworkReply::finished, this, [resp, rep, this]() {
+        if (!resp) {
+            rep->deleteLater();
+            return;
+        }
+        auto httpStatusCode = readHttpStatusCode(rep);
+        resp->setHttpStatusCode(httpStatusCode);
+        if (rep->error() == QNetworkReply::NoError) {
+            resp->setPayload(rep->readAll());
+        } else {
+            resp->setErrorMessage(readErrorMessage(resp, rep, httpStatusCode));
+        }
+
+        rep->deleteLater();
+        resp->setFinished();
+    });
+
+    return resp;
+}
+
 GetQuotesResponse *FpCore::getQuotes(const QStringList &symbols)
 {
     QPointer<GetQuotesResponse> resp(new GetQuotesResponse);
@@ -366,6 +423,8 @@ SendOrderResponse *FpCore::sendOrder(const QString &accountId, const OrderParams
         resp->setHttpStatusCode(httpStatusCode);
         if (rep->error() == QNetworkReply::NoError) {
             resp->setPayload(rep->readAll());
+
+            QMetaObject::invokeMethod(this, "positionsChanged", Qt::QueuedConnection);
         } else {
             resp->setErrorMessage(readErrorMessage(resp, rep, httpStatusCode));
         }
@@ -408,7 +467,7 @@ AddSymbolToWatchlistResponse *FpCore::addSymbolToWatchlist(const QString &watchl
     QPointer<AddSymbolToWatchlistResponse> resp(new AddSymbolToWatchlistResponse);
 
     auto rep = m_client->addSymbolToWatchlist(watchlistId, symbol);
-    connect(rep, &bsmi::INetworkReply::finished, this, [resp, rep, this]() {
+    connect(rep, &bsmi::INetworkReply::finished, this, [watchlistId, symbol, resp, rep, this]() {
         if (!resp) {
             rep->deleteLater();
             return;
@@ -417,6 +476,10 @@ AddSymbolToWatchlistResponse *FpCore::addSymbolToWatchlist(const QString &watchl
         resp->setHttpStatusCode(httpStatusCode);
         if (rep->error() == QNetworkReply::NoError) {
             resp->setPayload(rep->readAll());
+
+            QMetaObject::invokeMethod(this, "watchlistChanged", Qt::QueuedConnection,
+                                      Q_ARG(QString, watchlistId), Q_ARG(QString, symbol),
+                                      Q_ARG(bool, true));
         } else {
             resp->setErrorMessage(readErrorMessage(resp, rep, httpStatusCode));
         }
@@ -434,7 +497,7 @@ RemoveSymbolFromWatchlistResponse *FpCore::removeSymbolFromWatchlist(const QStri
     QPointer<RemoveSymbolFromWatchlistResponse> resp(new RemoveSymbolFromWatchlistResponse);
 
     auto rep = m_client->removeSymbolFromWatchlist(watchlistId, symbol);
-    connect(rep, &bsmi::INetworkReply::finished, this, [resp, rep, this]() {
+    connect(rep, &bsmi::INetworkReply::finished, this, [watchlistId, symbol, resp, rep, this]() {
         if (!resp) {
             rep->deleteLater();
             return;
@@ -443,6 +506,10 @@ RemoveSymbolFromWatchlistResponse *FpCore::removeSymbolFromWatchlist(const QStri
         resp->setHttpStatusCode(httpStatusCode);
         if (rep->error() == QNetworkReply::NoError) {
             resp->setPayload(rep->readAll());
+
+            QMetaObject::invokeMethod(this, "watchlistChanged", Qt::QueuedConnection,
+                                      Q_ARG(QString, watchlistId), Q_ARG(QString, symbol),
+                                      Q_ARG(bool, false));
         } else {
             resp->setErrorMessage(readErrorMessage(resp, rep, httpStatusCode));
         }

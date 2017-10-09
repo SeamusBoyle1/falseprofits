@@ -27,13 +27,18 @@ SOURCES += \
     fpsettings.cpp \
     fpcore.cpp \
     fpaccountslistmodel.cpp \
+    fpportfoliowrapper.cpp \
+    fppositionslistmodel.cpp \
     fpsymbolsearchresultsitemmodel.cpp \
     fpsymbolsearchwrapper.cpp \
     fptradingaccounts.cpp \
+    fptransactionslistmodel.cpp \
+    fptransactionswrapper.cpp \
     fpwatchlistlistmodel.cpp \
     fpwatchlists.cpp \
     fpwatchlistslistmodel.cpp \
-    fpwatchlistwrapper.cpp
+    fpwatchlistwrapper.cpp \
+    utilityfunctionswrapper.cpp
 
 HEADERS += \
     brokeragecostcalculator.h \
@@ -44,14 +49,19 @@ HEADERS += \
     fpcore.h \
     fpdeclarativetypes.h \
     fpcore_interfaces.h \
+    fpportfoliowrapper.h \
+    fppositionslistmodel.h \
     fpaccountslistmodel.h \
     fpsymbolsearchresultsitemmodel.h \
     fpsymbolsearchwrapper.h \
     fptradingaccounts.h \
+    fptransactionslistmodel.h \
+    fptransactionswrapper.h \
     fpwatchlistlistmodel.h \
     fpwatchlists.h \
     fpwatchlistslistmodel.h \
-    fpwatchlistwrapper.h
+    fpwatchlistwrapper.h \
+    utilityfunctionswrapper.h
 
 unix {
     target.path = /usr/lib

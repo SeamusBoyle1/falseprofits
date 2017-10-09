@@ -19,7 +19,7 @@ public:
     explicit FpTradingAccounts(QObject *parent = nullptr);
 
     FpCore *coreClient() const { return m_fpCore; }
-    void setCoreClient(FpCore *core) { m_fpCore = core; }
+    void setCoreClient(FpCore *core);
 
     FpAccountsListModel *model() const { return m_model; }
 
@@ -29,6 +29,7 @@ public:
 signals:
 
 public slots:
+    void unloadAccounts();
 
 private:
     void onResponseReceived(GetUserProfileResponse *reply, bool updateNotReplace);

@@ -1,0 +1,25 @@
+{
+    "balance": 928139.5,
+    "id": "cbb4bc3e-d3a1-4563-bc19-deb1a9e04918",
+    "name": "Default Account",
+    "positions": [
+        {
+            "averagePrice": 31.78,
+            "change": -0.05,
+            "changePercent": -0.16,
+            "lastPrice": 31.81,
+            "name": "WESTPAC BANKING CORPORATION",
+            "quantity": 1000,
+            "symbol": "WBC"
+        },
+        {
+            "averagePrice": 26.18,
+            "change": 0.175,
+            "changePercent": 0.673,
+            "lastPrice": 26.175,
+            "name": "BHP BILLITON LIMITED",
+            "quantity": 1500,
+            "symbol": "BHP"
+        }
+    ]
+}

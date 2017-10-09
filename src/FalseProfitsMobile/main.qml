@@ -9,7 +9,6 @@ ApplicationWindow {
     visible: true
     width: FpStyle.appWindowWidth
     height: FpStyle.appWindowHeight
-    title: qsTr("Hello World")
 
     Shortcut {
         sequence: StandardKey.Quit
@@ -62,6 +61,7 @@ ApplicationWindow {
                 ListElement{ title: qsTr("Quotes"); source: "qrc:/QuotesNavigation.qml" }
                 ListElement{ title: qsTr("My Profile and Accounts");
                     source: "qrc:/MyUserProfileNavigation.qml" }
+                ListElement{ title: qsTr("Transactions"); source: "qrc:/TransactionsPage.qml" }
                 ListElement{ title: qsTr("Sign Out"); source: "qrc:/SignOutPage.qml" }
             }
 

@@ -71,6 +71,43 @@ private:
     QString m_range;
 };
 
+class TransactionsQuery
+{
+    Q_GADGET
+    Q_PROPERTY(QString accountId READ accountId WRITE setAccountId)
+    Q_PROPERTY(QDateTime startDate READ startDate WRITE setStartDate)
+    Q_PROPERTY(QDateTime endDate READ endDate WRITE setEndDate)
+    Q_PROPERTY(int pageNumber READ pageNumber WRITE setPageNumber)
+    Q_PROPERTY(int pageSize READ pageSize WRITE setPageSize)
+public:
+    QString accountId() const { return m_accountId; }
+
+    void setAccountId(QString accountId) { m_accountId = accountId; }
+
+    QDateTime startDate() const { return m_startDate; }
+
+    void setStartDate(QDateTime startDate) { m_startDate = startDate; }
+
+    QDateTime endDate() const { return m_endDate; }
+
+    void setEndDate(QDateTime endDate) { m_endDate = endDate; }
+
+    int pageNumber() const { return m_pageNumber; }
+
+    void setPageNumber(int pageNumber) { m_pageNumber = pageNumber; }
+
+    int pageSize() const { return m_pageSize; }
+
+    void setPageSize(int pageSize) { m_pageSize = pageSize; }
+
+private:
+    QString m_accountId;
+    QDateTime m_startDate;
+    QDateTime m_endDate;
+    int m_pageNumber{ -1 };
+    int m_pageSize{ -1 };
+};
+
 class SymbolSearchQuery
 {
     Q_GADGET
@@ -387,6 +424,7 @@ private:
 
 Q_DECLARE_METATYPE(NewUserDetails)
 Q_DECLARE_METATYPE(CandlesRequestArgs)
+Q_DECLARE_METATYPE(TransactionsQuery)
 Q_DECLARE_METATYPE(SymbolSearchQuery)
 Q_DECLARE_METATYPE(OrderParams)
 Q_DECLARE_METATYPE(BrokerCostCalcArgs)
@@ -408,6 +446,7 @@ public:
     {
         qRegisterMetaType<NewUserDetails>("NewUserDetails");
         qRegisterMetaType<CandlesRequestArgs>("CandlesRequestArgs");
+        qRegisterMetaType<TransactionsQuery>("TransactionsQuery");
         qRegisterMetaType<SymbolSearchQuery>("SymbolSearchQuery");
         qRegisterMetaType<OrderParams>("OrderParams");
         qRegisterMetaType<OrderParams::Side>("OrderParams::Side");
@@ -428,6 +467,9 @@ public:
 
     Q_INVOKABLE
     CandlesRequestArgs makeCandlesRequestArgs() { return CandlesRequestArgs{}; }
+
+    Q_INVOKABLE
+    TransactionsQuery makeTransactionsQuery() { return TransactionsQuery{}; }
 
     Q_INVOKABLE
     SymbolSearchQuery makeSymbolSearchQuery() { return SymbolSearchQuery{}; }

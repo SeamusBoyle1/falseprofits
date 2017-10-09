@@ -26,6 +26,7 @@ Page {
     property bool maybeHasChartData: true
     property alias lastPriceLabel: lastPriceLabel
     property alias orderButton: orderButton
+    property alias newsFeedPage: newsFeedPage
     property alias busyIndicator: busyIndicator
 
     ButtonGroup2 {
@@ -128,6 +129,9 @@ Page {
                 TabButton {
                     text: qsTr("Key stats")
                 }
+                TabButton {
+                    text: qsTr("News")
+                }
             }
 
             SwipeView {
@@ -180,12 +184,14 @@ Page {
                                     text: changePriceText
                                     Layout.fillWidth: true
                                     font.pixelSize: 14
+                                    Layout.minimumWidth: implicitWidth
                                 }
                                 Label {
                                     text: changePercentText
                                     Layout.fillWidth: true
                                     font.pixelSize: 14
                                     horizontalAlignment: Text.AlignRight
+                                    Layout.minimumWidth: implicitWidth
                                 }
                             }
 
@@ -352,7 +358,14 @@ Page {
                         }
                     }
                 }
+
+                SymbolNewsFeedPage {
+                    id: newsFeedPage
+                }
             }
+        }
+
+        ScrollIndicator.vertical: ScrollIndicator {
         }
     }
 

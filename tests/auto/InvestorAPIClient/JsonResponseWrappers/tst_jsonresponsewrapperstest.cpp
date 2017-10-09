@@ -43,6 +43,8 @@ private Q_SLOTS:
     void errorMessageResponseTest();
     void userProfileResponseTest();
     void commissionResponseTest();
+    void positionsResponseTest();
+    void transactionsResponseTest();
     void symbolSearchTest();
     void watchlistResponseTest();
     void candlesResponseTest();
@@ -175,6 +177,92 @@ void JsonResponseWrappersTest::commissionResponseTest()
         QCOMPARE(*percentRange1.max(), 1000000);
         QVERIFY(percentRange1.value());
         QCOMPARE(*percentRange1.value(), 0.25);
+    }
+}
+
+void JsonResponseWrappersTest::positionsResponseTest()
+{
+    using namespace bsmi;
+
+    {
+        QString testFile("accountInfoPositions1.json");
+        auto doc = readFileContentsAsJson(srcDirFile(testFile));
+        if (doc.isNull()) {
+            QSKIP("Unable to open test file");
+        }
+
+        JsonObjectWrappers::PositionsResponse parser;
+        parser.d = doc.object();
+
+        QCOMPARE(*parser.id(), QString("cbb4bc3e-d3a1-4563-bc19-deb1a9e04918"));
+        QCOMPARE(*parser.name(), QString("Default Account"));
+        QCOMPARE(*parser.balance(), 928139.5);
+
+        auto itemParser = parser.positions();
+        QVERIFY(!itemParser.isEmpty());
+        QCOMPARE(itemParser.size(), 2);
+
+        auto foundWBC = false;
+        for (auto i = 0, total = 5; i < total; ++i) {
+            auto e = itemParser.at(i);
+            auto sym = e.symbol();
+            if (sym && *sym == QLatin1String("WBC")) {
+                foundWBC = true;
+                QCOMPARE(*e.name(), QLatin1String("WESTPAC BANKING CORPORATION"));
+                QCOMPARE(*e.quantity(), 1000);
+                QCOMPARE(*e.averagePrice(), 31.78);
+                QCOMPARE(*e.lastPrice(), 31.81);
+                QCOMPARE(*e.change(), -0.05);
+                QCOMPARE(*e.changePercent(), -0.16);
+                break;
+            }
+        }
+        QVERIFY(foundWBC);
+    }
+}
+
+void JsonResponseWrappersTest::transactionsResponseTest()
+{
+    using namespace bsmi;
+
+    {
+        QString testFile("transactionsOnlyReqArgs.json");
+        auto doc = readFileContentsAsJson(srcDirFile(testFile));
+        if (doc.isNull()) {
+            QSKIP("Unable to open test file");
+        }
+
+        auto parser = JsonObjectWrappers::TransactionsResponse(doc.object());
+
+        QCOMPARE(parser.pageNumber(), 1);
+        QCOMPARE(parser.pageSize(), 100);
+        QCOMPARE(parser.totalPageCount(), 1);
+        QCOMPARE(parser.totalRowCount(), 7);
+
+        auto itemParser = parser.items();
+        QVERIFY(!itemParser.isEmpty());
+        QCOMPARE(itemParser.size(), 7);
+
+        auto foundBHP = false;
+        for (auto i = 0, total = 5; i < total; ++i) {
+            auto e = itemParser.at(i);
+            auto desc = e.description();
+            if (desc && *desc == QLatin1String("Purchased 1500 shares of BHP for $26.18 each")) {
+                foundBHP = true;
+                QVERIFY(e.isValid());
+                QVERIFY(e.amount());
+                QCOMPARE(*e.amount(), -39270.0);
+                QVERIFY(e.balance());
+                QCOMPARE(*e.balance(), 928582.2);
+                QVERIFY(e.timestampUtc());
+                QCOMPARE(*e.timestampUtc(),
+                         QDateTime::fromString("2017-10-04T23:49:48Z", Qt::ISODate));
+                QVERIFY(e.type());
+                QCOMPARE(*e.type(), QLatin1String("Buy"));
+                break;
+            }
+        }
+        QVERIFY(foundBHP);
     }
 }
 

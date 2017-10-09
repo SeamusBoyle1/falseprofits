@@ -53,7 +53,7 @@ FinishNotifier *FpSymbolSearchWrapper::getNextPage()
 
     SymbolSearchQuery v;
     v.setSearchTerm(m_searchTerm);
-    v.setPageNumber(m_pageNumber++);
+    v.setPageNumber(++m_pageNumber);
 
     QPointer<FinishNotifier> notifier(new FinishNotifier);
 

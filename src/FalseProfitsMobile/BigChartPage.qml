@@ -15,6 +15,7 @@ BigChartPageForm {
 
     FpChartDataWrapper {
         id: chartDataWrapper
+        coreClient: fpCore
     }
 
     Component.onCompleted: {
@@ -123,7 +124,7 @@ BigChartPageForm {
         if (maxPrice === 0) {
             maxPrice = 1000
         }
-        var padding = (maxPrice - minPrice) * 0.05
+        var padding = maxPrice !== minPrice ? ((maxPrice - minPrice) * 0.05) : 0.01
         minPrice -= padding
         maxPrice += padding
         bigChartView.yAxis.min = minPrice
@@ -157,7 +158,7 @@ BigChartPageForm {
         reqArgs.range = chartDataRange
         reqArgs.interval = chartInterval
 
-        var candlesResp = chartDataWrapper.getCandlesFromYahoo(reqArgs)
+        var candlesResp = chartDataWrapper.getCandles(reqArgs)
         var thisRequestId = candlesRequestId + 1
         candlesRequestId = thisRequestId
         incrementBusyIndicatorVisibility()

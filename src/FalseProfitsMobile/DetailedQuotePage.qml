@@ -15,6 +15,7 @@ DetailedQuotePageForm {
 
     FpChartDataWrapper {
         id: chartDataWrapper
+        coreClient: fpCore
     }
 
     Component.onCompleted: {
@@ -34,6 +35,7 @@ DetailedQuotePageForm {
     onCurrentSymbolChanged: {
         clearQuote()
         symbolText = currentSymbol
+        newsFeedPage.currentSymbol = currentSymbol
         updateQuote()
         updateStarredState()
         fillChart()
@@ -180,7 +182,7 @@ DetailedQuotePageForm {
         reqArgs.range = chartDataRange
         reqArgs.interval = chartInterval
 
-        var candlesResp = chartDataWrapper.getCandlesFromYahoo(reqArgs)
+        var candlesResp = chartDataWrapper.getCandles(reqArgs)
         var thisRequestId = candlesRequestId + 1
         candlesRequestId = thisRequestId
         incrementBusyIndicatorVisibility()
@@ -201,7 +203,7 @@ DetailedQuotePageForm {
             if (maxPrice === 0) {
                 maxPrice = 1000
             }
-            var padding = (maxPrice - minPrice) * 0.05
+            var padding = maxPrice !== minPrice ? ((maxPrice - minPrice) * 0.05) : 0.01
             minPrice -= padding
             maxPrice += padding
             priceLineChart.yAxis.min = minPrice

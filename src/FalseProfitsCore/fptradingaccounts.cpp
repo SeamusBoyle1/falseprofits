@@ -18,6 +18,19 @@ FpTradingAccounts::FpTradingAccounts(QObject *parent)
 {
 }
 
+void FpTradingAccounts::setCoreClient(FpCore *core)
+{
+    if (m_fpCore) {
+        disconnect(m_fpCore, &FpCore::authStateChanged, this, &FpTradingAccounts::unloadAccounts);
+    }
+
+    m_fpCore = core;
+
+    if (core) {
+        connect(core, &FpCore::authStateChanged, this, &FpTradingAccounts::unloadAccounts);
+    }
+}
+
 FinishNotifier *FpTradingAccounts::updateAccounts()
 {
     Q_ASSERT(m_fpCore);
@@ -34,6 +47,11 @@ FinishNotifier *FpTradingAccounts::updateAccounts()
     });
 
     return notifier;
+}
+
+void FpTradingAccounts::unloadAccounts()
+{
+    m_model->resetWithData(QVector<TradingAccountItem>());
 }
 
 void FpTradingAccounts::onResponseReceived(GetUserProfileResponse *reply, bool updateNotReplace)

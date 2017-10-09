@@ -14,6 +14,20 @@ BrokerageCostCalculator::BrokerageCostCalculator(QObject *parent)
 {
 }
 
+void BrokerageCostCalculator::setCoreClient(FpCore *core)
+{
+    if (m_fpCore) {
+        disconnect(m_fpCore, &FpCore::authStateChanged, this,
+                   &BrokerageCostCalculator::unloadCommissions);
+    }
+
+    m_fpCore = core;
+
+    if (core) {
+        connect(core, &FpCore::authStateChanged, this, &BrokerageCostCalculator::unloadCommissions);
+    }
+}
+
 FinishNotifier *BrokerageCostCalculator::updateBuyCommission()
 {
     return updateCommission(true);
@@ -30,6 +44,12 @@ BrokerageCostCalculator::calcBrokerageCost(const BrokerCostCalcArgs &args) const
     return util::calcBrokerageCost(
         args.side() == OrderParams::Side::BuySide ? m_buyCommissionTable : m_sellCommissionTable,
         args);
+}
+
+void BrokerageCostCalculator::unloadCommissions()
+{
+    m_buyCommissionTable.clear();
+    m_sellCommissionTable.clear();
 }
 
 FinishNotifier *BrokerageCostCalculator::updateCommission(bool buyNotSell)

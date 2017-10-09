@@ -70,9 +70,9 @@ Page {
                     source: "qrc:/images/" + FpStyle.iconAccent + "/refresh.png"
                 }
                 enabled: visible
-                visible: watchlistPageLoader.item ?
-                             navPan.currentItem === watchlistPageLoader.item : false
-                onClicked: watchlistPageLoader.item.refreshWatchlist()
+                visible: homePageLoader.item ?
+                             navPan.currentItem === homePageLoader.item : false
+                onClicked: homePageLoader.item.refreshView()
             }
         }
     }
@@ -100,9 +100,9 @@ Page {
         }
 
         Loader {
-            id: watchlistPageLoader
+            id: homePageLoader
             active: true
-            source: "qrc:/WatchlistPage.qml"
+            source: "qrc:/HomePage.qml"
             anchors.fill: parent
             onLoaded: {
                 item.onSymbolClicked.connect(showCompanyInfo)
