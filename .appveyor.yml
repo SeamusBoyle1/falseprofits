@@ -1,4 +1,4 @@
-version: 0.3.0.{build}
+version: 0.3.1.{build}
 image: Visual Studio 2017
 environment:
   BOOST_ROOT: C:\Libraries\boost_1_64_0
