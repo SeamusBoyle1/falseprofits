@@ -6,6 +6,7 @@
 #include <QObject>
 
 #include <QAbstractSeries>
+#include <QAbstractAxis>
 #include <QString>
 #include <QVector>
 
@@ -179,6 +180,9 @@ public:
     Q_INVOKABLE
     void hackCandlestickSeriesPen(QAbstractSeries *s, const QColor &color, qreal width,
                                   bool cosmetic) const;
+
+    Q_INVOKABLE
+    void hackRemoveAllSeriesAndAxes(QAbstractSeries *s) const;
 
 signals:
 

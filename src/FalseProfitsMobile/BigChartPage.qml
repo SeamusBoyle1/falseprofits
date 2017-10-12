@@ -26,6 +26,10 @@ BigChartPageForm {
         intervalText = chartInterval.toUpperCase()
     }
 
+    Component.onDestruction: {
+        chartDataWrapper.hackRemoveAllSeriesAndAxes(bigChartView.candleSeries)
+    }
+
     onCurrentSymbolChanged: {
         symbolText = currentSymbol
         fillChart()
