@@ -8,10 +8,11 @@ ChartView {
     property alias xAxisLabelsAxis: dateTimeLabelAxis
     property alias yAxis: axisYRight2
 
-    antialiasing: !candleSeries.visible
+    antialiasing: candleSeries && !candleSeries.visible
     legend.visible: false
 
-    animationOptions: !candleSeries.visible ? ChartView.SeriesAnimations : ChartView.NoAnimation
+    animationOptions: candleSeries && !candleSeries.visible ?
+                          ChartView.SeriesAnimations : ChartView.NoAnimation
 
     ValueAxis {
         id: axisYRight2

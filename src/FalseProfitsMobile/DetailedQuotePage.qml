@@ -22,6 +22,10 @@ DetailedQuotePageForm {
         chartDataWrapper.hackMargin(priceLineChart.lineSeries)
     }
 
+    Component.onDestruction: {
+        chartDataWrapper.hackRemoveAllSeriesAndAxes(priceLineChart.lineSeries)
+    }
+
     orderButton.onClicked: {
         if (currentSymbol !== "") {
             tradeButtonClicked(currentSymbol)

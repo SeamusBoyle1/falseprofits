@@ -378,3 +378,29 @@ void FpChartDataWrapper::hackCandlestickSeriesPen(QAbstractSeries *s, const QCol
     pen.setCosmetic(cosmetic);
     hackCandlestickSeriesPen(s, pen);
 }
+
+/*!
+ * Workaround related to QTBUG-63078 and
+ * http://lists.qt-project.org/pipermail/interest/2017-September/028113.html
+ *
+ * The app will crash on Mac (maybe others) when the chart begins
+ * destructing children. Removing all the series and axes prior to
+ * the chart destructing seems to avoid the crash.
+ */
+void FpChartDataWrapper::hackRemoveAllSeriesAndAxes(QAbstractSeries *s) const
+{
+    if (s == nullptr) {
+        return;
+    }
+
+    auto chart = s->chart();
+
+    chart->removeAllSeries();
+
+    auto axes = chart->axes();
+    for (auto axis : qAsConst(axes)) {
+        chart->removeAxis(axis);
+    }
+
+    qDeleteAll(axes);
+}
