@@ -550,6 +550,31 @@ GetLeaderboardResponse *FpCore::getLeaderboard(const LeaderboardQuery &query)
     return resp;
 }
 
+GetLeaderboardMeResponse *FpCore::getLeaderboardMe(int neighborCount)
+{
+    QPointer<GetLeaderboardMeResponse> resp(new GetLeaderboardMeResponse);
+
+    auto rep = m_client->getLeaderboardMe(neighborCount);
+    connect(rep, &bsmi::INetworkReply::finished, this, [resp, rep, this]() {
+        if (!resp) {
+            rep->deleteLater();
+            return;
+        }
+        auto httpStatusCode = readHttpStatusCode(rep);
+        resp->setHttpStatusCode(httpStatusCode);
+        if (rep->error() == QNetworkReply::NoError) {
+            resp->setPayload(rep->readAll());
+        } else {
+            resp->setErrorMessage(readErrorMessage(resp, rep, httpStatusCode));
+        }
+
+        rep->deleteLater();
+        resp->setFinished();
+    });
+
+    return resp;
+}
+
 Fpx::AuthenticationState FpCore::authState() const
 {
     return m_authenticationState;

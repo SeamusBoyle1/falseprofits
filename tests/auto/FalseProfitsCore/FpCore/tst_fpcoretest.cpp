@@ -428,6 +428,24 @@ public:
     }
 };
 
+class InvestorAPIClientGetLeaderboardMeMock : public InvestorAPIClientMock
+{
+    Q_OBJECT
+public:
+    InvestorAPIClientGetLeaderboardMeMock() {}
+
+    NetworkReply *m_nextLeaderboardMeReply{ nullptr };
+    bool getLeaderboardMeCalled = false;
+    int neighborCount = 0;
+
+    INetworkReply *getLeaderboardMe(int neighborCount) override
+    {
+        getLeaderboardMeCalled = true;
+        this->neighborCount = neighborCount;
+        return m_nextLeaderboardMeReply;
+    }
+};
+
 static bsmi::IInvestorAPIClient *createMockFpCore(QObject *parent = 0)
 {
     return new InvestorAPIClientMock(parent);
@@ -457,6 +475,7 @@ private Q_SLOTS:
     void addSymbolToWatchlistTest();
     void removeSymbolFromWatchlistTest();
     void getLeaderboardTest();
+    void getLeaderboardMeTest();
 };
 
 FpCoreTest::FpCoreTest()
@@ -1142,6 +1161,47 @@ void FpCoreTest::getLeaderboardTest()
                                 "}";
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextLeaderboardReply->setFinished();
+
+        QVERIFY(!netAuthRep->m_payload.isEmpty());
+        QCOMPARE(QJsonDocument::fromJson(resp->payload()),
+                 QJsonDocument::fromJson(netAuthRep->m_payload));
+    }
+}
+
+void FpCoreTest::getLeaderboardMeTest()
+{
+    {
+        auto client = new InvestorAPIClientGetLeaderboardMeMock;
+        auto fpCoreSettings = new MockFpSettings;
+        auto fpCore = new FpCore(client, fpCoreSettings);
+        client->setParent(fpCore);
+
+        int neighborCount = -1;
+
+        // mock success response
+        auto netAuthRep = new QNetworkReplyMock;
+        client->m_nextLeaderboardMeReply = new bsmi::INetworkReply(netAuthRep);
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::NotAuthenticatedState);
+        fpCore->setAccessToken("i_am_very_token", QDateTime::currentDateTimeUtc().addDays(7));
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::AuthenticatedState);
+
+        auto resp = fpCore->getLeaderboardMe(neighborCount);
+        QVERIFY(resp);
+
+        // Test bsmi::IInvestorAPIClient got args
+        QVERIFY(client->getLeaderboardMeCalled);
+        QCOMPARE(client->neighborCount, neighborCount);
+
+        netAuthRep->m_payload = "{"
+                                "  \"rank\": 0,"
+                                "  \"displayName\": \"John Doe\","
+                                "  \"totalAccountValue\": 0,"
+                                "  \"profit\": 0,"
+                                "  \"profitPercent\": 0,"
+                                "  \"isCurrentUser\": true"
+                                "}";
+        netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
+        client->m_nextLeaderboardMeReply->setFinished();
 
         QVERIFY(!netAuthRep->m_payload.isEmpty());
         QCOMPARE(QJsonDocument::fromJson(resp->payload()),
