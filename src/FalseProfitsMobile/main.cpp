@@ -66,6 +66,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<SymbolSearchResponse>("FpResponses", 1, 0, "SymbolSearchResponse");
     qmlRegisterType<GetShareDetailsResponse>("FpResponses", 1, 0, "GetShareDetailsResponse");
     qmlRegisterType<SendOrderResponse>("FpResponses", 1, 0, "SendOrderResponse");
+    qmlRegisterType<GetLeaderboardResponse>("FpResponses", 1, 0, "GetLeaderboardResponse");
 
     qmlRegisterType<BrokerageCostCalculator>("com.example.fpx", 1, 0, "BrokerageCostCalculator");
     qmlRegisterType<FinishNotifier>("com.example.fpx", 1, 0, "FinishNotifier");

@@ -412,6 +412,22 @@ public:
     }
 };
 
+class InvestorAPIClientGetLeaderboardMock : public InvestorAPIClientMock
+{
+    Q_OBJECT
+public:
+    InvestorAPIClientGetLeaderboardMock() {}
+
+    NetworkReply *m_nextLeaderboardReply{ nullptr };
+    LeaderboardQuery m_query;
+
+    INetworkReply *getLeaderboard(const LeaderboardQuery &query) override
+    {
+        m_query = query;
+        return m_nextLeaderboardReply;
+    }
+};
+
 static bsmi::IInvestorAPIClient *createMockFpCore(QObject *parent = 0)
 {
     return new InvestorAPIClientMock(parent);
@@ -440,6 +456,7 @@ private Q_SLOTS:
     void getWatchlistTest();
     void addSymbolToWatchlistTest();
     void removeSymbolFromWatchlistTest();
+    void getLeaderboardTest();
 };
 
 FpCoreTest::FpCoreTest()
@@ -1078,6 +1095,57 @@ void FpCoreTest::removeSymbolFromWatchlistTest()
 
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextRemoveWatchlistSymbolReply->setFinished();
+    }
+}
+
+void FpCoreTest::getLeaderboardTest()
+{
+    {
+        auto client = new InvestorAPIClientGetLeaderboardMock;
+        auto fpCoreSettings = new MockFpSettings;
+        auto fpCore = new FpCore(client, fpCoreSettings);
+        client->setParent(fpCore);
+
+        LeaderboardQuery queryA;
+        queryA.setPageSize(20);
+        queryA.setPageNumber(2);
+
+        // mock success response
+        auto netAuthRep = new QNetworkReplyMock;
+        client->m_nextLeaderboardReply = new bsmi::INetworkReply(netAuthRep);
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::NotAuthenticatedState);
+        fpCore->setAccessToken("i_am_very_token", QDateTime::currentDateTimeUtc().addDays(7));
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::AuthenticatedState);
+
+        auto resp = fpCore->getLeaderboard(queryA);
+        QVERIFY(resp);
+
+        // Test bsmi::IInvestorAPIClient got args
+        QCOMPARE(client->m_query.pageSize, queryA.pageSize());
+        QCOMPARE(client->m_query.pageNumber, queryA.pageNumber());
+
+        netAuthRep->m_payload = "{"
+                                "  \"items\": ["
+                                "    {"
+                                "      \"rank\": 0,"
+                                "      \"displayName\": \"John Doe\","
+                                "      \"totalAccountValue\": 0,"
+                                "      \"profit\": 0,"
+                                "      \"profitPercent\": 0,"
+                                "      \"isCurrentUser\": true"
+                                "    }"
+                                "  ],"
+                                "  \"pageNumber\": 0,"
+                                "  \"pageSize\": 0,"
+                                "  \"totalPageCount\": 0,"
+                                "  \"totalRowCount\": 0"
+                                "}";
+        netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
+        client->m_nextLeaderboardReply->setFinished();
+
+        QVERIFY(!netAuthRep->m_payload.isEmpty());
+        QCOMPARE(QJsonDocument::fromJson(resp->payload()),
+                 QJsonDocument::fromJson(netAuthRep->m_payload));
     }
 }
 

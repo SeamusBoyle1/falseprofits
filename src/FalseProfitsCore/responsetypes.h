@@ -432,4 +432,24 @@ public:
     }
 };
 
+class GetLeaderboardResponse : public BaseResponse
+{
+    Q_OBJECT
+public:
+    GetLeaderboardResponse() {}
+    virtual ~GetLeaderboardResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 401:
+            return "Authorization failed";
+        default:
+            break;
+        }
+        return QString();
+    }
+};
+
 #endif // RESPONSETYPES_H
