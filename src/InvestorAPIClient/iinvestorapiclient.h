@@ -108,6 +108,9 @@ public:
     };
     virtual INetworkReply *getLeaderboard(const LeaderboardQuery &query) = 0;
 
+    // Use neighborCount = -1 for server default
+    virtual INetworkReply *getLeaderboardMe(int neighborCount) = 0;
+
 Q_SIGNALS:
     void authTokenChanged();
 };

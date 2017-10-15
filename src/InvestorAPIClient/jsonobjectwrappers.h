@@ -557,6 +557,11 @@ public:
     }
 };
 
+/*!
+ * \brief The LeaderboardResponseItems class is used to parse the
+ * items array from the /api/1.0/leaderBoard response and the array
+ * response from /api/1.0/leaderBoard/me
+ */
 class LeaderboardResponseItems
 {
 public:

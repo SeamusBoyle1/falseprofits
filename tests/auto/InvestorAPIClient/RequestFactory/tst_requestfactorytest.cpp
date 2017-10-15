@@ -30,6 +30,7 @@ private Q_SLOTS:
     void createRemoveSymbolFromWatchlistRequest();
     void createGetCandlesRequestTest();
     void createGetLeaderboardRequestTest();
+    void createGetLeaderboardMeRequestTest();
 };
 
 RequestFactoryTest::RequestFactoryTest()
@@ -553,6 +554,44 @@ void RequestFactoryTest::createGetLeaderboardRequestTest()
         QVERIFY(respUrlQuery.queryItemValue("pageNumber") == QLatin1String("2"));
         QVERIFY(respUrlQuery.hasQueryItem("pageSize"));
         QVERIFY(respUrlQuery.queryItemValue("pageSize") == QLatin1String("20"));
+    }
+}
+
+void RequestFactoryTest::createGetLeaderboardMeRequestTest()
+{
+    using namespace bsmi;
+
+    // Using -1 for server default neighborCount
+    {
+        InvestorAPIClient c(nullptr, QStringLiteral("http://example.com"));
+
+        c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 20), QTime(7, 51)));
+
+        auto resp = c.createGetLeaderboardMeRequest(-1);
+        auto const respUrl = resp.url();
+        const QUrlQuery respUrlQuery(respUrl.query());
+        QCOMPARE(QUrl(respUrl.toString(QUrl::RemoveQuery)),
+                 QUrl(QLatin1String("http://example.com/api/1.0/leaderBoard/me")));
+        QCOMPARE(resp.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+        QCOMPARE(resp.rawHeader("Content-Type"), QByteArray("application/json"));
+        QVERIFY(!respUrlQuery.hasQueryItem("neighborCount"));
+    }
+
+    // With neighborCount specified
+    {
+        InvestorAPIClient c(nullptr, QStringLiteral("http://example.com"));
+
+        c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 20), QTime(7, 51)));
+
+        auto resp = c.createGetLeaderboardMeRequest(3);
+        auto const respUrl = resp.url();
+        const QUrlQuery respUrlQuery(respUrl.query());
+        QCOMPARE(QUrl(respUrl.toString(QUrl::RemoveQuery)),
+                 QUrl(QLatin1String("http://example.com/api/1.0/leaderBoard/me")));
+        QCOMPARE(resp.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+        QCOMPARE(resp.rawHeader("Content-Type"), QByteArray("application/json"));
+        QVERIFY(respUrlQuery.hasQueryItem("neighborCount"));
+        QVERIFY(respUrlQuery.queryItemValue("neighborCount") == QLatin1String("3"));
     }
 }
 

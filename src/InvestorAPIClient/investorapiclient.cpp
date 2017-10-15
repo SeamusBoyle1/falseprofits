@@ -126,6 +126,11 @@ INetworkReply *InvestorAPIClient::getLeaderboard(const IInvestorAPIClient::Leade
     return m_requestQueue->get(createGetLeaderboardRequest(query));
 }
 
+INetworkReply *InvestorAPIClient::getLeaderboardMe(int neighborCount)
+{
+    return m_requestQueue->get(createGetLeaderboardMeRequest(neighborCount));
+}
+
 QPair<QNetworkRequest, QJsonObject>
 InvestorAPIClient::createCreateNewUserRequest(const QHash<UserRecordField, QVariant> &params) const
 {
@@ -314,6 +319,20 @@ QNetworkRequest InvestorAPIClient::createGetLeaderboardRequest(
     }
     if (query.pageSize > 0) {
         urlQuery.addQueryItem(QStringLiteral("pageSize"), QString::number(query.pageSize));
+    }
+
+    url.setQuery(urlQuery);
+
+    return makeAuthenticatedRequest(url);
+}
+
+QNetworkRequest InvestorAPIClient::createGetLeaderboardMeRequest(int neighborCount) const
+{
+    QUrl url(m_apiUrl + QStringLiteral("/api/1.0/leaderBoard/me"));
+
+    QUrlQuery urlQuery;
+    if (neighborCount > -1) {
+        urlQuery.addQueryItem(QStringLiteral("neighborCount"), QString::number(neighborCount));
     }
 
     url.setQuery(urlQuery);

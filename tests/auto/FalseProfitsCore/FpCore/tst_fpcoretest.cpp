@@ -156,6 +156,12 @@ public:
         Q_UNUSED(query);
         return nullptr;
     }
+
+    INetworkReply *getLeaderboardMe(int neighborCount) override
+    {
+        Q_UNUSED(neighborCount);
+        return nullptr;
+    }
 };
 
 class QNetworkReplyMock : public QNetworkReply
