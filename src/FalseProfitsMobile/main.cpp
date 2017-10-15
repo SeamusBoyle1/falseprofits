@@ -7,6 +7,8 @@
 #include <FalseProfitsCore/finishnotifier.h>
 #include <FalseProfitsCore/fpaccountslistmodel.h>
 #include <FalseProfitsCore/fpcore.h>
+#include <FalseProfitsCore/fpleaderboardlistmodel.h>
+#include <FalseProfitsCore/fpleaderboardwrapper.h>
 #include <FalseProfitsCore/fpdeclarativetypes.h>
 #include <FalseProfitsCore/responsetypes.h>
 #include <FalseProfitsCore/fppositionslistmodel.h>
@@ -78,6 +80,8 @@ int main(int argc, char *argv[])
     qmlRegisterType<FpPositionsListModel>("com.example.fpx", 1, 0, "FpPositionsListModel");
     qmlRegisterType<FpPortfolioWrapper>("com.example.fpx", 1, 0, "FpPortfolioWrapper");
     qmlRegisterType<FpChartDataWrapper>("com.example.fpx", 1, 0, "FpChartDataWrapper");
+    qmlRegisterType<FpLeaderboardListModel>("com.example.fpx", 1, 0, "FpLeaderboardListModel");
+    qmlRegisterType<FpLeaderboardWrapper>("com.example.fpx", 1, 0, "FpLeaderboardWrapper");
     qmlRegisterType<FpTradingAccounts>("com.example.fpx", 1, 0, "FpTradingAccounts");
     qmlRegisterType<FpTransactionsListModel>("com.example.fpx", 1, 0, "FpTransactionsListModel");
     qmlRegisterType<FpTransactionsWrapper>("com.example.fpx", 1, 0, "FpTransactionsWrapper");
