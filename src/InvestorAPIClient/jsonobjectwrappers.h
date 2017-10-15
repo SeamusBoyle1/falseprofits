@@ -52,6 +52,13 @@ inline boost::optional<int> getOptionalInt(const QJsonObject &o, const String &k
     return boost::make_optional(v != magic, v);
 }
 
+template <typename String>
+inline boost::optional<bool> getOptionalBool(const QJsonObject &o, const String &key)
+{
+    auto v = o.value(key);
+    return boost::make_optional(v.isBool(), v.toBool());
+}
+
 } // namespace util
 
 class ErrorMessageResponse
@@ -513,6 +520,76 @@ public:
     int size() const { return jsonItems.size(); }
 
     CandleResponse at(int i) const { return { jsonItems.at(i).toObject() }; }
+};
+
+class LeaderboardUser
+{
+public:
+    QJsonObject d;
+
+    bool isValid() const { return !d.isEmpty(); }
+
+    boost::optional<int> rank() const { return util::getOptionalInt(d, QLatin1String("rank"), -1); }
+
+    boost::optional<QString> displayName() const
+    {
+        return util::getOptionalString(d, QLatin1String("displayName"));
+    }
+
+    boost::optional<double> totalAccountValue() const
+    {
+        return util::getOptionalDouble(d, QLatin1String("totalAccountValue"));
+    }
+
+    boost::optional<double> profit() const
+    {
+        return util::getOptionalDouble(d, QLatin1String("profit"));
+    }
+
+    boost::optional<double> profitPercent() const
+    {
+        return util::getOptionalDouble(d, QLatin1String("profitPercent"));
+    }
+
+    boost::optional<bool> isCurrentUser() const
+    {
+        return util::getOptionalBool(d, QLatin1String("isCurrentUser"));
+    }
+};
+
+class LeaderboardResponseItems
+{
+public:
+    QJsonArray jsonItems;
+
+    bool isEmpty() const { return jsonItems.isEmpty(); }
+
+    int size() const { return jsonItems.size(); }
+
+    LeaderboardUser at(int i) const { return { jsonItems.at(i).toObject() }; }
+};
+
+class LeaderboardResponse
+{
+public:
+    LeaderboardResponse(QJsonObject obj)
+        : d{ std::move(obj) }
+    {
+        jsonItems = obj.value(QLatin1String("items")).toArray();
+    }
+
+    LeaderboardResponseItems items() const { return { jsonItems }; }
+
+    QJsonObject d;
+    QJsonArray jsonItems;
+
+    int pageNumber() const { return d.value(QLatin1String("pageNumber")).toInt(); }
+
+    int pageSize() const { return d.value(QLatin1String("pageSize")).toInt(); }
+
+    int totalPageCount() const { return d.value(QLatin1String("totalPageCount")).toInt(); }
+
+    int totalRowCount() const { return d.value(QLatin1String("totalRowCount")).toInt(); }
 };
 
 } // namespace JsonObjectWrappers

@@ -48,6 +48,7 @@ private Q_SLOTS:
     void symbolSearchTest();
     void watchlistResponseTest();
     void candlesResponseTest();
+    void leaderboardResponseTest();
 };
 
 JsonResponseWrappersTest::JsonResponseWrappersTest()
@@ -400,6 +401,48 @@ void JsonResponseWrappersTest::candlesResponseTest()
         // out-of-range, candle should not be valid
         auto cndl3 = parser.at(2);
         QVERIFY(!cndl3.isValid());
+    }
+}
+
+void JsonResponseWrappersTest::leaderboardResponseTest()
+{
+    using namespace bsmi;
+
+    {
+        QString testFile("leaderboardPageNum2PageSize3.json");
+        auto doc = readFileContentsAsJson(srcDirFile(testFile));
+        if (doc.isNull()) {
+            QSKIP("Unable to open test file");
+        }
+
+        auto parser = JsonObjectWrappers::LeaderboardResponse(doc.object());
+
+        QCOMPARE(parser.pageNumber(), 2);
+        QCOMPARE(parser.pageSize(), 3);
+        QCOMPARE(parser.totalPageCount(), 3);
+        QCOMPARE(parser.totalRowCount(), 9);
+
+        auto itemParser = parser.items();
+        QVERIFY(!itemParser.isEmpty());
+        QCOMPARE(itemParser.size(), 3);
+
+        auto foundAdmin = false;
+        for (auto i = 0, total = 5; i < total; ++i) {
+            auto e = itemParser.at(i);
+            auto displayName = e.displayName();
+            if (displayName && *displayName == QLatin1String("Admin User")) {
+                foundAdmin = true;
+                QVERIFY(e.isValid());
+                QVERIFY(e.isCurrentUser());
+                QVERIFY(!*e.isCurrentUser());
+                QCOMPARE(*e.profit(), -100.7);
+                QCOMPARE(*e.profitPercent(), -0.01007);
+                QCOMPARE(*e.rank(), 6);
+                QCOMPARE(*e.totalAccountValue(), 999899.3);
+                break;
+            }
+        }
+        QVERIFY(foundAdmin);
     }
 }
 

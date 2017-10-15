@@ -1,0 +1,32 @@
+{
+    "items": [
+        {
+            "displayName": "John Doe",
+            "isCurrentUser": false,
+            "profit": 0.0,
+            "profitPercent": 0.0,
+            "rank": 4,
+            "totalAccountValue": 1000000.0
+        },
+        {
+            "displayName": "Leonard Marcq",
+            "isCurrentUser": false,
+            "profit": 0.0,
+            "profitPercent": 0.0,
+            "rank": 5,
+            "totalAccountValue": 1000000.0
+        },
+        {
+            "displayName": "Admin User",
+            "isCurrentUser": false,
+            "profit": -100.7,
+            "profitPercent": -0.01007,
+            "rank": 6,
+            "totalAccountValue": 999899.3
+        }
+    ],
+    "pageNumber": 2,
+    "pageSize": 3,
+    "totalPageCount": 3,
+    "totalRowCount": 9
+}

@@ -121,6 +121,11 @@ INetworkReply *InvestorAPIClient::removeSymbolFromWatchlist(const QString &watch
                                                                                  symbol));
 }
 
+INetworkReply *InvestorAPIClient::getLeaderboard(const IInvestorAPIClient::LeaderboardQuery &query)
+{
+    return m_requestQueue->get(createGetLeaderboardRequest(query));
+}
+
 QPair<QNetworkRequest, QJsonObject>
 InvestorAPIClient::createCreateNewUserRequest(const QHash<UserRecordField, QVariant> &params) const
 {
@@ -296,6 +301,24 @@ InvestorAPIClient::createSendOrderRequest(const QString &accountId,
     obj.insert(QStringLiteral("nonce"), args.nonce);
 
     return qMakePair(req, obj);
+}
+
+QNetworkRequest InvestorAPIClient::createGetLeaderboardRequest(
+    const IInvestorAPIClient::LeaderboardQuery &query) const
+{
+    QUrl url(m_apiUrl + QStringLiteral("/api/1.0/leaderBoard"));
+
+    QUrlQuery urlQuery;
+    if (query.pageNumber > 0) {
+        urlQuery.addQueryItem(QStringLiteral("pageNumber"), QString::number(query.pageNumber));
+    }
+    if (query.pageSize > 0) {
+        urlQuery.addQueryItem(QStringLiteral("pageSize"), QString::number(query.pageSize));
+    }
+
+    url.setQuery(urlQuery);
+
+    return makeAuthenticatedRequest(url);
 }
 
 QNetworkRequest InvestorAPIClient::makeRequest(const QUrl &url) const

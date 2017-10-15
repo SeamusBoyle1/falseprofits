@@ -150,6 +150,12 @@ public:
         Q_UNUSED(symbol)
         return nullptr;
     }
+
+    INetworkReply *getLeaderboard(const LeaderboardQuery &query) override
+    {
+        Q_UNUSED(query);
+        return nullptr;
+    }
 };
 
 class QNetworkReplyMock : public QNetworkReply
