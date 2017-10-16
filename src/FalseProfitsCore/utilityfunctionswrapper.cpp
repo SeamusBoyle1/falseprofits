@@ -1,7 +1,6 @@
 // Copyright 2017
 
 #include "utilityfunctionswrapper.h"
-#include <QDebug>
 
 UtilityFunctionsWrapper::UtilityFunctionsWrapper(QObject *parent)
     : QObject(parent)
