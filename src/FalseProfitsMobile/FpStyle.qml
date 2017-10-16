@@ -17,4 +17,6 @@ QtObject {
     property int passwordEchoMode: TextInput.PasswordEchoOnEdit
 
     property int appBarHeight: Screen.primaryOrientation === Qt.LandscapeOrientation ? 48 : 56
+
+    property int navBarMaxWidth: 280
 }

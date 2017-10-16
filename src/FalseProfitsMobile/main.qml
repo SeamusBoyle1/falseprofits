@@ -24,7 +24,7 @@ ApplicationWindow {
 
     Drawer {
         id: appDrawer
-        width: Math.min(appWindow.width, appWindow.height) / 3 * 2
+        width: Math.min(FpStyle.navBarMaxWidth, appWindow.width - FpStyle.appBarHeight)
         height: appWindow.height
 
         property bool enableDrawer: true
@@ -40,10 +40,15 @@ ApplicationWindow {
             focus: true
             currentIndex: -1
             anchors.fill: parent
+            anchors.topMargin: 8
 
             delegate: ItemDelegate {
                 width: parent.width
+                height: 48
                 text: model.title
+                font.pixelSize: 14
+                font.weight: Font.Medium
+                opacity: 0.87
                 highlighted: ListView.isCurrentItem
                 onClicked: {
                     listView.currentIndex = index
