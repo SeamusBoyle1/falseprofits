@@ -293,6 +293,9 @@ Page {
                                         ToolTip.text: qsTr("Fullscreen")
                                     }
                                 }
+
+                                ScrollIndicator.horizontal: ScrollIndicator {
+                                }
                             }
 
                             FpLineChartWidget {
