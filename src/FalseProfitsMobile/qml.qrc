@@ -42,5 +42,8 @@
         <file>TransactionsPage.qml</file>
         <file>TransactionsPageForm.ui.qml</file>
         <file>TransactionsListView.qml</file>
+        <file>LeaderboardListView.qml</file>
+        <file>LeaderboardPage.qml</file>
+        <file>LeaderboardPageForm.ui.qml</file>
     </qresource>
 </RCC>
