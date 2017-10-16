@@ -32,6 +32,7 @@ Page {
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.topMargin: !watchlistsComboBox.visible ? 8 : 0
+            bottomMargin: addButton.visible ? addButton.parent.height - addButton.y : 0
         }
     }
 
