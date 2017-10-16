@@ -54,6 +54,8 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     qmlRegisterSingletonType(QUrl("qrc:/FpStyle.qml"), "com.example.fpx", 1, 0, "FpStyle");
+    qmlRegisterSingletonType(QUrl("qrc:/ExtraMaterial.qml"), "io.material.xtra", 1, 0,
+                             "ExtraMaterial");
 
     qmlRegisterUncreatableType<FpCore>("FpCore", 1, 0, "FpCore", "For setter injection only");
 

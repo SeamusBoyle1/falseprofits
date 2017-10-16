@@ -45,5 +45,7 @@
         <file>LeaderboardListView.qml</file>
         <file>LeaderboardPage.qml</file>
         <file>LeaderboardPageForm.ui.qml</file>
+        <file>AccentPane.qml</file>
+        <file>ExtraMaterial.qml</file>
     </qresource>
 </RCC>

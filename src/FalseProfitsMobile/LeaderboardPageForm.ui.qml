@@ -56,7 +56,7 @@ Page {
         }
     }
 
-    Pane {
+    AccentPane {
         id: currentUserRank
         anchors.leftMargin: FpStyle.screenEdgeLeftMargin
         anchors.rightMargin: FpStyle.screenEdgeRightMargin
