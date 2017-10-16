@@ -22,6 +22,8 @@ Page {
 
     ToolBar {
         id: toolBarH
+        implicitHeight: FpStyle.appBarHeight
+
         RowLayout {
             anchors.fill: parent
             ToolButton {

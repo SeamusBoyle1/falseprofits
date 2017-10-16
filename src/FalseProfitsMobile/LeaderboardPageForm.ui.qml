@@ -20,6 +20,7 @@ Page {
     property alias menuButton: menuButton
 
     header: ToolBar {
+        implicitHeight: FpStyle.appBarHeight
         Layout.fillWidth: true
         RowLayout {
             anchors.fill: parent

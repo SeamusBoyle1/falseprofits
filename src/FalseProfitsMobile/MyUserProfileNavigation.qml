@@ -20,6 +20,7 @@ Page {
 
     header: ColumnLayout {
         ToolBar {
+            implicitHeight: FpStyle.appBarHeight
             Layout.fillWidth: true
             RowLayout {
                 anchors.fill: parent
