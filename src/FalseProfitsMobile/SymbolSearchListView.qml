@@ -20,6 +20,7 @@ ListView {
 
         ColumnLayout {
             id: delegateContent
+            height: 76
 
             ColumnLayout {
                 Layout.leftMargin: FpStyle.screenEdgeLeftMargin

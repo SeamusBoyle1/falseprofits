@@ -75,6 +75,7 @@ ListView {
         ColumnLayout {
             id: delegateContent
             width: parent.width
+            height: 60
             x: swipeDelegate.swipe.rightItem ?
                    swipeDelegate.swipe.rightItem.width * swipeDelegate.swipe.position : 0
 
