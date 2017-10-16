@@ -78,6 +78,7 @@ MyUserProfilePageForm {
 
     function clearUserProfileDisplay()
     {
+        headlineGreeting.text = "Hello"
         userDetails.userEmailText = ""
         userDetails.userDisplayNameText = ""
         userDetails.userLevelText = ""
@@ -99,6 +100,7 @@ MyUserProfilePageForm {
                 busyIndicator.visible = false
                 if (!userProfileResp.hasError()) {
                     var userDetailsDat = fpType.makeJsonUserDetails(userProfileResp.payload())
+                    headlineGreeting.text = qsTr("Hi %1!").arg(userDetailsDat.displayName)
                     userDetails.userEmailText = userDetailsDat.email
                     userDetails.userDisplayNameText = userDetailsDat.displayName
                     userDetails.userLevelText = userDetailsDat.level
