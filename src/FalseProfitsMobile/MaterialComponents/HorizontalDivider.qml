@@ -10,7 +10,7 @@ Item {
 
     Rectangle {
         width: parent.width
-        height: parent.height
+        height: 1
         color: ExtraMaterial.dividerColor
         opacity: ExtraMaterial.dividerOpacity
     }
