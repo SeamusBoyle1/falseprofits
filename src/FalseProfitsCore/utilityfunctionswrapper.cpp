@@ -1,5 +1,6 @@
 // Copyright 2017
 
+#include <QLocale>
 #include "utilityfunctionswrapper.h"
 
 UtilityFunctionsWrapper::UtilityFunctionsWrapper(QObject *parent)
@@ -17,7 +18,6 @@ QString UtilityFunctionsWrapper::timeDifference(const QDateTime &dt, const QDate
     int diffSecs = int(dt.secsTo(current_dt));;
     int minutes = 60;
     int hours = 60 * minutes;
-    QLocale locale;
 
     if(diffSecs < minutes)
     {
@@ -33,8 +33,10 @@ QString UtilityFunctionsWrapper::timeDifference(const QDateTime &dt, const QDate
     }
     else
     {
-        // Returns as string using ISO date format without h:m:s component.
-        return locale.toString(dt, "ddd MMM d yyyy");
+        QLocale locale;
+
+        // Returns as string
+        return locale.toString(dt, locale.dateFormat(QLocale::LongFormat));
     }
 }
 
