@@ -88,7 +88,9 @@ QVariant FpPositionsListModel::data(const QModelIndex &index, int role) const
         }
         case ProfitLossPercentRole: {
             auto const &e = m_rows.at(row);
-            if (!(e.lastPrice > 0))
+            // average price must be non-zero otherwise cost is zero
+            // which causes a divide by zero error
+            if (!(e.lastPrice > 0 && e.averagePrice > 0))
                 return QVariant();
             auto marketValue = e.quantity * e.lastPrice;
             auto cost = e.quantity * e.averagePrice;

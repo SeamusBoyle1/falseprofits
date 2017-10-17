@@ -118,8 +118,9 @@ ListView {
 
                 Label {
                     id: profitLossLabel
-                    text: qsTr("PnL: %1 (%2%)").arg(model.profitLoss.toFixed(0)).arg(
-                              model.profitLossPercent.toFixed(1))
+                    text: model.profitLossPercent && model.profitLoss ?
+                              qsTr("PnL: %1 (%2%)").arg(model.profitLoss.toFixed(0)).arg(
+                                  model.profitLossPercent.toFixed(1)) : ""
                     // TODO(seamus): Use FpStyle for color
                     color: model.direction === 1 ? "#0b893e" : model.direction
                                                    === -1 ? "#bf1722" : "black"
