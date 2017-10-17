@@ -49,7 +49,7 @@ Page {
                     font.pixelSize: 13
                     font.bold: true
                 }
-//Thu, 28 Sep 2017 21:42:10 +0000
+
                 Label {
                     id: pubDateBox
                     text: utilityFunctions.timeDifference(new Date(pubDate), new Date) + " (<a href=\"" + link + "\">Link</a>)"
