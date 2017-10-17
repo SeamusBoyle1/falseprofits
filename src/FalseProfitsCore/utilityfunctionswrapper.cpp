@@ -14,24 +14,27 @@ QDateTime UtilityFunctionsWrapper::makeDateFromString(const QString &dt, enum Qt
 
 QString UtilityFunctionsWrapper::timeDifference(const QDateTime &dt, const QDateTime &current_dt) const
 {
-    int diffSecs = dt.msecsTo(current_dt) / 1000;
+    int diffSecs = int(dt.secsTo(current_dt));;
     int minutes = 60;
     int hours = 60 * minutes;
+    QLocale locale;
 
     if(diffSecs < minutes)
     {
-        return QString::number(diffSecs) + " seconds ago.";
+        return tr("%1 seconds ago").arg(diffSecs);
     }
     else if (diffSecs < hours )
     {
-        return QString::number(diffSecs / minutes) + " minutes ago.";
+        return tr("%1 minutes ago").arg(diffSecs / minutes);
     }
     else if ( diffSecs < (24 * hours) )
     {
-        return QString::number(diffSecs / hours) + " hours ago.";
+        return tr("%1 hours ago").arg(diffSecs / hours);
     }
     else
     {
-        return dt.toString();
+        // Returns as string using ISO date format without h:m:s component.
+        return locale.toString(dt, "ddd MMM d yyyy");
     }
 }
+

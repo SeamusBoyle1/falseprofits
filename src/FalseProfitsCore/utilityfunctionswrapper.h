@@ -7,6 +7,8 @@
 
 #include <QDate>
 
+#include <QLocale>
+
 class UtilityFunctionsWrapper : public QObject
 {
     Q_OBJECT
