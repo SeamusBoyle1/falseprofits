@@ -126,15 +126,12 @@ QVariant FpLeaderboardWrapper::currentUserDisplayName() const
 
 QVariant FpLeaderboardWrapper::currentUserProfit() const
 {
-    return m_currentUserRank && (*m_currentUserRank).profit > 0 ? (*m_currentUserRank).profit
-                                                                : QVariant();
+    return m_currentUserRank ? (*m_currentUserRank).profit : QVariant();
 }
 
 QVariant FpLeaderboardWrapper::currentUserProfitPercent() const
 {
-    return m_currentUserRank && (*m_currentUserRank).profitPercent > 0
-        ? (*m_currentUserRank).profitPercent
-        : QVariant();
+    return m_currentUserRank ? (*m_currentUserRank).profitPercent : QVariant();
 }
 
 void FpLeaderboardWrapper::unloadLeaderboard()
