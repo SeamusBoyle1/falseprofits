@@ -5,8 +5,6 @@ import io.material.xtra 1.0
 
 Item {
     height: 1
-    anchors.left: parent.left
-    anchors.right: parent.right
 
     Rectangle {
         width: parent.width

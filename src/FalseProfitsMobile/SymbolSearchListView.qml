@@ -53,7 +53,9 @@ ListView {
                 }
             }
 
-            HorizontalDivider{}
+            HorizontalDivider {
+                Layout.fillWidth: true
+            }
         }
 
         onClicked: {
