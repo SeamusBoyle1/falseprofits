@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.3
 
 Page {
     property string currentSymbol
+    property bool enableRelativeTimeUpdates
 
     /* newsFeedModel
         Defining XML file of current Symbol to be created as List element.  */
@@ -30,8 +31,10 @@ Page {
 
         clip: true
         Repeater {
+            id: repeater
             anchors.fill: parent
             model: newsFeedModel
+            property date currentDate: new Date
 
             delegate: Column {
                 id: delegate
@@ -52,7 +55,8 @@ Page {
 
                 Label {
                     id: pubDateBox
-                    text: utilityFunctions.timeDifference(new Date(pubDate), new Date) + " (<a href=\"" + link + "\">Link</a>)"
+                    text: utilityFunctions.timeDifference(new Date(pubDate), repeater.currentDate) +
+                          " (<a href=\"" + link + "\">Link</a>)"
                     width: delegate.width
                     wrapMode: Text.WordWrap
                     font.pixelSize: 12
@@ -74,11 +78,11 @@ Page {
 
         Timer {
                 id: newsFeedTimer
-                interval: 1000 * 60 // Update every 60 seconds.
+                interval: 4000 // Update every 4 seconds.
                 repeat: true
-                running: true
+                running: enableRelativeTimeUpdates
                 triggeredOnStart: true
-                onTriggered: newsFeedModel.reload()
+                onTriggered: repeater.currentDate = new Date
         }
     }
 }

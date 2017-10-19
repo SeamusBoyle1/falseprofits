@@ -362,6 +362,7 @@ Page {
 
                 SymbolNewsFeedPage {
                     id: newsFeedPage
+                    enableRelativeTimeUpdates: SwipeView.isCurrentItem
                 }
             }
         }
