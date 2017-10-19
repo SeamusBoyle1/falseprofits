@@ -14,7 +14,7 @@ public:
     explicit UtilityFunctionsWrapper(QObject *parent = nullptr);
 
     Q_INVOKABLE
-    QDateTime makeDateFromString(const QString &dt, enum Qt::DateFormat) const;
+    QDate makeDateFromString(const QString &dt, const QString &format) const;
 
     Q_INVOKABLE
     QString timeDifference(const QDateTime &dt, const QDateTime &currentDate) const;

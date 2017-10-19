@@ -8,9 +8,9 @@ UtilityFunctionsWrapper::UtilityFunctionsWrapper(QObject *parent)
 {
 }
 
-QDateTime UtilityFunctionsWrapper::makeDateFromString(const QString &dt, enum Qt::DateFormat format = Qt::RFC2822Date) const
+QDate UtilityFunctionsWrapper::makeDateFromString(const QString &dt, const QString &format) const
 {
-    return QDateTime::fromString(dt, format);
+    return QDate::fromString(dt, format);
 }
 
 QString UtilityFunctionsWrapper::timeDifference(const QDateTime &dt, const QDateTime &current_dt) const
