@@ -118,7 +118,7 @@ ListView {
 
                 Label {
                     id: profitLossLabel
-                    text: model.profitLossPercent && model.profitLoss ?
+                    text: model.profitLossPercent !== undefined && model.profitLoss !== undefined ?
                               qsTr("PnL: %1 (%2%)").arg(model.profitLoss.toFixed(0)).arg(
                                   model.profitLossPercent.toFixed(1)) : ""
                     // TODO(seamus): Use FpStyle for color
