@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 import com.example.fpx 1.0
+import io.material.xtra 1.0
 
 Pane {
     width: 400
@@ -52,13 +53,16 @@ Pane {
 
                 Label {
                     text: qsTr("Name")
+                    color: displayNameField.acceptableInput ? ExtraMaterial.hintTextColor : ExtraMaterial.errorHintTextColor
+                    font.pixelSize: 12
                     visible: parent.text
                     anchors.bottom: parent.top
                 }
 
                 Label {
                     text: qsTr("Name must be between 5 and 30 characters")
-                    font.bold: true
+                    color: ExtraMaterial.errorHintTextColor
+                    font.pixelSize: 12
                     wrapMode: Text.WordWrap
                     visible: parent.text.length > 0 && !parent.acceptableInput
                     anchors.top: parent.bottom
@@ -79,13 +83,16 @@ Pane {
 
                 Label {
                     text: qsTr("Email")
+                    color: emailField.acceptableInput ? ExtraMaterial.hintTextColor : ExtraMaterial.errorHintTextColor
+                    font.pixelSize: 12
                     visible: parent.text
                     anchors.bottom: parent.top
                 }
 
                 Label {
                     text: qsTr("Email must be valid and not already used")
-                    font.bold: true
+                    color: ExtraMaterial.errorHintTextColor
+                    font.pixelSize: 12
                     wrapMode: Text.WordWrap
                     visible: parent.text.length > 0 && !parent.acceptableInput
                     anchors.top: parent.bottom
@@ -104,13 +111,16 @@ Pane {
 
                 Label {
                     text: qsTr("Password")
+                    color: passwordField.acceptableInput ? ExtraMaterial.hintTextColor : ExtraMaterial.errorHintTextColor
+                    font.pixelSize: 12
                     visible: parent.text
                     anchors.bottom: parent.top
                 }
 
                 Label {
                     text: qsTr("Password must be between 8 and 30 characters")
-                    font.bold: true
+                    color: ExtraMaterial.errorHintTextColor
+                    font.pixelSize: 12
                     wrapMode: Text.WordWrap
                     visible: parent.text.length > 0 && !parent.acceptableInput
                     anchors.top: parent.bottom

@@ -15,4 +15,14 @@ Item {
     // 12% black for light theme or 12% white for dark theme
     property color dividerColor: Qt.rgba(0, 0, 0, 1)
     property double dividerOpacity: .12
+
+    // https://material.io/guidelines/style/color.html#color-usability
+    // Dark text on light backgrounds
+    // - text hints and disabled text 38%
+    //
+    // Light text on dark backgrounds
+    // - text hints and disabled text 50%
+    property color hintTextColor: Qt.rgba(0, 0, 0, .38)
+
+    property color errorHintTextColor: Material.color(Material.Red, Material.Shade300)
 }
