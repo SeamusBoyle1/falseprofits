@@ -71,6 +71,15 @@ Page {
                 }
             }
         }
+
+        Timer {
+                id: newsFeedTimer
+                interval: 1000 * 60 // Update every 60 seconds.
+                repeat: true
+                running: true
+                triggeredOnStart: true
+                onTriggered: newsFeedModel.reload()
+        }
     }
 }
 
