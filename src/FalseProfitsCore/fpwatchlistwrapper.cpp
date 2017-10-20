@@ -210,6 +210,8 @@ void FpWatchlistWrapper::onGetResponseReceived(GetWatchlistResponse *reply)
             rows.append(r);
         }
 
+        util::sortBySymbol(rows.begin(), rows.end());
+
         m_model->resetWithData(rows);
     } else {
         // TODO(seamus): Handle error case

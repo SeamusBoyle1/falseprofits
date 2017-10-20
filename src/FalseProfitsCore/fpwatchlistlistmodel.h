@@ -8,6 +8,9 @@
 #include <QHash>
 #include <QVector>
 
+#include <algorithm>
+#include <iterator>
+
 struct WatchlistItem
 {
     QString symbol;
@@ -16,6 +19,19 @@ struct WatchlistItem
     double change{ 0 };
     double changePercent{ 0 };
 };
+
+namespace util {
+
+template <class RandomIt>
+typename std::enable_if<std::is_same<typename std::iterator_traits<RandomIt>::value_type,
+                                     WatchlistItem>::value>::type
+sortBySymbol(RandomIt first, RandomIt last)
+{
+    std::sort(first, last,
+              [](const WatchlistItem &a, const WatchlistItem &b) { return a.symbol < b.symbol; });
+}
+
+} // namespace util
 
 class FpWatchlistListModel : public QAbstractListModel
 {
