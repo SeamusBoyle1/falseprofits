@@ -13,6 +13,7 @@ Page {
     property alias accountsComboBox: accountsComboBox
     property alias menuButton: menuButton
     property alias filterButton: filterButton
+    property alias refreshButton: refreshButton
 
     header: ToolBar {
         implicitHeight: FpStyle.appBarHeight
@@ -44,6 +45,16 @@ Page {
                     verticalAlignment: Image.AlignVCenter
                     source: "qrc:/images/" + FpStyle.iconAccent + "/filter_list.png"
                 }
+            }
+            ToolButton {
+                id: refreshButton
+                contentItem: Image {
+                    fillMode: Image.Pad
+                    horizontalAlignment: Image.AlignHCenter
+                    verticalAlignment: Image.AlignVCenter
+                    source: "qrc:/images/" + FpStyle.iconAccent + "/refresh.png"
+                }
+                enabled: visible
             }
         }
     }
