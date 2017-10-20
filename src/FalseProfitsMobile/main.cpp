@@ -7,6 +7,8 @@
 #include <FalseProfitsCore/finishnotifier.h>
 #include <FalseProfitsCore/fpaccountslistmodel.h>
 #include <FalseProfitsCore/fpcore.h>
+#include <FalseProfitsCore/fpleaderboardlistmodel.h>
+#include <FalseProfitsCore/fpleaderboardwrapper.h>
 #include <FalseProfitsCore/fpdeclarativetypes.h>
 #include <FalseProfitsCore/responsetypes.h>
 #include <FalseProfitsCore/fppositionslistmodel.h>
@@ -26,10 +28,14 @@
 #include <InvestorAPIClient/iinvestorapiclient.h>
 
 #include <QDateTime>
+#include <QDebug>
 #include <QFileSelector>
+#include <QFontDatabase>
 #include <QQmlContext>
 #include <QQmlFileSelector>
 #include <QSettings>
+
+#include <array>
 
 constexpr bool isHostMobile()
 {
@@ -38,6 +44,53 @@ constexpr bool isHostMobile()
 #else
     return false;
 #endif
+}
+
+constexpr bool isHostAndroid()
+{
+#if defined(Q_OS_ANDROID)
+    return true;
+#else
+    return false;
+#endif
+}
+
+void loadRobotoFont()
+{
+    std::array<QString, 18> fonts{ {
+        // Workaround for Normal weighted font must be inserted
+        // before heavier fonts. Keep fonts group ordering the
+        // same as QFont::Weight
+
+        "Roboto-Thin.ttf", //
+        "Roboto-ThinItalic.ttf", //
+        "Roboto-Light.ttf", //
+        "Roboto-LightItalic.ttf", //
+        "Roboto-Regular.ttf", //
+        "Roboto-Italic.ttf", //
+        "Roboto-Medium.ttf", //
+        "Roboto-MediumItalic.ttf", //
+        "Roboto-Bold.ttf", //
+        "Roboto-BoldItalic.ttf", //
+        "Roboto-Black.ttf", //
+        "Roboto-BlackItalic.ttf", //
+
+        "RobotoCondensed-Light.ttf", //
+        "RobotoCondensed-LightItalic.ttf", //
+        "RobotoCondensed-Regular.ttf", //
+        "RobotoCondensed-Italic.ttf", //
+        "RobotoCondensed-Bold.ttf", //
+        "RobotoCondensed-BoldItalic.ttf", //
+    } };
+
+    QString prefix{ ":/fonts/" };
+    QFontDatabase fontDatabase;
+    for (auto const &e : fonts) {
+        QString fileName{ prefix + e };
+        if (fontDatabase.addApplicationFont(fileName) == -1) {
+            qWarning() << "Failed to load font:" << fileName;
+        }
+    }
 }
 
 int main(int argc, char *argv[])
@@ -51,7 +104,13 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
 
+    if (!isHostAndroid()) {
+        loadRobotoFont();
+    }
+
     qmlRegisterSingletonType(QUrl("qrc:/FpStyle.qml"), "com.example.fpx", 1, 0, "FpStyle");
+    qmlRegisterSingletonType(QUrl("qrc:/ExtraMaterial.qml"), "io.material.xtra", 1, 0,
+                             "ExtraMaterial");
 
     qmlRegisterUncreatableType<FpCore>("FpCore", 1, 0, "FpCore", "For setter injection only");
 
@@ -66,6 +125,8 @@ int main(int argc, char *argv[])
     qmlRegisterType<SymbolSearchResponse>("FpResponses", 1, 0, "SymbolSearchResponse");
     qmlRegisterType<GetShareDetailsResponse>("FpResponses", 1, 0, "GetShareDetailsResponse");
     qmlRegisterType<SendOrderResponse>("FpResponses", 1, 0, "SendOrderResponse");
+    qmlRegisterType<GetLeaderboardResponse>("FpResponses", 1, 0, "GetLeaderboardResponse");
+    qmlRegisterType<GetLeaderboardMeResponse>("FpResponses", 1, 0, "GetLeaderboardMeResponse");
 
     qmlRegisterType<BrokerageCostCalculator>("com.example.fpx", 1, 0, "BrokerageCostCalculator");
     qmlRegisterType<FinishNotifier>("com.example.fpx", 1, 0, "FinishNotifier");
@@ -76,6 +137,8 @@ int main(int argc, char *argv[])
     qmlRegisterType<FpPositionsListModel>("com.example.fpx", 1, 0, "FpPositionsListModel");
     qmlRegisterType<FpPortfolioWrapper>("com.example.fpx", 1, 0, "FpPortfolioWrapper");
     qmlRegisterType<FpChartDataWrapper>("com.example.fpx", 1, 0, "FpChartDataWrapper");
+    qmlRegisterType<FpLeaderboardListModel>("com.example.fpx", 1, 0, "FpLeaderboardListModel");
+    qmlRegisterType<FpLeaderboardWrapper>("com.example.fpx", 1, 0, "FpLeaderboardWrapper");
     qmlRegisterType<FpTradingAccounts>("com.example.fpx", 1, 0, "FpTradingAccounts");
     qmlRegisterType<FpTransactionsListModel>("com.example.fpx", 1, 0, "FpTransactionsListModel");
     qmlRegisterType<FpTransactionsWrapper>("com.example.fpx", 1, 0, "FpTransactionsWrapper");

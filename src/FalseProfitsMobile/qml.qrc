@@ -42,5 +42,11 @@
         <file>TransactionsPage.qml</file>
         <file>TransactionsPageForm.ui.qml</file>
         <file>TransactionsListView.qml</file>
+        <file>LeaderboardListView.qml</file>
+        <file>LeaderboardPage.qml</file>
+        <file>LeaderboardPageForm.ui.qml</file>
+        <file>AccentPane.qml</file>
+        <file>ExtraMaterial.qml</file>
+        <file>MaterialComponents/HorizontalDivider.qml</file>
     </qresource>
 </RCC>

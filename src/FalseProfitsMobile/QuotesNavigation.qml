@@ -22,6 +22,8 @@ Page {
 
     ToolBar {
         id: toolBarH
+        implicitHeight: FpStyle.appBarHeight
+
         RowLayout {
             anchors.fill: parent
             ToolButton {
@@ -70,9 +72,9 @@ Page {
                     source: "qrc:/images/" + FpStyle.iconAccent + "/refresh.png"
                 }
                 enabled: visible
-                visible: homePageLoader.item ?
-                             navPan.currentItem === homePageLoader.item : false
-                onClicked: homePageLoader.item.refreshView()
+                visible: navPan.currentItem &&
+                         typeof navPan.currentItem.onRefreshTriggered == 'function'
+                onClicked: navPan.currentItem.onRefreshTriggered()
             }
         }
     }

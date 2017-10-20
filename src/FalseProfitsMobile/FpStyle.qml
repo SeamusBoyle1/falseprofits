@@ -1,5 +1,6 @@
 pragma Singleton
 import QtQuick 2.7
+import QtQuick.Window 2.2
 
 QtObject {
     property string selector: "touch"
@@ -14,4 +15,8 @@ QtObject {
     property string iconPrimary: "black"
 
     property int passwordEchoMode: TextInput.PasswordEchoOnEdit
+
+    property int appBarHeight: Screen.primaryOrientation === Qt.LandscapeOrientation ? 48 : 56
+
+    property int navBarMaxWidth: 280
 }

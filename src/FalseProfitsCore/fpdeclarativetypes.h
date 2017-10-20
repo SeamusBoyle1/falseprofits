@@ -170,6 +170,25 @@ private:
     Side m_side{ Side::BuySide };
 };
 
+class LeaderboardQuery
+{
+    Q_GADGET
+    Q_PROPERTY(int pageNumber READ pageNumber WRITE setPageNumber)
+    Q_PROPERTY(int pageSize READ pageSize WRITE setPageSize)
+public:
+    int pageNumber() const { return m_pageNumber; }
+
+    void setPageNumber(int pageNumber) { m_pageNumber = pageNumber; }
+
+    int pageSize() const { return m_pageSize; }
+
+    void setPageSize(int pageSize) { m_pageSize = pageSize; }
+
+private:
+    int m_pageNumber{ -1 };
+    int m_pageSize{ -1 };
+};
+
 class BrokerCostCalcArgs
 {
     Q_GADGET
@@ -427,6 +446,7 @@ Q_DECLARE_METATYPE(CandlesRequestArgs)
 Q_DECLARE_METATYPE(TransactionsQuery)
 Q_DECLARE_METATYPE(SymbolSearchQuery)
 Q_DECLARE_METATYPE(OrderParams)
+Q_DECLARE_METATYPE(LeaderboardQuery)
 Q_DECLARE_METATYPE(BrokerCostCalcArgs)
 Q_DECLARE_METATYPE(BrokerCostCalcResult)
 Q_DECLARE_METATYPE(JsonUserTradingAccount)
@@ -450,6 +470,7 @@ public:
         qRegisterMetaType<SymbolSearchQuery>("SymbolSearchQuery");
         qRegisterMetaType<OrderParams>("OrderParams");
         qRegisterMetaType<OrderParams::Side>("OrderParams::Side");
+        qRegisterMetaType<LeaderboardQuery>("LeaderboardQuery");
         qRegisterMetaType<BrokerCostCalcArgs>("BrokerCostCalcArgs");
         qRegisterMetaType<BrokerCostCalcResult>("BrokerCostCalcResult");
 
@@ -476,6 +497,9 @@ public:
 
     Q_INVOKABLE
     OrderParams makeOrderParams() { return OrderParams{}; }
+
+    Q_INVOKABLE
+    LeaderboardQuery makeLeaderboardQuery() { return LeaderboardQuery{}; }
 
     Q_INVOKABLE
     BrokerCostCalcArgs makeBrokerCostCalcArgs() { return BrokerCostCalcArgs{}; }

@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 import com.example.fpx 1.0
+import "MaterialComponents"
 
 ListView {
     id: listView
@@ -20,6 +21,9 @@ ListView {
 
         ColumnLayout {
             id: delegateContent
+            width: parent.width
+            height: 76
+            spacing: 0
 
             ColumnLayout {
                 Layout.leftMargin: FpStyle.screenEdgeLeftMargin
@@ -47,6 +51,10 @@ ListView {
                     text: model.industry
                     font.pixelSize: 11
                 }
+            }
+
+            HorizontalDivider {
+                Layout.fillWidth: true
             }
         }
 

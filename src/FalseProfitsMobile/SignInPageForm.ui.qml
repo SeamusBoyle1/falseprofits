@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 import com.example.fpx 1.0
+import io.material.xtra 1.0
 
 Pane {
     width: 400
@@ -53,6 +54,8 @@ Pane {
 
                 Label {
                     text: qsTr("Email")
+                    color: emailField.acceptableInput ? ExtraMaterial.hintTextColor : ExtraMaterial.errorHintTextColor
+                    font.pixelSize: 12
                     visible: parent.text
                     anchors.bottom: parent.top
                 }
@@ -67,6 +70,7 @@ Pane {
 
                 Label {
                     text: qsTr("Password")
+                    color: ExtraMaterial.hintTextColor
                     visible: parent.text
                     anchors.bottom: parent.top
                 }

@@ -188,4 +188,8 @@ BigChartPageForm {
             updateTickLabels()
         })
     }
+
+    function onRefreshTriggered() {
+        fillChart()
+    }
 }

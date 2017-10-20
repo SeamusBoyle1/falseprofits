@@ -16,6 +16,8 @@ public:
     Q_INVOKABLE
     QDate makeDateFromString(const QString &dt, const QString &format) const;
 
+    Q_INVOKABLE
+    QString timeDifference(const QDateTime &dt, const QDateTime &currentDate) const;
 signals:
 
 public slots:

@@ -26,6 +26,8 @@ SOURCES += \
     brokeragecostcalculator.cpp \
     fpsettings.cpp \
     fpcore.cpp \
+    fpleaderboardlistmodel.cpp \
+    fpleaderboardwrapper.cpp \
     fpaccountslistmodel.cpp \
     fpportfoliowrapper.cpp \
     fppositionslistmodel.cpp \
@@ -47,6 +49,8 @@ HEADERS += \
     finishnotifier.h \
     fpsettings.h \
     fpcore.h \
+    fpleaderboardlistmodel.h \
+    fpleaderboardwrapper.h \
     fpdeclarativetypes.h \
     fpcore_interfaces.h \
     fpportfoliowrapper.h \

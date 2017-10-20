@@ -14,4 +14,8 @@ QtObject {
     property string iconPrimary: "black"
 
     property int passwordEchoMode: TextInput.Password
+
+    property int appBarHeight: 64
+
+    property int navBarMaxWidth: 320
 }

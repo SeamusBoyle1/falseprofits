@@ -123,6 +123,9 @@ Page {
                         ButtonGroup.group: chartTypeButtonGroup
                     }
                 }
+
+                ScrollIndicator.horizontal: ScrollIndicator {
+                }
             }
         }
     }

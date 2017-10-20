@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 import com.example.fpx 1.0
+import "MaterialComponents"
 
 ListView {
     id: listView
@@ -69,8 +70,10 @@ ListView {
         ColumnLayout {
             id: delegateContent
             width: parent.width
+            height: 60
             x: swipeDelegate.swipe.rightItem ?
                    swipeDelegate.swipe.rightItem.width * swipeDelegate.swipe.position : 0
+            spacing: 0
 
             GridLayout {
                 id: mainGrid
@@ -115,8 +118,9 @@ ListView {
 
                 Label {
                     id: profitLossLabel
-                    text: qsTr("PnL: %1 (%2%)").arg(model.profitLoss.toFixed(0)).arg(
-                              model.profitLossPercent.toFixed(1))
+                    text: model.profitLossPercent !== undefined && model.profitLoss !== undefined ?
+                              qsTr("PnL: %1 (%2%)").arg(model.profitLoss.toFixed(0)).arg(
+                                  model.profitLossPercent.toFixed(1)) : ""
                     // TODO(seamus): Use FpStyle for color
                     color: model.direction === 1 ? "#0b893e" : model.direction
                                                    === -1 ? "#bf1722" : "black"
@@ -124,6 +128,10 @@ ListView {
                     Layout.preferredWidth: 100
                     horizontalAlignment: Text.AlignRight
                 }
+            }
+
+            HorizontalDivider {
+                Layout.fillWidth: true
             }
         }
 

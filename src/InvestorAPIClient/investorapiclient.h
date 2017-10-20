@@ -54,6 +54,10 @@ public:
     INetworkReply *removeSymbolFromWatchlist(const QString &watchlistId,
                                              const QString &symbol) override;
 
+    INetworkReply *getLeaderboard(const LeaderboardQuery &query) override;
+
+    INetworkReply *getLeaderboardMe(int neighborCount) override;
+
     // TODO(seamus): Extract a request factory
     QPair<QNetworkRequest, QJsonObject>
     createCreateNewUserRequest(const QHash<UserRecordField, QVariant> &params) const;
@@ -87,6 +91,10 @@ public:
 
     QPair<QNetworkRequest, QJsonObject> createSendOrderRequest(const QString &accountId,
                                                                const OrderParams &args);
+
+    QNetworkRequest createGetLeaderboardRequest(const LeaderboardQuery &query) const;
+
+    QNetworkRequest createGetLeaderboardMeRequest(int neighborCount) const;
 
     QNetworkRequest makeRequest(const QUrl &url) const;
     QNetworkRequest makeAuthenticatedRequest(const QUrl &url) const;

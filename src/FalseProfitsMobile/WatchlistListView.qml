@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 import com.example.fpx 1.0
+import "MaterialComponents"
 
 ListView {
     id: listView
@@ -75,8 +76,10 @@ ListView {
         ColumnLayout {
             id: delegateContent
             width: parent.width
+            height: 60
             x: swipeDelegate.swipe.rightItem ?
                    swipeDelegate.swipe.rightItem.width * swipeDelegate.swipe.position : 0
+            spacing: 0
 
             GridLayout {
                 id: mainGrid
@@ -131,6 +134,10 @@ ListView {
                     Layout.preferredWidth: 100
                     horizontalAlignment: Text.AlignRight
                 }
+            }
+
+            HorizontalDivider {
+                Layout.fillWidth: true
             }
         }
 

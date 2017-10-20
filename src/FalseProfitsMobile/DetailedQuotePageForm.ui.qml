@@ -221,7 +221,6 @@ Page {
 
                             Flickable {
                                 id: flickable2
-                                Layout.fillHeight: true
                                 Layout.fillWidth: true
                                 Layout.minimumHeight: rangeButtons.implicitHeight
                                 contentWidth: rangeButtons.implicitWidth
@@ -293,6 +292,9 @@ Page {
                                         ToolTip.text: qsTr("Fullscreen")
                                     }
                                 }
+
+                                ScrollIndicator.horizontal: ScrollIndicator {
+                                }
                             }
 
                             FpLineChartWidget {
@@ -300,7 +302,6 @@ Page {
                                 Layout.minimumHeight: 215
                                 Layout.maximumWidth: parent.width < 1260 ? -1 : 420
                                 Layout.fillWidth: true
-                                Layout.fillHeight: true
                                 backgroundRoundness: 0
                                 lineSeries.visible: maybeHasChartData
                             }
@@ -361,6 +362,8 @@ Page {
 
                 SymbolNewsFeedPage {
                     id: newsFeedPage
+                    enableReloadTimer: SwipeView.isCurrentItem
+                    enableRelativeTimeUpdates: SwipeView.isCurrentItem
                 }
             }
         }

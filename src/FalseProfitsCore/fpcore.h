@@ -95,6 +95,12 @@ public:
     RemoveSymbolFromWatchlistResponse *removeSymbolFromWatchlist(const QString &watchlistId,
                                                                  const QString &symbol);
 
+    Q_INVOKABLE
+    GetLeaderboardResponse *getLeaderboard(const LeaderboardQuery &query);
+
+    Q_INVOKABLE
+    GetLeaderboardMeResponse *getLeaderboardMe(int neighborCount);
+
     Fpx::AuthenticationState authState() const;
 
     void loadLaunchSettings();

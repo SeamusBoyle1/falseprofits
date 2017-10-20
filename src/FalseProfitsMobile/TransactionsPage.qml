@@ -60,6 +60,11 @@ TransactionsPageForm {
         transactionQueryPopup.open()
     }
 
+    refreshButton.onClicked: {
+        updateAccounts()
+        refreshTransactions()
+    }
+
     listView.onAtYEndChanged: {
         if (listView.atYEnd) {
             fetchMoreResults()

@@ -101,6 +101,16 @@ public:
     virtual INetworkReply *removeSymbolFromWatchlist(const QString &watchlistId,
                                                      const QString &symbol) = 0;
 
+    struct LeaderboardQuery
+    {
+        int pageNumber{ -1 };
+        int pageSize{ -1 };
+    };
+    virtual INetworkReply *getLeaderboard(const LeaderboardQuery &query) = 0;
+
+    // Use neighborCount = -1 for server default
+    virtual INetworkReply *getLeaderboardMe(int neighborCount) = 0;
+
 Q_SIGNALS:
     void authTokenChanged();
 };

@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
 
 import com.example.fpx 1.0
+import "MaterialComponents"
 
 ListView {
     id: listView
@@ -80,6 +81,10 @@ ListView {
                     horizontalAlignment: Text.AlignRight
                     font.pixelSize: 13
                 }
+            }
+
+            HorizontalDivider {
+                Layout.fillWidth: true
             }
         }
     }

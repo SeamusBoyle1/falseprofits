@@ -209,4 +209,10 @@ OrderTicketPageForm {
             totalText = costResult.estimatedTotal.toFixed(3)
         }
     }
+
+    function onRefreshTriggered() {
+        updateAccounts()
+        updateCommissionTables()
+        updateQuote()
+    }
 }

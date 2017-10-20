@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 import com.example.fpx 1.0
+import io.material.xtra 1.0
 
 Page {
     id: page
@@ -59,6 +60,8 @@ Page {
 
                 Label {
                     text: qsTr("Symbol")
+                    color: symbolField.acceptableInput ? ExtraMaterial.hintTextColor : ExtraMaterial.errorHintTextColor
+                    font.pixelSize: 12
                     Layout.fillWidth: true
                 }
 
@@ -75,6 +78,8 @@ Page {
 
                 Label {
                     text: qsTr("Quantity")
+                    color: quantityField.acceptableInput ? ExtraMaterial.hintTextColor : ExtraMaterial.errorHintTextColor
+                    font.pixelSize: 12
                     Layout.fillWidth: true
                 }
 
