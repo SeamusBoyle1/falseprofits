@@ -231,4 +231,10 @@ DetailedQuotePageForm {
             }
         })
     }
+
+    function onRefreshTriggered() {
+        updateQuote()
+        fillChart()
+        newsFeedPage.reloadNews()
+    }
 }

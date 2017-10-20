@@ -94,5 +94,9 @@ Page {
             onTriggered: repeater.currentDate = new Date
         }
     }
+
+    function reloadNews() {
+        newsFeedModel.reload()
+    }
 }
 

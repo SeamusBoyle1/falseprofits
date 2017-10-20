@@ -19,4 +19,8 @@ HomePageForm {
             watchlistPage.refreshWatchlist()
         }
     }
+
+    function onRefreshTriggered() {
+        refreshView()
+    }
 }
