@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.3
 
 Page {
     property string currentSymbol
+    property bool enableReloadTimer
     property bool enableRelativeTimeUpdates
 
     /* newsFeedModel
@@ -78,11 +79,19 @@ Page {
 
         Timer {
                 id: newsFeedTimer
-                interval: 4000 // Update every 4 seconds.
+                interval: 1000 * 60 // Update every 60 seconds.
                 repeat: true
-                running: enableRelativeTimeUpdates
+                running: enableReloadTimer
                 triggeredOnStart: true
-                onTriggered: repeater.currentDate = new Date
+                onTriggered: newsFeedModel.reload()
+        }
+
+        Timer {
+            interval: 4000 // Update every 4 seconds.
+            repeat: true
+            running: enableRelativeTimeUpdates
+            triggeredOnStart: true
+            onTriggered: repeater.currentDate = new Date
         }
     }
 }
