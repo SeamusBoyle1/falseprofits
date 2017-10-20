@@ -35,6 +35,11 @@ LeaderboardPageForm {
         appDrawer.open()
     }
 
+    refreshButton.onClicked: {
+        // updateCurrentUserRank() is called inside refreshLeaderboard()
+        refreshLeaderboard()
+    }
+
     listView.onAtYEndChanged: {
         if (listView.atYEnd) {
             fetchMoreResults()
@@ -56,6 +61,7 @@ LeaderboardPageForm {
     function updateCurrentUserRank() {
         var notifier = leaderboardWrapper.refreshLeaderboardMe()
         incrementBusyIndicatorVisibility()
+        gotCurrentUserRank = false
         notifier.onFinished.connect(function() {
             decrementBusyIndicatorVisibility()
             gotCurrentUserRank = leaderboardWrapper.gotCurrentUserRank()

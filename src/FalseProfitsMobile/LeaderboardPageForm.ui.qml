@@ -18,6 +18,7 @@ Page {
     property alias listView: listView
     property alias currentUserRank: currentUserRank
     property alias menuButton: menuButton
+    property alias refreshButton: refreshButton
 
     header: ToolBar {
         implicitHeight: FpStyle.appBarHeight
@@ -40,6 +41,16 @@ Page {
                 Layout.fillWidth: true
                 font.pixelSize: 16
                 font.bold: true
+            }
+            ToolButton {
+                id: refreshButton
+                contentItem: Image {
+                    fillMode: Image.Pad
+                    horizontalAlignment: Image.AlignHCenter
+                    verticalAlignment: Image.AlignVCenter
+                    source: "qrc:/images/" + FpStyle.iconAccent + "/refresh.png"
+                }
+                enabled: visible
             }
         }
     }
