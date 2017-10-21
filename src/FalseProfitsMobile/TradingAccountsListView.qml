@@ -47,7 +47,7 @@ ListView {
                     }
 
                     Label {
-                        text: model.balance.toFixed(2)
+                        text: fpLocale.toDecimalString(model.balance, 2)
                         horizontalAlignment: Text.AlignLeft
                         font.pixelSize: 13
                         Layout.fillWidth: true

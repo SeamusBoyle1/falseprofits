@@ -69,14 +69,14 @@ ListView {
                 }
 
                 Label {
-                    text: model.amount.toFixed(2)
+                    text: fpLocale.toDecimalString(model.amount, 2)
                     Layout.preferredWidth: 100
                     horizontalAlignment: Text.AlignRight
                     font.pixelSize: 13
                 }
 
                 Label {
-                    text: model.balance.toFixed(2)
+                    text: fpLocale.toDecimalString(model.balance, 2)
                     Layout.preferredWidth: 100
                     horizontalAlignment: Text.AlignRight
                     font.pixelSize: 13

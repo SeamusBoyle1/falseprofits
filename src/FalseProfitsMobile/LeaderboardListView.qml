@@ -32,7 +32,7 @@ ListView {
                 columns: 4
 
                 Label {
-                    text: model.rank
+                    text: fpLocale.toIntString(model.rank)
                     font.pixelSize: 18
                     font.weight: Font.Medium
                     horizontalAlignment: Text.AlignHCenter
@@ -50,14 +50,14 @@ ListView {
                 }
 
                 Label {
-                    text: model.profit.toFixed(2)
+                    text: fpLocale.toDecimalString(model.profit, 2)
                     font.pixelSize: 13
                     horizontalAlignment: Text.AlignRight
                     Layout.preferredWidth: 100
                 }
 
                 Label {
-                    text: qsTr("%1%").arg(model.profitPercent.toFixed(2))
+                    text: qsTr("%1%").arg(fpLocale.toDecimalString(model.profitPercent, 2))
                     font.pixelSize: 16
                     font.weight: Font.Medium
                     horizontalAlignment: Text.AlignRight

@@ -67,14 +67,15 @@ LeaderboardPageForm {
             gotCurrentUserRank = leaderboardWrapper.gotCurrentUserRank()
             if (leaderboardWrapper.gotCurrentUserRank()) {
                 currentUserDisplayNameValue = leaderboardWrapper.currentUserDisplayName()
-                currentUserRankNumber = leaderboardWrapper.currentUserRank()
+                currentUserRankNumber = fpLocale.toIntString(leaderboardWrapper.currentUserRank())
 
                 var profit = leaderboardWrapper.currentUserProfit()
-                currentUserProfitNumber = profit ? parseFloat(profit).toFixed(2) : ""
+                currentUserProfitNumber = profit ? fpLocale.toDecimalString(parseFloat(profit), 2)
+                                                 : ""
 
                 var profitPct = leaderboardWrapper.currentUserProfitPercent()
                 currentUserProfitPercentNumber = profitPct ?
-                            qsTr("%1%").arg(parseFloat(profitPct).toFixed(2)) : ""
+                            qsTr("%1%").arg(fpLocale.toDecimalString(parseFloat(profitPct), 2)) : ""
             }
         })
     }

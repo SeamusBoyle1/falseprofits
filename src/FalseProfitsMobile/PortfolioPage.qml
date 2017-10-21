@@ -42,10 +42,10 @@ PortfolioPageForm {
         }
 
         onMarketValueChanged: {
-            marketValueValue = portfolioWrapper.marketValue.toFixed(2)
+            marketValueValue = fpLocale.toDecimalString(portfolioWrapper.marketValue, 2)
         }
         onBalanceChanged: {
-            cashBalanceValue = portfolioWrapper.balance.toFixed(2)
+            cashBalanceValue = fpLocale.toDecimalString(portfolioWrapper.balance, 2)
         }
     }
 
@@ -56,8 +56,8 @@ PortfolioPageForm {
         accountsComboBox.model = myTradingAccounts.model
         listView.model = portfolioWrapper.model
 
-        marketValueValue = portfolioWrapper.marketValue.toFixed(2)
-        cashBalanceValue = portfolioWrapper.balance.toFixed(2)
+        marketValueValue = fpLocale.toDecimalString(portfolioWrapper.marketValue, 2)
+        cashBalanceValue = fpLocale.toDecimalString(portfolioWrapper.balance, 2)
 
         if (fpCore.authState === Fpx.AuthenticatedState) {
             updateAccounts()

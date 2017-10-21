@@ -93,20 +93,22 @@ ListView {
 
                 Label {
                     id: lastPriceLabel
-                    text: model.lastPrice ? qsTr("Last: %1").arg(model.lastPrice) : ""
+                    text: model.lastPrice ? qsTr("Last: %1").arg(
+                                                fpLocale.toShortDecimalString(model.lastPrice)) : ""
                     font.pixelSize: 13
                 }
 
                 Label {
-                    text: model.marketValue.toFixed(0)
+                    text: fpLocale.toDecimalString(model.marketValue, 0)
                     font.pixelSize: 20
                     Layout.preferredWidth: 100
                     horizontalAlignment: Text.AlignRight
                 }
 
                 Label {
-                    text: qsTr("%1 shares @ %2 = %3").arg(model.quantity).arg(
-                              model.averagePrice).arg(model.cost)
+                    text: qsTr("%1 shares @ %2 = %3").arg(fpLocale.toIntString(model.quantity)).arg(
+                              fpLocale.toShortDecimalString(model.averagePrice)).arg(
+                              fpLocale.toShortDecimalString(model.cost, 2))
                     font.pixelSize: 12
                     Layout.columnSpan: 2
                     elide: Text.ElideRight
@@ -119,8 +121,9 @@ ListView {
                 Label {
                     id: profitLossLabel
                     text: model.profitLossPercent !== undefined && model.profitLoss !== undefined ?
-                              qsTr("PnL: %1 (%2%)").arg(model.profitLoss.toFixed(0)).arg(
-                                  model.profitLossPercent.toFixed(1)) : ""
+                              qsTr("PnL: %1 (%2%)").arg(
+                                  fpLocale.toDecimalString(model.profitLoss, 0)).arg(
+                                  fpLocale.toDecimalString(model.profitLossPercent, 1)) : ""
                     // TODO(seamus): Use FpStyle for color
                     color: model.direction === 1 ? "#0b893e" : model.direction
                                                    === -1 ? "#bf1722" : "black"

@@ -107,20 +107,22 @@ DetailedQuotePageForm {
                 var quotes = fpType.makeJsonQuotes(quoteResp.payload())
                 var quote = quotes.find(currentSymbol)
                 if (quote.isValid) {
-                    lastPriceLabel.text = quote.last
-                    bidText = quote.bid
-                    askText = quote.ask
+                    lastPriceLabel.text = fpLocale.toShortDecimalString(quote.last)
+                    bidText = fpLocale.toShortDecimalString(quote.bid)
+                    askText = fpLocale.toShortDecimalString(quote.ask)
 
                     var change = quote.change
-                    changePriceText = change ? quote.change : "-"
+                    changePriceText = change ? fpLocale.toShortDecimalString(quote.change) : "-"
                     direction = change > 0 ? 1 : change < 0 ? -1 : 0
                     priceLineChart.lineSeries.color = direction > 0 ? "#00a95d" : "#f0162f"
 
                     var pctChange = quote.changePercent
-                    changePercentText = pctChange ? qsTr("%1%").arg(pctChange) : "-"
+                    changePercentText = pctChange ? qsTr("%1%").arg(
+                                                        fpLocale.toShortDecimalString(pctChange)) :
+                                                    "-"
 
-                    dayLowText = quote.dayLow
-                    dayHighText = quote.dayHigh
+                    dayLowText = fpLocale.toShortDecimalString(quote.dayLow)
+                    dayHighText = fpLocale.toShortDecimalString(quote.dayHigh)
                 }
             } else {
                 errorDialogText.text = quoteResp.errorMessage()

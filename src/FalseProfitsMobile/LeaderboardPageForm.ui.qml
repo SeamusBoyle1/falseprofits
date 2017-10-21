@@ -10,7 +10,7 @@ Page {
 //    height: 400
     property bool leaderboardEmpty: false
     property bool gotCurrentUserRank: false
-    property int currentUserRankNumber: 0
+    property string currentUserRankNumber: ""
     property string currentUserDisplayNameValue: ""
     property string currentUserProfitNumber: ""
     property string currentUserProfitPercentNumber: ""

@@ -9,6 +9,7 @@
 #include <FalseProfitsCore/fpcore.h>
 #include <FalseProfitsCore/fpleaderboardlistmodel.h>
 #include <FalseProfitsCore/fpleaderboardwrapper.h>
+#include <FalseProfitsCore/fplocale.h>
 #include <FalseProfitsCore/fpdeclarativetypes.h>
 #include <FalseProfitsCore/responsetypes.h>
 #include <FalseProfitsCore/fppositionslistmodel.h>
@@ -167,6 +168,7 @@ int main(int argc, char *argv[])
     FpSettings fpCoreSettings;
     FpCore fpCore(client, &fpCoreSettings);
     client->setParent(&fpCore);
+    FpLocale fpLocale;
     FalseProfitsDeclarativeTypes fpTypes;
 
     QQmlApplicationEngine engine;
@@ -175,6 +177,7 @@ int main(int argc, char *argv[])
     }
     engine.rootContext()->setContextProperty("utilityFunctions", &utilityFunctions);
     engine.rootContext()->setContextProperty("fpCore", &fpCore);
+    engine.rootContext()->setContextProperty("fpLocale", &fpLocale);
     engine.rootContext()->setContextProperty("fpType", &fpTypes);
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())

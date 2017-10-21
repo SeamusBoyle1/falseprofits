@@ -28,6 +28,7 @@ SOURCES += \
     fpcore.cpp \
     fpleaderboardlistmodel.cpp \
     fpleaderboardwrapper.cpp \
+    fplocale.cpp \
     fpaccountslistmodel.cpp \
     fpportfoliowrapper.cpp \
     fppositionslistmodel.cpp \
@@ -51,6 +52,7 @@ HEADERS += \
     fpcore.h \
     fpleaderboardlistmodel.h \
     fpleaderboardwrapper.h \
+    fplocale.h \
     fpdeclarativetypes.h \
     fpcore_interfaces.h \
     fpportfoliowrapper.h \
