@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import QtQuick.Window 2.2
 
 import com.example.fpx 1.0
 import "MaterialComponents"
@@ -29,7 +30,17 @@ ListView {
                 Layout.rightMargin: FpStyle.screenEdgeRightMargin
                 Layout.bottomMargin: 3
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                columns: 4
+                columns: 5
+
+                Image {
+                    source: model.gravatarUrl ? model.gravatarUrl + "&size=" +
+                                                (42 * Screen.devicePixelRatio) + "x" +
+                                                (42 * Screen.devicePixelRatio) : ""
+                    Layout.rowSpan: 2
+                    Layout.preferredWidth: 42
+                    Layout.preferredHeight: 42
+                    fillMode: Image.PreserveAspectCrop
+                }
 
                 Label {
                     text: fpLocale.toIntString(model.rank)

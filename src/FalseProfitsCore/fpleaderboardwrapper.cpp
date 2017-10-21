@@ -164,6 +164,10 @@ void FpLeaderboardWrapper::onLeaderboardReceived(GetLeaderboardResponse *reply, 
             if (displayName) {
                 r.displayName = *displayName;
             }
+            auto gravatarUrl = e.gravatarUrl();
+            if (gravatarUrl) {
+                r.gravatarUrl = *gravatarUrl;
+            }
             auto totalAccountValue = e.totalAccountValue();
             if (totalAccountValue) {
                 r.totalAccountValue = *totalAccountValue;
@@ -218,6 +222,10 @@ void FpLeaderboardWrapper::onLeaderboardMeReceived(GetLeaderboardMeResponse *rep
             auto displayName = e.displayName();
             if (displayName) {
                 r.displayName = *displayName;
+            }
+            auto gravatarUrl = e.gravatarUrl();
+            if (gravatarUrl) {
+                r.gravatarUrl = *gravatarUrl;
             }
             auto totalAccountValue = e.totalAccountValue();
             if (totalAccountValue) {

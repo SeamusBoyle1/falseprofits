@@ -436,6 +436,9 @@ void JsonResponseWrappersTest::leaderboardResponseTest()
                 QVERIFY(e.isCurrentUser());
                 QVERIFY(!*e.isCurrentUser());
                 QCOMPARE(*e.profit(), -100.7);
+                QCOMPARE(*e.gravatarUrl(),
+                         QLatin1String("http://www.gravatar.com/avatar/"
+                                       "52d3069c2761cc16c54f08bf73677980.jpg?d=identicon"));
                 QCOMPARE(*e.profitPercent(), -0.01007);
                 QCOMPARE(*e.rank(), 6);
                 QCOMPARE(*e.totalAccountValue(), 999899.3);

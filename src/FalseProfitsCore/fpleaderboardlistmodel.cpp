@@ -11,6 +11,7 @@ FpLeaderboardListModel::FpLeaderboardListModel(QObject *parent)
     m_roleNames.insert(ProfitRole, "profit");
     m_roleNames.insert(ProfitPercentRole, "profitPercent");
     m_roleNames.insert(IsCurrentUserRole, "isCurrentUser");
+    m_roleNames.insert(GravatarUrl, "gravatarUrl");
 }
 
 void FpLeaderboardListModel::resetWithData(QVector<LeaderBoardUser> data)
@@ -54,6 +55,8 @@ QVariant FpLeaderboardListModel::data(const QModelIndex &index, int role) const
             return m_rows.at(row).profitPercent;
         case IsCurrentUserRole:
             return m_rows.at(row).isCurrentUser;
+        case GravatarUrl:
+            return m_rows.at(row).gravatarUrl;
         default:
             break;
         }
