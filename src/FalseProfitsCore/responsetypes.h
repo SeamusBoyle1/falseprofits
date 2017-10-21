@@ -275,6 +275,21 @@ public:
     }
 };
 
+class GetFundamentalsResponse : public BaseResponse
+{
+    Q_OBJECT
+public:
+    GetFundamentalsResponse() {}
+    virtual ~GetFundamentalsResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        Q_UNUSED(httpStatusCode)
+        // no codes in swagger docs
+        return QString();
+    }
+};
+
 class GetCandlesResponse : public BaseResponse
 {
     Q_OBJECT

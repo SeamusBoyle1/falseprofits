@@ -338,6 +338,31 @@ GetQuotesResponse *FpCore::getQuotes(const QStringList &symbols)
     return resp;
 }
 
+GetFundamentalsResponse *FpCore::getFundamentals(const QString &symbol)
+{
+    QPointer<GetFundamentalsResponse> resp(new GetFundamentalsResponse);
+
+    auto rep = m_client->getFundamentals(symbol);
+    connect(rep, &bsmi::INetworkReply::finished, this, [resp, rep, this]() {
+        if (!resp) {
+            rep->deleteLater();
+            return;
+        }
+        auto httpStatusCode = readHttpStatusCode(rep);
+        resp->setHttpStatusCode(httpStatusCode);
+        if (rep->error() == QNetworkReply::NoError) {
+            resp->setPayload(rep->readAll());
+        } else {
+            resp->setErrorMessage(readErrorMessage(resp, rep, httpStatusCode));
+        }
+
+        rep->deleteLater();
+        resp->setFinished();
+    });
+
+    return resp;
+}
+
 GetCandlesResponse *FpCore::getCandles(const CandlesRequestArgs &args)
 {
     QPointer<GetCandlesResponse> resp(new GetCandlesResponse);

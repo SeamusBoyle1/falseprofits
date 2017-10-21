@@ -79,6 +79,9 @@ public:
     GetQuotesResponse *getQuotes(const QStringList &symbols);
 
     Q_INVOKABLE
+    GetFundamentalsResponse *getFundamentals(const QString &symbol);
+
+    Q_INVOKABLE
     GetCandlesResponse *getCandles(const CandlesRequestArgs &args);
 
     Q_INVOKABLE
