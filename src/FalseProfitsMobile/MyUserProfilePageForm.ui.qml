@@ -12,6 +12,7 @@ Page {
     property string originalEmail
     property alias cancelButton: cancelButton
     property alias saveButton: saveButton
+    property alias resetMyAccountButton: resetMyAccountButton
     property alias deleteMyAccountButton: deleteMyAccountButton
     property alias headlineGreeting: headlineGreeting
     property alias userDetails: userDetails
@@ -73,17 +74,32 @@ Page {
                     }
                 }
 
-                Item {
-                    Layout.preferredWidth: 20
-                    Layout.preferredHeight: 40
+                Label {
+                    text: qsTr("Danger Zone")
+                    horizontalAlignment: Text.AlignHCenter
+                    wrapMode: Text.WordWrap
+                    font.pixelSize: 24
+                    Layout.fillWidth: true
+                    Layout.topMargin: 32
+                    Layout.bottomMargin: 32
+                    Layout.leftMargin: FpStyle.screenEdgeLeftMargin
+                    Layout.rightMargin: FpStyle.screenEdgeRightMargin
                 }
 
                 ColumnLayout {
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    Layout.bottomMargin: 32
+
+                    DelayButton {
+                        id: resetMyAccountButton
+                        text: qsTr("Reset my account balance")
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    }
 
                     DelayButton {
                         id: deleteMyAccountButton
                         text: qsTr("Delete my account")
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     }
                 }
             }

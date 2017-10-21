@@ -7,15 +7,28 @@ import com.example.fpx 1.0
 MyUserProfilePageForm {
     property int busyIndicatorVisibility: 0
 
+    FpTradingAccounts {
+        id: myTradingAccounts
+        coreClient: fpCore
+    }
+
     Connections {
         target: fpCore
         onAuthStateChanged: {
             reloadUserProfile()
+
+            if (fpCore.authState === Fpx.AuthenticatedState) {
+                updateAccounts()
+            }
         }
     }
 
     Component.onCompleted: {
         reloadUserProfile()
+
+        if (fpCore.authState === Fpx.AuthenticatedState) {
+            updateAccounts()
+        }
     }
 
     cancelButton.onClicked: {
@@ -40,6 +53,28 @@ MyUserProfilePageForm {
             decrementBusyIndicatorVisibility()
             if (!resp.hasError()) {
                 reloadUserProfile()
+            } else {
+                errorDialogText.text = resp.errorMessage()
+                errorDialog.open()
+            }
+        })
+    }
+
+    resetMyAccountButton.onClicked: {
+        // Only handling resetting the first account
+        // since all users only have one account
+        var accountId = myTradingAccounts.model.getAccountId(0)
+        if (accountId === "")
+            return;
+
+        incrementBusyIndicatorVisibility()
+        var resp = fpCore.resetAccount(accountId)
+        resp.onFinished.connect(function() {
+            decrementBusyIndicatorVisibility()
+            if (!resp.hasError()) {
+                infoDialog.title = qsTr("Account Reset")
+                infoDialogText.text = qsTr("Your trading account has been reset, enjoy.")
+                infoDialog.open()
             } else {
                 errorDialogText.text = resp.errorMessage()
                 errorDialog.open()
@@ -160,5 +195,14 @@ MyUserProfilePageForm {
                 }
             })
         }
+    }
+
+    function updateAccounts() {
+        var notifier = myTradingAccounts.updateAccounts()
+        incrementBusyIndicatorVisibility()
+        notifier.onFinished.connect(function() {
+            decrementBusyIndicatorVisibility()
+            resetMyAccountButton.enabled = myTradingAccounts.model.rowCount() === 1
+        })
     }
 }
