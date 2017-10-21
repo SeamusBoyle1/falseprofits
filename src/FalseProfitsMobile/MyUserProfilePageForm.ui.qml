@@ -8,6 +8,10 @@ Page {
     id: page
     width: 400
     height: 400
+    property string originalDisplayName
+    property string originalEmail
+    property alias cancelButton: cancelButton
+    property alias saveButton: saveButton
     property alias deleteMyAccountButton: deleteMyAccountButton
     property alias headlineGreeting: headlineGreeting
     property alias userDetails: userDetails
@@ -47,6 +51,26 @@ Page {
                     Layout.fillWidth: true
                     Layout.leftMargin: FpStyle.screenEdgeLeftMargin
                     Layout.rightMargin: FpStyle.screenEdgeRightMargin
+                }
+
+                RowLayout {
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+                    Button {
+                        id: cancelButton
+                        text: qsTr("Cancel")
+                        enabled: userDetails.userDisplayNameText != originalDisplayName
+                                 || userDetails.userEmailText != originalEmail
+                    }
+
+                    Button {
+                        id: saveButton
+                        text: qsTr("Save changes")
+                        enabled: (userDetails.userDisplayNameText != originalDisplayName
+                                  && userDetails.displayNameAcceptableInput)
+                                 || (userDetails.userEmailText != originalEmail
+                                     && userDetails.emailAcceptableInput)
+                    }
                 }
 
                 Item {
