@@ -60,7 +60,7 @@ MyUserProfilePageForm {
         })
     }
 
-    resetMyAccountButton.onClicked: {
+    resetMyAccountButton.onActivated: {
         // Only handling resetting the first account
         // since all users only have one account
         var accountId = myTradingAccounts.model.getAccountId(0)
