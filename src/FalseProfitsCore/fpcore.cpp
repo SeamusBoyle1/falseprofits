@@ -256,6 +256,31 @@ GetPositionsResponse *FpCore::getPositions(const QString &accountId)
     return resp;
 }
 
+ResetAccountResponse *FpCore::resetAccount(const QString &accountId)
+{
+    QPointer<ResetAccountResponse> resp(new ResetAccountResponse);
+
+    auto rep = m_client->resetAccount(accountId);
+    connect(rep, &bsmi::INetworkReply::finished, this, [resp, rep, this]() {
+        if (!resp) {
+            rep->deleteLater();
+            return;
+        }
+        auto httpStatusCode = readHttpStatusCode(rep);
+        resp->setHttpStatusCode(httpStatusCode);
+        if (rep->error() == QNetworkReply::NoError) {
+            resp->setPayload(rep->readAll());
+        } else {
+            resp->setErrorMessage(readErrorMessage(resp, rep, httpStatusCode));
+        }
+
+        rep->deleteLater();
+        resp->setFinished();
+    });
+
+    return resp;
+}
+
 GetTransactionsResponse *FpCore::getTransactions(const TransactionsQuery &query)
 {
     QPointer<GetTransactionsResponse> resp(new GetTransactionsResponse);

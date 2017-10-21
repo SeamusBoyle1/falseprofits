@@ -306,6 +306,22 @@ public:
     }
 };
 
+class InvestorAPIClientResetAccountMock : public InvestorAPIClientMock
+{
+    Q_OBJECT
+public:
+    InvestorAPIClientResetAccountMock() {}
+
+    NetworkReply *m_nextResetReply{ nullptr };
+    QString m_accountId;
+
+    INetworkReply *resetAccount(const QString &accountId) override
+    {
+        m_accountId = accountId;
+        return m_nextResetReply;
+    }
+};
+
 class InvestorAPIClientGetTransactionsMock : public InvestorAPIClientMock
 {
     Q_OBJECT
@@ -495,6 +511,7 @@ private Q_SLOTS:
     void getUserProfileTest();
     void editUserProfileTest();
     void getPositionsTest();
+    void resetAccountTest();
     void getTransactionsTest();
     void getQuotesTest();
     void getCandlesTest();
@@ -805,6 +822,38 @@ void FpCoreTest::getPositionsTest()
         QVERIFY(!netAuthRep->m_payload.isEmpty());
         QCOMPARE(QJsonDocument::fromJson(resp->payload()),
                  QJsonDocument::fromJson(netAuthRep->m_payload));
+    }
+}
+
+void FpCoreTest::resetAccountTest()
+{
+    {
+        auto client = new InvestorAPIClientResetAccountMock;
+        auto fpCoreSettings = new MockFpSettings;
+        auto fpCore = new FpCore(client, fpCoreSettings);
+        client->setParent(fpCore);
+
+        QVERIFY(client->m_accountId.isEmpty());
+
+        QString accIda("valid-fake-id");
+
+        // mock success response
+        auto netAuthRep = new QNetworkReplyMock;
+        client->m_nextResetReply = new bsmi::INetworkReply(netAuthRep);
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::NotAuthenticatedState);
+        fpCore->setAccessToken("i_am_very_token", QDateTime::currentDateTimeUtc().addDays(7));
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::AuthenticatedState);
+
+        auto resp = fpCore->resetAccount(accIda);
+        QVERIFY(resp);
+
+        // Test bsmi::IInvestorAPIClient::resetAccount was called
+        QVERIFY(!client->m_accountId.isEmpty());
+
+        netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 201);
+        client->m_nextResetReply->setFinished();
+
+        QVERIFY(resp->isFinished());
     }
 }
 

@@ -207,6 +207,30 @@ public:
     }
 };
 
+class ResetAccountResponse : public BaseResponse
+{
+    Q_OBJECT
+public:
+    ResetAccountResponse() {}
+    virtual ~ResetAccountResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 201:
+            return "Account successfully reset.";
+        case 401:
+            return "Authorization failed";
+        case 404:
+            return "Account not found";
+        default:
+            break;
+        }
+        return QString();
+    }
+};
+
 class GetTransactionsResponse : public BaseResponse
 {
     Q_OBJECT

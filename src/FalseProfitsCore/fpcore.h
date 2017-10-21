@@ -70,6 +70,9 @@ public:
     GetPositionsResponse *getPositions(const QString &accountId);
 
     Q_INVOKABLE
+    ResetAccountResponse *resetAccount(const QString &accountId);
+
+    Q_INVOKABLE
     GetTransactionsResponse *getTransactions(const TransactionsQuery &query);
 
     Q_INVOKABLE
