@@ -80,6 +80,11 @@ INetworkReply *InvestorAPIClient::getPositions(const QString &accountId)
     return m_requestQueue->get(createGetPositionsRequest(accountId));
 }
 
+INetworkReply *InvestorAPIClient::resetAccount(const QString &accountId)
+{
+    return m_requestQueue->put(createResetAccountRequest(accountId));
+}
+
 INetworkReply *
 InvestorAPIClient::getTransactions(const IInvestorAPIClient::GetTransactionsArgs &query)
 {
@@ -203,6 +208,12 @@ QNetworkRequest InvestorAPIClient::createGetCommissionsRequest(CommissionSide si
 }
 
 QNetworkRequest InvestorAPIClient::createGetPositionsRequest(const QString &accountId) const
+{
+    QUrl url(m_apiUrl + QStringLiteral("/api/1.0/accounts/") + accountId);
+    return makeAuthenticatedRequest(url);
+}
+
+QNetworkRequest InvestorAPIClient::createResetAccountRequest(const QString &accountId) const
 {
     QUrl url(m_apiUrl + QStringLiteral("/api/1.0/accounts/") + accountId);
     return makeAuthenticatedRequest(url);

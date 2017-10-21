@@ -61,6 +61,8 @@ public:
 
     virtual INetworkReply *getPositions(const QString &accountId) = 0;
 
+    virtual INetworkReply *resetAccount(const QString &accountId) = 0;
+
     struct GetTransactionsArgs
     {
         QString accountId;
@@ -198,6 +200,7 @@ public:
     virtual INetworkReply *get(const QNetworkRequest &request) = 0;
     virtual INetworkReply *post(const QNetworkRequest &request, const QJsonObject &jsonObject) = 0;
     virtual INetworkReply *put(const QNetworkRequest &request, const QJsonObject &jsonObject) = 0;
+    virtual INetworkReply *put(const QNetworkRequest &request) = 0;
     virtual INetworkReply *deleteResource(const QNetworkRequest &request) = 0;
 };
 

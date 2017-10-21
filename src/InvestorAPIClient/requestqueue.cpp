@@ -33,6 +33,12 @@ INetworkReply *RequestQueue::put(const QNetworkRequest &request, const QJsonObje
     return new NetworkReply(m_network->put(request, payload));
 }
 
+INetworkReply *RequestQueue::put(const QNetworkRequest &request)
+{
+    QByteArray ba;
+    return new NetworkReply(m_network->put(request, ba));
+}
+
 INetworkReply *RequestQueue::deleteResource(const QNetworkRequest &request)
 {
     return new NetworkReply(m_network->deleteResource(request));

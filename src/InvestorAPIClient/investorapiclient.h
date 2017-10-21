@@ -39,6 +39,8 @@ public:
 
     INetworkReply *getPositions(const QString &accountId) override;
 
+    INetworkReply *resetAccount(const QString &accountId) override;
+
     INetworkReply *getTransactions(const GetTransactionsArgs &query) override;
 
     INetworkReply *getQuotes(const QStringList &symbols) override;
@@ -77,6 +79,8 @@ public:
     QNetworkRequest createGetCommissionsRequest(CommissionSide side) const;
 
     QNetworkRequest createGetPositionsRequest(const QString &accountId) const;
+
+    QNetworkRequest createResetAccountRequest(const QString &accountId) const;
 
     QNetworkRequest createGetTransactionsRequest(const GetTransactionsArgs &query) const;
 

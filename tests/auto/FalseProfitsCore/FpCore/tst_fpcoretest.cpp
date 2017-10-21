@@ -105,6 +105,12 @@ public:
         return nullptr;
     }
 
+    INetworkReply *resetAccount(const QString &accountId) override
+    {
+        Q_UNUSED(accountId)
+        return nullptr;
+    }
+
     INetworkReply *getTransactions(const GetTransactionsArgs &query) override
     {
         Q_UNUSED(query)

@@ -22,6 +22,7 @@ private Q_SLOTS:
     void createEditUserProfileTest();
     void createGetCommissionsRequestTest();
     void createGetPositionsRequestTest();
+    void createResetAccountRequestTest();
     void createGetTransactionsRequestTest();
     void createGetQuotesRequestTest();
     void createSymbolSearchRequestTest();
@@ -203,6 +204,21 @@ void RequestFactoryTest::createGetPositionsRequestTest()
         c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 12), QTime(2, 48)));
 
         auto resp = c.createGetPositionsRequest("fakeAccId");
+        QCOMPARE(resp.url(), QUrl(QLatin1String("http://example.com/api/1.0/accounts/fakeAccId")));
+        QCOMPARE(resp.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+    }
+}
+
+void RequestFactoryTest::createResetAccountRequestTest()
+{
+    using namespace bsmi;
+
+    {
+        InvestorAPIClient c(nullptr, QStringLiteral("http://example.com"));
+
+        c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 12), QTime(2, 48)));
+
+        auto resp = c.createResetAccountRequest("fakeAccId");
         QCOMPARE(resp.url(), QUrl(QLatin1String("http://example.com/api/1.0/accounts/fakeAccId")));
         QCOMPARE(resp.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
     }
