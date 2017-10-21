@@ -73,6 +73,7 @@ Page {
 
     function refreshView() {
         userProfilePage.reloadUserProfile()
+        userProfilePage.updateAccounts()
         tradingAccountsPage.updateAccounts()
     }
 }
