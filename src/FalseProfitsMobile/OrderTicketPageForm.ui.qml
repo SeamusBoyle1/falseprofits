@@ -44,6 +44,7 @@ Page {
                     Layout.fillWidth: true
                     textRole: "name"
                     displayText: currentIndex == -1 ? qsTr("Select an account") : currentText
+                    visible: count > 1
                 }
 
                 RowLayout {
