@@ -33,6 +33,24 @@ private:
     QString m_password;
 };
 
+class EditUserArgs
+{
+private:
+    Q_GADGET
+    Q_PROPERTY(QString displayName READ displayName WRITE setDisplayName)
+    Q_PROPERTY(QString email READ email WRITE setEmail)
+public:
+    QString displayName() const { return m_displayName; }
+    void setDisplayName(QString displayName) { m_displayName = displayName; }
+
+    QString email() const { return m_email; }
+    void setEmail(QString email) { m_email = email; }
+
+private:
+    QString m_displayName;
+    QString m_email;
+};
+
 class CandlesRequestArgs
 {
 private:
@@ -442,6 +460,7 @@ private:
 };
 
 Q_DECLARE_METATYPE(NewUserDetails)
+Q_DECLARE_METATYPE(EditUserArgs)
 Q_DECLARE_METATYPE(CandlesRequestArgs)
 Q_DECLARE_METATYPE(TransactionsQuery)
 Q_DECLARE_METATYPE(SymbolSearchQuery)
@@ -465,6 +484,7 @@ public:
         : QObject(parent)
     {
         qRegisterMetaType<NewUserDetails>("NewUserDetails");
+        qRegisterMetaType<EditUserArgs>("EditUserArgs");
         qRegisterMetaType<CandlesRequestArgs>("CandlesRequestArgs");
         qRegisterMetaType<TransactionsQuery>("TransactionsQuery");
         qRegisterMetaType<SymbolSearchQuery>("SymbolSearchQuery");
@@ -485,6 +505,9 @@ public:
 
     Q_INVOKABLE
     NewUserDetails makeNewUserDetails() { return NewUserDetails{}; }
+
+    Q_INVOKABLE
+    EditUserArgs makeEditUserArgs() { return EditUserArgs{}; }
 
     Q_INVOKABLE
     CandlesRequestArgs makeCandlesRequestArgs() { return CandlesRequestArgs{}; }

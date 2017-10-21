@@ -61,6 +61,9 @@ public:
     GetUserProfileResponse *getUserProfile();
 
     Q_INVOKABLE
+    EditUserProfileResponse *editUserProfile(const EditUserArgs &args);
+
+    Q_INVOKABLE
     GetCommissionsResponse *getCommissions(Fpx::CommissionSide side);
 
     Q_INVOKABLE

@@ -144,6 +144,32 @@ public:
     }
 };
 
+class EditUserProfileResponse : public BaseResponse
+{
+    Q_OBJECT
+public:
+    EditUserProfileResponse() {}
+    virtual ~EditUserProfileResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 204:
+            return "User successfully updated";
+        case 400:
+            return "Invalid request";
+        case 401:
+            return "Authentication failed";
+        case 404:
+            return "User not found";
+        default:
+            break;
+        }
+        return QString();
+    }
+};
+
 class GetCommissionsResponse : public BaseResponse
 {
     Q_OBJECT

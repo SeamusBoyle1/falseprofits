@@ -267,6 +267,23 @@ public:
     }
 };
 
+class InvestorAPIClientEditUserProfileMock : public InvestorAPIClientMock
+{
+    Q_OBJECT
+public:
+    InvestorAPIClientEditUserProfileMock() {}
+
+    NetworkReply *m_nextEditProfileReply{ nullptr };
+    QString m_accountId;
+    EditUserArgs m_editProfileArgs;
+
+    INetworkReply *editUserProfile(const EditUserArgs &args) override
+    {
+        m_editProfileArgs = args;
+        return m_nextEditProfileReply;
+    }
+};
+
 class InvestorAPIClientGetPositionsMock : public InvestorAPIClientMock
 {
     Q_OBJECT
@@ -470,6 +487,7 @@ private Q_SLOTS:
     void authenticateTest();
     void deleteUserTest();
     void getUserProfileTest();
+    void editUserProfileTest();
     void getPositionsTest();
     void getTransactionsTest();
     void getQuotesTest();
@@ -696,6 +714,39 @@ void FpCoreTest::getUserProfileTest()
         QVERIFY(!netAuthRep->m_payload.isEmpty());
         QCOMPARE(QJsonDocument::fromJson(resp->payload()),
                  QJsonDocument::fromJson(netAuthRep->m_payload));
+    }
+}
+
+void FpCoreTest::editUserProfileTest()
+{
+    {
+        auto client = new InvestorAPIClientEditUserProfileMock;
+        auto fpCoreSettings = new MockFpSettings;
+        auto fpCore = new FpCore(client, fpCoreSettings);
+        client->setParent(fpCore);
+
+        EditUserArgs editArgsA;
+        editArgsA.setDisplayName("Seamus");
+        editArgsA.setEmail("seamus@example.com");
+
+        // mock success response
+        auto netAuthRep = new QNetworkReplyMock;
+        client->m_nextEditProfileReply = new bsmi::INetworkReply(netAuthRep);
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::NotAuthenticatedState);
+        fpCore->setAccessToken("i_am_very_token", QDateTime::currentDateTimeUtc().addDays(7));
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::AuthenticatedState);
+
+        auto resp = fpCore->editUserProfile(editArgsA);
+        QVERIFY(resp);
+
+        // Test bsmi::IInvestorAPIClient got args
+        QCOMPARE(client->m_editProfileArgs.displayName, editArgsA.displayName());
+        QCOMPARE(client->m_editProfileArgs.email, editArgsA.email());
+
+        netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 204);
+        client->m_nextEditProfileReply->setFinished();
+
+        QVERIFY(resp->isFinished());
     }
 }
 
