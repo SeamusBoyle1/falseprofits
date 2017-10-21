@@ -65,9 +65,8 @@ ApplicationWindow {
             model: ListModel {
                 ListElement{ title: qsTr("Quotes"); source: "qrc:/QuotesNavigation.qml" }
                 ListElement{ title: qsTr("Leaderboard"); source: "qrc:/LeaderboardPage.qml" }
-                ListElement{ title: qsTr("My Profile and Accounts");
-                    source: "qrc:/MyUserProfileNavigation.qml" }
                 ListElement{ title: qsTr("Transactions"); source: "qrc:/TransactionsPage.qml" }
+                ListElement{ title: qsTr("Profile"); source: "qrc:/MyUserProfileNavigation.qml" }
                 ListElement{ title: qsTr("Sign Out"); source: "qrc:/SignOutPage.qml" }
             }
 

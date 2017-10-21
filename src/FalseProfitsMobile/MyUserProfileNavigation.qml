@@ -5,68 +5,45 @@ import QtQuick.Layouts 1.3
 import com.example.fpx 1.0
 
 Page {
-    SwipeView {
-        id: swipeView
+    MyUserProfilePage {
         anchors.fill: parent
-        currentIndex: tabBar.currentIndex
-
-        MyUserProfilePage {
-            id: userProfilePage
-        }
-
-        TradingAccountsPage {
-            id: tradingAccountsPage
-        }
+        id: userProfilePage
     }
 
-    header: ColumnLayout {
-        ToolBar {
-            implicitHeight: FpStyle.appBarHeight
-            Layout.fillWidth: true
-            RowLayout {
-                anchors.fill: parent
-                ToolButton {
-                    contentItem: Image {
-                        fillMode: Image.Pad
-                        horizontalAlignment: Image.AlignHCenter
-                        verticalAlignment: Image.AlignVCenter
-                        source: "qrc:/images/" + FpStyle.iconAccent + "/menu.png"
-                    }
-                    onClicked: {
-                        appDrawer.open()
-                    }
+    header: ToolBar {
+        implicitHeight: FpStyle.appBarHeight
+        Layout.fillWidth: true
+        RowLayout {
+            anchors.fill: parent
+            ToolButton {
+                contentItem: Image {
+                    fillMode: Image.Pad
+                    horizontalAlignment: Image.AlignHCenter
+                    verticalAlignment: Image.AlignVCenter
+                    source: "qrc:/images/" + FpStyle.iconAccent + "/menu.png"
                 }
-                Label {
-                    text: qsTr("Profile and Accounts")
-                    elide: Label.ElideRight
-                    verticalAlignment: Qt.AlignVCenter
-                    Layout.fillWidth: true
-                    font.pixelSize: 16
-                    font.bold: true
-                }
-                ToolButton {
-                    id: refreshButton
-                    contentItem: Image {
-                        fillMode: Image.Pad
-                        horizontalAlignment: Image.AlignHCenter
-                        verticalAlignment: Image.AlignVCenter
-                        source: "qrc:/images/" + FpStyle.iconAccent + "/refresh.png"
-                    }
-                    enabled: visible
-                    onClicked: refreshView()
+                onClicked: {
+                    appDrawer.open()
                 }
             }
-        }
-        TabBar {
-            id: tabBar
-            currentIndex: swipeView.currentIndex
-            Layout.fillWidth: true
-            TabButton {
+            Label {
                 text: qsTr("Profile")
+                elide: Label.ElideRight
+                verticalAlignment: Qt.AlignVCenter
+                Layout.fillWidth: true
+                font.pixelSize: 16
+                font.bold: true
             }
-
-            TabButton {
-                text: qsTr("Accounts")
+            ToolButton {
+                id: refreshButton
+                contentItem: Image {
+                    fillMode: Image.Pad
+                    horizontalAlignment: Image.AlignHCenter
+                    verticalAlignment: Image.AlignVCenter
+                    source: "qrc:/images/" + FpStyle.iconAccent + "/refresh.png"
+                }
+                enabled: visible
+                onClicked: refreshView()
             }
         }
     }
@@ -74,6 +51,5 @@ Page {
     function refreshView() {
         userProfilePage.reloadUserProfile()
         userProfilePage.updateAccounts()
-        tradingAccountsPage.updateAccounts()
     }
 }
