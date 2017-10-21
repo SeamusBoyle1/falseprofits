@@ -16,7 +16,9 @@ Page {
     property string companyNameText
     property string industryText
     property string bidText
+    property string bidSizeText
     property string askText
+    property string askSizeText
     property int direction: 0
     property string changePriceText
     property string changePercentText
@@ -28,6 +30,26 @@ Page {
     property alias orderButton: orderButton
     property alias newsFeedPage: newsFeedPage
     property alias busyIndicator: busyIndicator
+
+    property string fundamental_marketCap
+    property string fundamental_volume
+    property string fundamental_averageDailyVolume
+    property string fundamental_previousClose
+    property string fundamental_low52Weeks
+    property string fundamental_high52Weeks
+    property string fundamental_dividendShare
+    property string fundamental_dividendYield
+    property string fundamental_exDividendDate
+    property string fundamental_dividendPayDate
+    property string fundamental_peRatio
+    property string fundamental_bookValue
+    property string fundamental_priceBook
+    property string fundamental_earningsShare
+    property string fundamental_movingAverage200Days
+    property string fundamental_movingAverage50Days
+    property string fundamental_symbol
+    property string fundamental_name
+    property string fundamental_industry
 
     ButtonGroup2 {
         id: rangeButtonGroup
@@ -321,40 +343,209 @@ Page {
                         anchors.top: parent.top
                         anchors.left: parent.left
                         anchors.right: parent.right
+                        anchors.topMargin: 4
 
                         GridLayout {
                             rowSpacing: 20
                             Layout.fillWidth: true
                             Layout.leftMargin: 16
                             Layout.rightMargin: 16
-                            columns: 2
+                            Layout.bottomMargin: 38
+                            columns: parent.width < 500 ? 1 : 2
+                            columnSpacing: 32
 
-                            Label {
-                                text: qsTr("Day High")
-                            }
-                            Label {
-                                text: dayHighText
+                            // Unused fundamental fields
+                            //Label { text: fundamental_bookValue }
+                            //Label { text: fundamental_symbol }
+                            //Label { text: fundamental_name }
+                            //Label { text: fundamental_industry }
+                            GridLayout {
+                                columns: 2
+
+                                Label {
+                                    text: qsTr("Trading")
+                                    font.pixelSize: 16
+                                    font.weight: Font.Medium
+                                    Layout.columnSpan: 2
+                                    Layout.bottomMargin: 8
+                                }
+
+                                Label {
+                                    text: qsTr("Previous Close")
+                                }
+                                Label {
+                                    text: fundamental_previousClose
+                                    Layout.fillWidth: true
+                                    horizontalAlignment: Text.AlignRight
+                                }
+                                Label {
+                                    text: qsTr("Day's Range")
+                                }
+                                Label {
+                                    text: dayLowText + " - " + dayHighText
+                                    Layout.fillWidth: true
+                                    horizontalAlignment: Text.AlignRight
+                                }
+                                Label {
+                                    text: qsTr("Volume")
+                                }
+                                Label {
+                                    text: fundamental_volume
+                                    Layout.fillWidth: true
+                                    horizontalAlignment: Text.AlignRight
+                                }
+                                Label {
+                                    text: qsTr("Bid")
+                                }
+                                Label {
+                                    text: bidText + " x " + bidSizeText
+                                    Layout.fillWidth: true
+                                    horizontalAlignment: Text.AlignRight
+                                }
+                                Label {
+                                    text: qsTr("Ask")
+                                }
+                                Label {
+                                    text: askText + " x " + askSizeText
+                                    Layout.fillWidth: true
+                                    horizontalAlignment: Text.AlignRight
+                                }
                             }
 
-                            Label {
-                                text: qsTr("Day Low")
-                            }
-                            Label {
-                                text: dayLowText
+                            GridLayout {
+                                columns: 2
+                                Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+
+                                Label {
+                                    text: qsTr("Valuation")
+                                    font.pixelSize: 16
+                                    font.weight: Font.Medium
+                                    Layout.columnSpan: 2
+                                    Layout.bottomMargin: 8
+                                }
+
+                                Label {
+                                    text: qsTr("Market Cap")
+                                }
+                                Label {
+                                    text: fundamental_marketCap
+                                    Layout.fillWidth: true
+                                    horizontalAlignment: Text.AlignRight
+                                }
+                                Label {
+                                    text: qsTr("P/E Ratio")
+                                }
+                                Label {
+                                    text: fundamental_peRatio
+                                    Layout.fillWidth: true
+                                    horizontalAlignment: Text.AlignRight
+                                }
+                                Label {
+                                    text: qsTr("Price/Book")
+                                }
+                                Label {
+                                    text: fundamental_priceBook
+                                    Layout.fillWidth: true
+                                    horizontalAlignment: Text.AlignRight
+                                }
+                                Label {
+                                    text: qsTr("Earnings/Share")
+                                }
+                                Label {
+                                    text: fundamental_earningsShare
+                                    Layout.fillWidth: true
+                                    horizontalAlignment: Text.AlignRight
+                                }
                             }
 
-                            Label {
-                                text: qsTr("Bid")
-                            }
-                            Label {
-                                text: bidText
+                            GridLayout {
+                                columns: 2
+
+                                Label {
+                                    text: qsTr("Stock Market History")
+                                    font.pixelSize: 16
+                                    font.weight: Font.Medium
+                                    Layout.columnSpan: 2
+                                    Layout.bottomMargin: 8
+                                }
+
+                                Label {
+                                    text: qsTr("52 Week Range")
+                                }
+                                Label {
+                                    text: fundamental_low52Weeks + " - " + fundamental_high52Weeks
+                                    Layout.fillWidth: true
+                                    horizontalAlignment: Text.AlignRight
+                                }
+                                Label {
+                                    text: qsTr("50-Day Moving Average")
+                                }
+                                Label {
+                                    text: fundamental_movingAverage50Days
+                                    Layout.fillWidth: true
+                                    horizontalAlignment: Text.AlignRight
+                                }
+                                Label {
+                                    text: qsTr("200-Day Moving Average")
+                                }
+                                Label {
+                                    text: fundamental_movingAverage200Days
+                                    Layout.fillWidth: true
+                                    horizontalAlignment: Text.AlignRight
+                                }
+                                Label {
+                                    text: qsTr("Average Daily Volume")
+                                }
+                                Label {
+                                    text: fundamental_averageDailyVolume
+                                    Layout.fillWidth: true
+                                    horizontalAlignment: Text.AlignRight
+                                }
                             }
 
-                            Label {
-                                text: qsTr("Ask")
-                            }
-                            Label {
-                                text: askText
+                            GridLayout {
+                                columns: 2
+
+                                Label {
+                                    text: qsTr("Dividends")
+                                    font.pixelSize: 16
+                                    font.weight: Font.Medium
+                                    Layout.columnSpan: 2
+                                    Layout.bottomMargin: 8
+                                }
+
+                                Label {
+                                    text: qsTr("Dividend Share")
+                                }
+                                Label {
+                                    text: fundamental_dividendShare
+                                    Layout.fillWidth: true
+                                    horizontalAlignment: Text.AlignRight
+                                }
+                                Label {
+                                    text: qsTr("Dividend Yield")
+                                }
+                                Label {
+                                    text: fundamental_dividendYield
+                                    Layout.fillWidth: true
+                                    horizontalAlignment: Text.AlignRight
+                                }
+                                Label {
+                                    text: qsTr("Ex-Dividend Date")
+                                }
+                                Label {
+                                    text: fundamental_exDividendDate
+                                    Layout.fillWidth: true
+                                    horizontalAlignment: Text.AlignRight
+                                }
+                                Label {
+                                    text: qsTr("Dividend Pay Date")
+                                }
+                                Label {
+                                    text: fundamental_dividendPayDate
+                                    Layout.fillWidth: true
+                                    horizontalAlignment: Text.AlignRight
+                                }
                             }
                         }
                     }

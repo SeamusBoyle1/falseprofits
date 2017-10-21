@@ -35,3 +35,9 @@ QString FpLocale::toShortDecimalString(double d) const
     QLocale locale_;
     return locale_.toString(d, 'g');
 }
+
+QString FpLocale::toLocaleDateStringShortFormat(const QDate &d) const
+{
+    QLocale locale_;
+    return locale_.toString(d, QLocale::ShortFormat);
+}

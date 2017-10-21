@@ -23,6 +23,9 @@ public:
     Q_INVOKABLE
     QString toShortDecimalString(double d) const;
 
+    Q_INVOKABLE
+    QString toLocaleDateStringShortFormat(const QDate &d) const;
+
 signals:
 
 public slots:

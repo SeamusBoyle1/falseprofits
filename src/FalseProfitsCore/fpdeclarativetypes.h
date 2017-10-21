@@ -403,6 +403,96 @@ public:
     }
 };
 
+class JsonShareFundamentals
+{
+    Q_GADGET
+    Q_PROPERTY(bool isValid READ isValid)
+    Q_PROPERTY(QVariant marketCap READ marketCap)
+    Q_PROPERTY(QVariant volume READ volume)
+    Q_PROPERTY(QVariant averageDailyVolume READ averageDailyVolume)
+    Q_PROPERTY(QVariant previousClose READ previousClose)
+    Q_PROPERTY(QVariant low52Weeks READ low52Weeks)
+    Q_PROPERTY(QVariant high52Weeks READ high52Weeks)
+    Q_PROPERTY(QVariant dividendShare READ dividendShare)
+    Q_PROPERTY(QVariant dividendYield READ dividendYield)
+    Q_PROPERTY(QVariant exDividendDate READ exDividendDate)
+    Q_PROPERTY(QVariant dividendPayDate READ dividendPayDate)
+    Q_PROPERTY(QVariant peRatio READ peRatio)
+    Q_PROPERTY(QVariant bookValue READ bookValue)
+    Q_PROPERTY(QVariant priceBook READ priceBook)
+    Q_PROPERTY(QVariant earningsShare READ earningsShare)
+    Q_PROPERTY(QVariant movingAverage200Days READ movingAverage200Days)
+    Q_PROPERTY(QVariant movingAverage50Days READ movingAverage50Days)
+    Q_PROPERTY(QVariant symbol READ symbol)
+    Q_PROPERTY(QVariant name READ name)
+    Q_PROPERTY(QVariant industry READ industry)
+public:
+    QJsonObject m_d;
+
+    bool isValid() const { return !m_d.isEmpty(); }
+
+    QVariant marketCap() const { return m_d.value(QLatin1String("marketCap")).toVariant(); }
+
+    QVariant volume() const { return m_d.value(QLatin1String("volume")).toVariant(); }
+
+    QVariant averageDailyVolume() const
+    {
+        return m_d.value(QLatin1String("averageDailyVolume")).toVariant();
+    }
+
+    QVariant previousClose() const { return m_d.value(QLatin1String("previousClose")).toVariant(); }
+
+    QVariant low52Weeks() const { return m_d.value(QLatin1String("low52Weeks")).toVariant(); }
+
+    QVariant high52Weeks() const { return m_d.value(QLatin1String("high52Weeks")).toVariant(); }
+
+    QVariant dividendShare() const { return m_d.value(QLatin1String("dividendShare")).toVariant(); }
+
+    QVariant dividendYield() const { return m_d.value(QLatin1String("dividendYield")).toVariant(); }
+
+    QDate exDividendDate() const
+    {
+        auto dv = m_d.value(QLatin1String("exDividendDate"));
+        if (dv.isString()) {
+            return QDate::fromString(dv.toString(), Qt::ISODate);
+        }
+        return QDate();
+    }
+
+    QVariant dividendPayDate() const
+    {
+        auto dv = m_d.value(QLatin1String("dividendPayDate"));
+        if (dv.isString()) {
+            return QDate::fromString(dv.toString(), Qt::ISODate);
+        }
+        return QDate();
+    }
+
+    QVariant peRatio() const { return m_d.value(QLatin1String("peRatio")).toVariant(); }
+
+    QVariant bookValue() const { return m_d.value(QLatin1String("bookValue")).toVariant(); }
+
+    QVariant priceBook() const { return m_d.value(QLatin1String("priceBook")).toVariant(); }
+
+    QVariant earningsShare() const { return m_d.value(QLatin1String("earningsShare")).toVariant(); }
+
+    QVariant movingAverage200Days() const
+    {
+        return m_d.value(QLatin1String("movingAverage200Days")).toVariant();
+    }
+
+    QVariant movingAverage50Days() const
+    {
+        return m_d.value(QLatin1String("movingAverage50Days")).toVariant();
+    }
+
+    QVariant symbol() const { return m_d.value(QLatin1String("symbol")).toVariant(); }
+
+    QVariant name() const { return m_d.value(QLatin1String("name")).toVariant(); }
+
+    QVariant industry() const { return m_d.value(QLatin1String("industry")).toVariant(); }
+};
+
 class JsonSymbolSearchResult
 {
     Q_GADGET
@@ -499,6 +589,7 @@ public:
         qRegisterMetaType<JsonUserDetails>("JsonUserDetails");
         qRegisterMetaType<JsonQuotesQuote>("JsonQuotesQuote");
         qRegisterMetaType<JsonQuotes>("JsonQuotes");
+        qRegisterMetaType<JsonShareFundamentals>("JsonShareFundamentals");
         qRegisterMetaType<JsonSymbolSearchResult>("JsonSymbolSearchResult");
         qRegisterMetaType<JsonSymbolSearchResults>("JsonSymbolSearchResults");
     }
@@ -537,6 +628,12 @@ public:
     JsonQuotes makeJsonQuotes(const QByteArray &json)
     {
         return { QJsonDocument::fromJson(json).array() };
+    }
+
+    Q_INVOKABLE
+    JsonShareFundamentals makeJsonShareFundamentals(const QByteArray &json)
+    {
+        return { QJsonDocument::fromJson(json).object() };
     }
 
     Q_INVOKABLE
