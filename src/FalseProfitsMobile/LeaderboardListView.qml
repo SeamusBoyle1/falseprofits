@@ -75,10 +75,6 @@ ListView {
                     Layout.preferredWidth: 100
                 }
             }
-
-            HorizontalDivider {
-                Layout.fillWidth: true
-            }
         }
     }
 
