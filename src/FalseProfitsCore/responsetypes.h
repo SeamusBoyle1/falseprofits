@@ -17,6 +17,8 @@ public:
     BaseResponse() {}
     virtual ~BaseResponse() {}
 
+    bool isFinished() const { return m_finished; }
+
     // TODO(seamus): Return enum of error type instead of bool
     Q_INVOKABLE
     bool hasError() const { return m_httpStatusCode < 200 || m_httpStatusCode > 299; }

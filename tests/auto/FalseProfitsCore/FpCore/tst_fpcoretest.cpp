@@ -561,6 +561,8 @@ void FpCoreTest::createNewUserTest()
 
         netCreateRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 201);
         client->m_nextCreateUserReply->setFinished();
+
+        QVERIFY(resp->isFinished());
     }
 }
 
@@ -592,6 +594,8 @@ void FpCoreTest::authenticateTest()
                                 "}";
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextAuthReply->setFinished();
+
+        QVERIFY(resp->isFinished());
 
         QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::AuthenticatedState);
         // TODO(seamus): Test expires is set
@@ -630,6 +634,8 @@ void FpCoreTest::deleteUserTest()
 
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 204);
         client->m_nextDeleteReply->setFinished();
+
+        QVERIFY(resp->isFinished());
 
         QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::NotAuthenticatedState);
         QVERIFY(fpCore->authToken().isEmpty());
@@ -678,6 +684,8 @@ void FpCoreTest::getUserProfileTest()
                                 "};";
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextUserProfileReply->setFinished();
+
+        QVERIFY(resp->isFinished());
 
         QVERIFY(!netAuthRep->m_payload.isEmpty());
         QCOMPARE(QJsonDocument::fromJson(resp->payload()),
@@ -728,6 +736,8 @@ void FpCoreTest::getPositionsTest()
                                 "}";
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextGetPositionsReply->setFinished();
+
+        QVERIFY(resp->isFinished());
 
         QVERIFY(!netAuthRep->m_payload.isEmpty());
         QCOMPARE(QJsonDocument::fromJson(resp->payload()),
@@ -785,6 +795,8 @@ void FpCoreTest::getTransactionsTest()
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextTransactionsReply->setFinished();
 
+        QVERIFY(resp->isFinished());
+
         QVERIFY(!netAuthRep->m_payload.isEmpty());
         QCOMPARE(QJsonDocument::fromJson(resp->payload()),
                  QJsonDocument::fromJson(netAuthRep->m_payload));
@@ -827,6 +839,8 @@ void FpCoreTest::getQuotesTest()
                                 "]";
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextQuotesReply->setFinished();
+
+        QVERIFY(resp->isFinished());
 
         QVERIFY(!netAuthRep->m_payload.isEmpty());
         QCOMPARE(QJsonDocument::fromJson(resp->payload()),
@@ -872,6 +886,8 @@ void FpCoreTest::getCandlesTest()
                                 "]";
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextCandlesReply->setFinished();
+
+        QVERIFY(resp->isFinished());
 
         QVERIFY(!netAuthRep->m_payload.isEmpty());
         QCOMPARE(QJsonDocument::fromJson(resp->payload()),
@@ -923,6 +939,8 @@ void FpCoreTest::symbolSearchTest()
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextSearchReply->setFinished();
 
+        QVERIFY(resp->isFinished());
+
         QVERIFY(!netAuthRep->m_payload.isEmpty());
         QCOMPARE(QJsonDocument::fromJson(resp->payload()),
                  QJsonDocument::fromJson(netAuthRep->m_payload));
@@ -966,6 +984,8 @@ void FpCoreTest::sendOrderTest()
 
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 201);
         client->m_nextSendOrderReply->setFinished();
+
+        QVERIFY(resp->isFinished());
     }
 }
 
@@ -1051,6 +1071,8 @@ void FpCoreTest::getWatchlistTest()
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextGetWatchlistReply->setFinished();
 
+        QVERIFY(resp->isFinished());
+
         QVERIFY(!netAuthRep->m_payload.isEmpty());
         QCOMPARE(QJsonDocument::fromJson(resp->payload()),
                  QJsonDocument::fromJson(netAuthRep->m_payload));
@@ -1084,6 +1106,8 @@ void FpCoreTest::addSymbolToWatchlistTest()
 
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextAddWatchlistSymbolReply->setFinished();
+
+        QVERIFY(resp->isFinished());
     }
 }
 
@@ -1114,6 +1138,8 @@ void FpCoreTest::removeSymbolFromWatchlistTest()
 
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextRemoveWatchlistSymbolReply->setFinished();
+
+        QVERIFY(resp->isFinished());
     }
 }
 
@@ -1162,6 +1188,8 @@ void FpCoreTest::getLeaderboardTest()
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextLeaderboardReply->setFinished();
 
+        QVERIFY(resp->isFinished());
+
         QVERIFY(!netAuthRep->m_payload.isEmpty());
         QCOMPARE(QJsonDocument::fromJson(resp->payload()),
                  QJsonDocument::fromJson(netAuthRep->m_payload));
@@ -1202,6 +1230,8 @@ void FpCoreTest::getLeaderboardMeTest()
                                 "}";
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextLeaderboardMeReply->setFinished();
+
+        QVERIFY(resp->isFinished());
 
         QVERIFY(!netAuthRep->m_payload.isEmpty());
         QCOMPARE(QJsonDocument::fromJson(resp->payload()),
