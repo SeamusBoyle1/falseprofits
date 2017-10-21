@@ -33,6 +33,8 @@ public:
 
     INetworkReply *getUserProfile() override;
 
+    INetworkReply *editUserProfile(const EditUserArgs &args) override;
+
     INetworkReply *getCommissions(CommissionSide side) override;
 
     INetworkReply *getPositions(const QString &accountId) override;
@@ -68,6 +70,9 @@ public:
     QNetworkRequest createDeleteUserRequest() const;
 
     QNetworkRequest createGetUserProfileRequest() const;
+
+    QPair<QNetworkRequest, QJsonObject>
+    createEditUserProfileRequest(const EditUserArgs &args) const;
 
     QNetworkRequest createGetCommissionsRequest(CommissionSide side) const;
 

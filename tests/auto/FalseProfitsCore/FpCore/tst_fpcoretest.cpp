@@ -87,6 +87,12 @@ public:
         return nullptr;
     }
 
+    INetworkReply *editUserProfile(const EditUserArgs &args) override
+    {
+        Q_UNUSED(args)
+        return nullptr;
+    }
+
     INetworkReply *getCommissions(CommissionSide side) override
     {
         Q_UNUSED(side)

@@ -23,6 +23,7 @@ public:
 
     INetworkReply *get(const QNetworkRequest &request) override;
     INetworkReply *post(const QNetworkRequest &request, const QJsonObject &jsonObject) override;
+    INetworkReply *put(const QNetworkRequest &request, const QJsonObject &jsonObject) override;
     INetworkReply *deleteResource(const QNetworkRequest &request) override;
 
 signals:

@@ -64,6 +64,12 @@ INetworkReply *InvestorAPIClient::getUserProfile()
     return m_requestQueue->get(createGetUserProfileRequest());
 }
 
+INetworkReply *InvestorAPIClient::editUserProfile(const IInvestorAPIClient::EditUserArgs &args)
+{
+    auto r = createEditUserProfileRequest(args);
+    return m_requestQueue->put(r.first, r.second);
+}
+
 INetworkReply *InvestorAPIClient::getCommissions(IInvestorAPIClient::CommissionSide side)
 {
     return m_requestQueue->get(createGetCommissionsRequest(side));
@@ -169,6 +175,24 @@ QNetworkRequest InvestorAPIClient::createGetUserProfileRequest() const
 {
     QUrl url(m_apiUrl + QStringLiteral("/api/1.0/users"));
     return makeAuthenticatedRequest(url);
+}
+
+QPair<QNetworkRequest, QJsonObject>
+InvestorAPIClient::createEditUserProfileRequest(const IInvestorAPIClient::EditUserArgs &args) const
+{
+    QUrl url(m_apiUrl + QStringLiteral("/api/1.0/users"));
+    auto req = makeAuthenticatedRequest(url);
+
+    QJsonObject obj;
+    if (!args.displayName.isEmpty()) {
+        obj.insert(QStringLiteral("displayName"), args.displayName);
+    }
+
+    if (!args.email.isEmpty()) {
+        obj.insert(QStringLiteral("email"), args.email);
+    }
+
+    return qMakePair(req, obj);
 }
 
 QNetworkRequest InvestorAPIClient::createGetCommissionsRequest(CommissionSide side) const

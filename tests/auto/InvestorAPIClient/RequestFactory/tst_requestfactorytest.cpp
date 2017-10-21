@@ -19,6 +19,7 @@ private Q_SLOTS:
     void createAuthenticateRequestTest();
     void createDeleteUserRequestTest();
     void createGetUserProfileRequestTest();
+    void createEditUserProfileTest();
     void createGetCommissionsRequestTest();
     void createGetPositionsRequestTest();
     void createGetTransactionsRequestTest();
@@ -105,6 +106,63 @@ void RequestFactoryTest::createGetUserProfileRequestTest()
         auto resp = c.createGetUserProfileRequest();
         QCOMPARE(resp.url(), QUrl(QLatin1String("http://example.com/api/1.0/users")));
         QCOMPARE(resp.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+    }
+}
+
+void RequestFactoryTest::createEditUserProfileTest()
+{
+    using namespace bsmi;
+
+    // edit both email and display name
+    {
+        InvestorAPIClient c(nullptr, QStringLiteral("http://example.com"));
+
+        c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 20), QTime(1, 37)));
+
+        IInvestorAPIClient::EditUserArgs args;
+        args.displayName = "Seamus";
+        args.email = "seamus@example.com";
+
+        auto resp = c.createEditUserProfileRequest(args);
+        QCOMPARE(resp.first.url(), QUrl(QLatin1String("http://example.com/api/1.0/users")));
+        QCOMPARE(resp.first.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+        QCOMPARE(resp.first.rawHeader("Content-Type"), QByteArray("application/json"));
+        QCOMPARE(resp.second.value("displayName").toString(), QString("Seamus"));
+        QCOMPARE(resp.second.value("email").toString(), QString("seamus@example.com"));
+    }
+
+    // edit email only
+    {
+        InvestorAPIClient c(nullptr, QStringLiteral("http://example.com"));
+
+        c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 20), QTime(1, 37)));
+
+        IInvestorAPIClient::EditUserArgs args;
+        args.email = "seamus@example.com";
+
+        auto resp = c.createEditUserProfileRequest(args);
+        QCOMPARE(resp.first.url(), QUrl(QLatin1String("http://example.com/api/1.0/users")));
+        QCOMPARE(resp.first.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+        QCOMPARE(resp.first.rawHeader("Content-Type"), QByteArray("application/json"));
+        QVERIFY(!resp.second.contains("displayName"));
+        QCOMPARE(resp.second.value("email").toString(), QString("seamus@example.com"));
+    }
+
+    // edit display name only
+    {
+        InvestorAPIClient c(nullptr, QStringLiteral("http://example.com"));
+
+        c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 20), QTime(1, 37)));
+
+        IInvestorAPIClient::EditUserArgs args;
+        args.displayName = "Seamus";
+
+        auto resp = c.createEditUserProfileRequest(args);
+        QCOMPARE(resp.first.url(), QUrl(QLatin1String("http://example.com/api/1.0/users")));
+        QCOMPARE(resp.first.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+        QCOMPARE(resp.first.rawHeader("Content-Type"), QByteArray("application/json"));
+        QCOMPARE(resp.second.value("displayName").toString(), QString("Seamus"));
+        QVERIFY(!resp.second.contains("email"));
     }
 }
 

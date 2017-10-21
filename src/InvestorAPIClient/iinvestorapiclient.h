@@ -46,6 +46,13 @@ public:
 
     virtual INetworkReply *getUserProfile() = 0;
 
+    struct EditUserArgs
+    {
+        QString displayName;
+        QString email;
+    };
+    virtual INetworkReply *editUserProfile(const EditUserArgs &args) = 0;
+
     enum class CommissionSide {
         Buy,
         Sell,
@@ -190,6 +197,7 @@ public:
 
     virtual INetworkReply *get(const QNetworkRequest &request) = 0;
     virtual INetworkReply *post(const QNetworkRequest &request, const QJsonObject &jsonObject) = 0;
+    virtual INetworkReply *put(const QNetworkRequest &request, const QJsonObject &jsonObject) = 0;
     virtual INetworkReply *deleteResource(const QNetworkRequest &request) = 0;
 };
 
