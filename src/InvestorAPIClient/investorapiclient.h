@@ -45,6 +45,8 @@ public:
 
     INetworkReply *getQuotes(const QStringList &symbols) override;
 
+    INetworkReply *getFundamentals(const QString &symbol) override;
+
     INetworkReply *getCandles(const CandlesRequestArgs &args) override;
 
     INetworkReply *symbolSearch(const SymbolSearchQuery &query) override;
@@ -95,6 +97,8 @@ public:
     QNetworkRequest createGetCandlesRequest(const CandlesRequestArgs &args) const;
 
     QNetworkRequest createGetQuotesRequest(const QStringList &symbols) const;
+
+    QNetworkRequest createGetFundamentalsRequest(const QString &symbol) const;
 
     QNetworkRequest createSymbolSearchRequest(const SymbolSearchQuery &query) const;
 

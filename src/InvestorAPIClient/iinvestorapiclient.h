@@ -75,6 +75,8 @@ public:
 
     virtual INetworkReply *getQuotes(const QStringList &symbols) = 0;
 
+    virtual INetworkReply *getFundamentals(const QString &symbol) = 0;
+
     struct CandlesRequestArgs
     {
         QString symbol;

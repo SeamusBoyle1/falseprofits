@@ -25,6 +25,7 @@ private Q_SLOTS:
     void createResetAccountRequestTest();
     void createGetTransactionsRequestTest();
     void createGetQuotesRequestTest();
+    void createGetFundamentalsTest();
     void createSymbolSearchRequestTest();
     void createSendOrderRequestTest();
     void createGetWatchlistTest();
@@ -326,6 +327,27 @@ void RequestFactoryTest::createGetQuotesRequestTest()
         QVERIFY(respUrlQuery.hasQueryItem("symbols"));
         auto respSymbols = respUrlQuery.queryItemValue("symbols").split(QLatin1Char(','));
         QCOMPARE(respSymbols.size(), 3 /* the size if the input symbols, less empty parts */);
+    }
+}
+
+void RequestFactoryTest::createGetFundamentalsTest()
+{
+    using namespace bsmi;
+
+    {
+        InvestorAPIClient c(nullptr, QStringLiteral("http://example.com"));
+
+        c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 20), QTime(6, 48)));
+
+        QString symbol("ASYMBOL1");
+
+        auto resp = c.createGetFundamentalsRequest(symbol);
+        auto const respUrl = resp.url();
+        const QUrlQuery respUrlQuery(respUrl.query());
+        QCOMPARE(QUrl(respUrl.toString(QUrl::RemoveQuery)),
+                 QUrl(QLatin1String("http://example.com/api/1.0/shares/ASYMBOL1/fundamentals")));
+        QCOMPARE(resp.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+        QCOMPARE(resp.rawHeader("Content-Type"), QByteArray("application/json"));
     }
 }
 

@@ -96,6 +96,11 @@ INetworkReply *InvestorAPIClient::getQuotes(const QStringList &symbols)
     return m_requestQueue->get(createGetQuotesRequest(symbols));
 }
 
+INetworkReply *InvestorAPIClient::getFundamentals(const QString &symbol)
+{
+    return m_requestQueue->get(createGetFundamentalsRequest(symbol));
+}
+
 INetworkReply *InvestorAPIClient::getCandles(const CandlesRequestArgs &args)
 {
     return m_requestQueue->get(createGetCandlesRequest(args));
@@ -305,6 +310,13 @@ QNetworkRequest InvestorAPIClient::createGetQuotesRequest(const QStringList &sym
 
     url.setQuery(urlQuery);
 
+    return makeAuthenticatedRequest(url);
+}
+
+QNetworkRequest InvestorAPIClient::createGetFundamentalsRequest(const QString &symbol) const
+{
+    QUrl url(m_apiUrl + QStringLiteral("/api/1.0/shares/") + symbol
+             + QStringLiteral("/fundamentals"));
     return makeAuthenticatedRequest(url);
 }
 

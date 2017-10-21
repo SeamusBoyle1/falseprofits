@@ -123,6 +123,12 @@ public:
         return nullptr;
     }
 
+    INetworkReply *getFundamentals(const QString &symbol) override
+    {
+        Q_UNUSED(symbol)
+        return nullptr;
+    }
+
     INetworkReply *getCandles(const CandlesRequestArgs &args) override
     {
         Q_UNUSED(args)
