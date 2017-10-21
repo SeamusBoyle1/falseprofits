@@ -11,10 +11,11 @@ Page {
         currentIndex: tabBar.currentIndex
 
         MyUserProfilePage {
+            id: userProfilePage
         }
 
         TradingAccountsPage {
-
+            id: tradingAccountsPage
         }
     }
 
@@ -43,6 +44,17 @@ Page {
                     font.pixelSize: 16
                     font.bold: true
                 }
+                ToolButton {
+                    id: refreshButton
+                    contentItem: Image {
+                        fillMode: Image.Pad
+                        horizontalAlignment: Image.AlignHCenter
+                        verticalAlignment: Image.AlignVCenter
+                        source: "qrc:/images/" + FpStyle.iconAccent + "/refresh.png"
+                    }
+                    enabled: visible
+                    onClicked: refreshView()
+                }
             }
         }
         TabBar {
@@ -57,5 +69,10 @@ Page {
                 text: qsTr("Accounts")
             }
         }
+    }
+
+    function refreshView() {
+        userProfilePage.reloadUserProfile()
+        tradingAccountsPage.updateAccounts()
     }
 }
