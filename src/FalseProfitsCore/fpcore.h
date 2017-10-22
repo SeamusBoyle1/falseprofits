@@ -120,6 +120,7 @@ public:
 Q_SIGNALS:
     void launchSettingsLoaded();
     void authStateChanged(Fpx::AuthenticationState);
+    void userProfileChanged();
     void positionsChanged();
     void watchlistChanged(const QString watchlistId, const QString &symbol, bool added);
 

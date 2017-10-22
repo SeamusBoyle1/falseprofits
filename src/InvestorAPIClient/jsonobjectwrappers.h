@@ -160,6 +160,11 @@ public:
         return util::getOptionalString(d, QLatin1String("displayName"));
     }
 
+    boost::optional<QString> gravatarUrl() const
+    {
+        return util::getOptionalString(d, QLatin1String("gravatarUrl"));
+    }
+
     boost::optional<QString> level() const
     {
         return util::getOptionalString(d, QLatin1String("level"));

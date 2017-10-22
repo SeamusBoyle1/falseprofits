@@ -310,6 +310,7 @@ class JsonUserDetails
     Q_PROPERTY(QVariant id READ id)
     Q_PROPERTY(QVariant email READ email)
     Q_PROPERTY(QVariant displayName READ displayName)
+    Q_PROPERTY(QVariant gravatarUrl READ gravatarUrl)
     Q_PROPERTY(QVariant level READ level)
     Q_PROPERTY(JsonUserTradingAccounts accounts READ accounts)
 public:
@@ -320,6 +321,8 @@ public:
     QVariant email() const { return m_d.value(QLatin1String("email")).toVariant(); }
 
     QVariant displayName() const { return m_d.value(QLatin1String("displayName")).toVariant(); }
+
+    QVariant gravatarUrl() const { return m_d.value(QLatin1String("gravatarUrl")).toVariant(); }
 
     QVariant level() const { return m_d.value(QLatin1String("level")).toVariant(); }
 

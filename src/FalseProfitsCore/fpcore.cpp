@@ -193,6 +193,8 @@ EditUserProfileResponse *FpCore::editUserProfile(const EditUserArgs &args)
         resp->setHttpStatusCode(httpStatusCode);
         if (rep->error() == QNetworkReply::NoError) {
             resp->setPayload(rep->readAll());
+
+            QMetaObject::invokeMethod(this, "userProfileChanged", Qt::QueuedConnection);
         } else {
             resp->setErrorMessage(readErrorMessage(resp, rep, httpStatusCode));
         }
