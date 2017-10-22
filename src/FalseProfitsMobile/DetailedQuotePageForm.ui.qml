@@ -177,8 +177,14 @@ Page {
 
                             Label {
                                 id: lastPriceLabel
-                                font.pixelSize: 45
-                                font.weight: Font.Light
+                                // Workaround for Light weighted font not displaying
+                                // correct values on iOS. The UI design had this label at
+                                // size 45sp with Light weight, this workaround reduces the
+                                // font size and uses default (probably Normal) weight.
+                                // TODO(seams): Change pixelSize back to 45 and font.weight
+                                // back to Light when Roboto font is used on iOS.
+                                font.pixelSize: 34
+                                //font.weight: Font.Light
                                 Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
                             }
 
