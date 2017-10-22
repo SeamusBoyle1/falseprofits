@@ -117,14 +117,17 @@ DetailedQuotePageForm {
                     askSizeText = fpLocale.toIntString(quote.askSize)
 
                     var change = quote.change
-                    changePriceText = change ? fpLocale.toShortDecimalString(quote.change) : "-"
                     direction = change > 0 ? 1 : change < 0 ? -1 : 0
+                    var changeSign = direction === 1 ? "+" : ""
+                    changePriceText = change ? (changeSign +
+                                                fpLocale.toShortDecimalString(quote.change)) : "-"
                     priceLineChart.lineSeries.color = direction > 0 ? "#00a95d" : "#f0162f"
 
                     var pctChange = quote.changePercent
-                    changePercentText = pctChange ? qsTr("%1%").arg(
-                                                        fpLocale.toShortDecimalString(pctChange)) :
-                                                    "-"
+                    changePercentText = pctChange ?
+                                (changeSign +
+                                 qsTr("%1%").arg(fpLocale.toShortDecimalString(pctChange))) :
+                                "-"
 
                     dayLowText = fpLocale.toShortDecimalString(quote.dayLow)
                     dayHighText = fpLocale.toShortDecimalString(quote.dayHigh)
