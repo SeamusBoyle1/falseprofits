@@ -8,6 +8,10 @@
 /coverage-gcov-unknown-coverage.txt
 /doc/coverage/*
 
+# android qt
+/src/FalseProfitsMobile/android/gradle.properties
+/src/FalseProfitsMobile/android/local.properties
+
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------
 
