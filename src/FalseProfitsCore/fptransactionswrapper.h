@@ -43,6 +43,9 @@ public:
     Q_INVOKABLE
     void setDateRangeLocal(QDate start, QDate end);
 
+    Q_INVOKABLE
+    void setShowTradesOnly(bool b);
+
 signals:
 
 public slots:
@@ -59,6 +62,7 @@ private:
     qint64 m_requestId{ 0 };
     int m_pageNumber{ 0 };
     int m_totalPageCount{ 0 };
+    bool m_showTradesOnly{ false };
 };
 
 #endif // FPTRANSACTIONSWRAPPER_H
