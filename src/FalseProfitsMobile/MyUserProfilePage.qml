@@ -60,7 +60,7 @@ MyUserProfilePageForm {
         })
     }
 
-    resetMyAccountButton.onActivated: {
+    function resetMyAccount() {
         // Only handling resetting the first account
         // since all users only have one account
         var accountId = myTradingAccounts.model.getAccountId(0)
@@ -82,7 +82,7 @@ MyUserProfilePageForm {
         })
     }
 
-    deleteMyAccountButton.onActivated: {
+    function deleteMyAccount() {
         incrementBusyIndicatorVisibility()
         var resp = fpCore.deleteUser()
         resp.onFinished.connect(function() {
@@ -202,7 +202,6 @@ MyUserProfilePageForm {
         incrementBusyIndicatorVisibility()
         notifier.onFinished.connect(function() {
             decrementBusyIndicatorVisibility()
-            resetMyAccountButton.enabled = myTradingAccounts.model.rowCount() === 1
         })
     }
 }
