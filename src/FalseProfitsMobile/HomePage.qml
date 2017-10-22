@@ -7,8 +7,11 @@ import com.example.fpx 1.0
 HomePageForm {
     signal symbolClicked(string symbol)
 
+    property bool firstView: true
+
     Component.onCompleted: {
         portfolioPage.symbolClicked.connect(symbolClicked)
+        portfolioPage.portfolioLoaded.connect(onPortfolioLoaded)
         watchlistPage.symbolClicked.connect(symbolClicked)
     }
 
@@ -22,5 +25,12 @@ HomePageForm {
 
     function onRefreshTriggered() {
         refreshView()
+    }
+
+    function onPortfolioLoaded(positionCount) {
+        if (firstView && !(positionCount > 0)) {
+            firstView = false
+            swipeView.setCurrentIndex(watchlistPage.SwipeView.index)
+        }
     }
 }

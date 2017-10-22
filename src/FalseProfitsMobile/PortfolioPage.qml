@@ -7,6 +7,7 @@ import com.example.fpx 1.0
 PortfolioPageForm {
     signal symbolClicked(string symbol)
     signal marketOrderTriggered(string symbol, int quantity)
+    signal portfolioLoaded(int positionCount)
 
     property int busyIndicatorVisibility: 0
 
@@ -75,6 +76,7 @@ PortfolioPageForm {
             // TODO(seamus): Handle errors
             decrementBusyIndicatorVisibility()
             portfolioEmpty = listView.count == 0
+            portfolioLoaded(listView.count)
         })
     }
 
