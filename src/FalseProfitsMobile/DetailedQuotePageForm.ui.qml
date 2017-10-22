@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 import com.example.fpx 1.0
+import io.material.xtra 1.0
 
 Page {
     id: page
@@ -86,7 +87,7 @@ Page {
                     Label {
                         id: companyNameLabel
                         text: companyNameText
-                        font.pixelSize: 12
+                        font.pixelSize: 16
                         Layout.fillWidth: true
                         wrapMode: Text.WordWrap
                     }
@@ -94,7 +95,8 @@ Page {
                     Label {
                         id: industryLabel
                         text: industryText
-                        font.pixelSize: 11
+                        font.pixelSize: 14
+                        opacity: ExtraMaterial.secondaryTextOpacity
                         Layout.fillWidth: true
                         wrapMode: Text.WordWrap
                     }

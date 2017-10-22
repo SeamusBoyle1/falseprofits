@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Window 2.2
 
 import com.example.fpx 1.0
+import io.material.xtra 1.0
 
 ListView {
     id: listView
@@ -62,6 +63,7 @@ ListView {
                 Label {
                     text: fpLocale.toDecimalString(model.profit, 2)
                     font.pixelSize: 13
+                    opacity: ExtraMaterial.secondaryTextOpacity
                     horizontalAlignment: Text.AlignRight
                     Layout.preferredWidth: 100
                 }

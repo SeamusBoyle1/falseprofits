@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 import com.example.fpx 1.0
+import io.material.xtra 1.0
 import "MaterialComponents"
 
 ListView {
@@ -41,7 +42,7 @@ ListView {
                 Label {
                     Layout.fillWidth: true
                     text: model.companyName
-                    font.pixelSize: 13
+                    font.pixelSize: 14
                     elide: Text.ElideRight
                     Layout.maximumWidth: itemDelegate.width - FpStyle.screenEdgeLeftMargin -
                                          FpStyle.screenEdgeRightMargin
@@ -49,7 +50,8 @@ ListView {
                 Label {
                     Layout.fillWidth: true
                     text: model.industry
-                    font.pixelSize: 11
+                    font.pixelSize: 14
+                    opacity: ExtraMaterial.secondaryTextOpacity
                 }
             }
 

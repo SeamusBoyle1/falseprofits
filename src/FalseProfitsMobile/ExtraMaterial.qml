@@ -18,11 +18,15 @@ Item {
 
     // https://material.io/guidelines/style/color.html#color-usability
     // Dark text on light backgrounds
+    // - secondary text 54%
     // - text hints and disabled text 38%
     //
     // Light text on dark backgrounds
+    // - secondary text 70%
     // - text hints and disabled text 50%
     property color hintTextColor: Qt.rgba(0, 0, 0, .38)
+
+    property double secondaryTextOpacity: .54
 
     property color errorHintTextColor: Material.color(Material.Red, Material.Shade300)
 }
