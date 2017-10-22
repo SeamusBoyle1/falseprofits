@@ -173,70 +173,47 @@ Page {
                             Layout.fillWidth: true
                             Layout.leftMargin: 16
                             Layout.rightMargin: 16
-                            columns: 3
+                            columns: 4
 
-                            RowLayout {
+                            Label {
+                                id: lastPriceLabel
+                                font.pixelSize: 45
+                                font.weight: Font.Light
                                 Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
-                                Layout.rowSpan: 5
-
-                                Label {
-                                    id: changeArrow
-                                    text: direction == 1 ? '▲' : direction == -1 ? '▼' : '='
-                                    color: direction == 1 ? "#0b893e" : direction
-                                                            == -1 ? "#bf1722" : "black"
-                                    font.pixelSize: 32
-                                }
-
-                                Label {
-                                    id: lastPriceLabel
-                                    font.pixelSize: 32
-                                }
                             }
 
                             Label {
-                                text: qsTr("Daily Change")
-                                font.pixelSize: 12
-                                font.capitalization: Font.AllUppercase
-                                Layout.columnSpan: 2
-                            }
-
-                            RowLayout {
-                                Layout.columnSpan: 2
-                                spacing: 12
-
-                                Label {
-                                    text: changePriceText
-                                    Layout.fillWidth: true
-                                    font.pixelSize: 14
-                                    Layout.minimumWidth: implicitWidth
-                                }
-                                Label {
-                                    text: changePercentText
-                                    Layout.fillWidth: true
-                                    font.pixelSize: 14
-                                    horizontalAlignment: Text.AlignRight
-                                    Layout.minimumWidth: implicitWidth
-                                }
+                                id: changeArrow
+                                text: direction == 1 ? '▲' : direction == -1 ? '▼' : '='
+                                color: direction == 1 ? "#0b893e" : direction
+                                                        == -1 ? "#bf1722" :
+                                                                ExtraMaterial.primaryTextColor
+                                font.pixelSize: 32
+                                Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+                                Layout.bottomMargin: 7
                             }
 
                             Label {
-                                text: qsTr("Bid")
-                                font.pixelSize: 12
-                                font.capitalization: Font.AllUppercase
-                            }
-                            Label {
-                                text: qsTr("Ask")
-                                font.pixelSize: 12
-                                font.capitalization: Font.AllUppercase
+                                text: changePriceText
+                                font.pixelSize: 16
+                                font.weight: Font.Medium
+                                color: direction == 1 ? "#0b893e" : direction
+                                                        == -1 ? "#bf1722" :
+                                                                ExtraMaterial.primaryTextColor
+                                Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+                                Layout.bottomMargin: 7
                             }
 
                             Label {
-                                text: bidText
-                                font.pixelSize: 14
-                            }
-                            Label {
-                                text: askText
-                                font.pixelSize: 14
+                                text: changePercentText
+                                font.pixelSize: 16
+                                font.weight: Font.Medium
+                                color: direction == 1 ? "#0b893e" : direction
+                                                        == -1 ? "#bf1722" :
+                                                                ExtraMaterial.primaryTextColor
+                                horizontalAlignment: Text.AlignRight
+                                Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+                                Layout.bottomMargin: 7
                             }
                         }
 

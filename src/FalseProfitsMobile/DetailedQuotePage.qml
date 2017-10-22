@@ -120,14 +120,14 @@ DetailedQuotePageForm {
                     direction = change > 0 ? 1 : change < 0 ? -1 : 0
                     var changeSign = direction === 1 ? "+" : ""
                     changePriceText = change ? (changeSign +
-                                                fpLocale.toShortDecimalString(quote.change)) : "-"
+                                                fpLocale.toShortDecimalString(quote.change)) : "0"
                     priceLineChart.lineSeries.color = direction > 0 ? "#00a95d" : "#f0162f"
 
                     var pctChange = quote.changePercent
                     changePercentText = pctChange ?
                                 (changeSign +
                                  qsTr("%1%").arg(fpLocale.toShortDecimalString(pctChange))) :
-                                "-"
+                                qsTr("0%")
 
                     dayLowText = fpLocale.toShortDecimalString(quote.dayLow)
                     dayHighText = fpLocale.toShortDecimalString(quote.dayHigh)

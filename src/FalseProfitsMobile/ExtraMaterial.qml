@@ -18,12 +18,15 @@ Item {
 
     // https://material.io/guidelines/style/color.html#color-usability
     // Dark text on light backgrounds
+    // - most important text [primary] 87%
     // - secondary text 54%
     // - text hints and disabled text 38%
     //
     // Light text on dark backgrounds
+    // - most important text [primary] 100%
     // - secondary text 70%
     // - text hints and disabled text 50%
+    property color primaryTextColor: Qt.rgba(0, 0, 0, .87)
     property color hintTextColor: Qt.rgba(0, 0, 0, .38)
 
     property double secondaryTextOpacity: .54
