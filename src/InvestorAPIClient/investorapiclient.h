@@ -33,13 +33,19 @@ public:
 
     INetworkReply *getUserProfile() override;
 
+    INetworkReply *editUserProfile(const EditUserArgs &args) override;
+
     INetworkReply *getCommissions(CommissionSide side) override;
 
     INetworkReply *getPositions(const QString &accountId) override;
 
+    INetworkReply *resetAccount(const QString &accountId) override;
+
     INetworkReply *getTransactions(const GetTransactionsArgs &query) override;
 
     INetworkReply *getQuotes(const QStringList &symbols) override;
+
+    INetworkReply *getFundamentals(const QString &symbol) override;
 
     INetworkReply *getCandles(const CandlesRequestArgs &args) override;
 
@@ -69,9 +75,14 @@ public:
 
     QNetworkRequest createGetUserProfileRequest() const;
 
+    QPair<QNetworkRequest, QJsonObject>
+    createEditUserProfileRequest(const EditUserArgs &args) const;
+
     QNetworkRequest createGetCommissionsRequest(CommissionSide side) const;
 
     QNetworkRequest createGetPositionsRequest(const QString &accountId) const;
+
+    QNetworkRequest createResetAccountRequest(const QString &accountId) const;
 
     QNetworkRequest createGetTransactionsRequest(const GetTransactionsArgs &query) const;
 
@@ -86,6 +97,8 @@ public:
     QNetworkRequest createGetCandlesRequest(const CandlesRequestArgs &args) const;
 
     QNetworkRequest createGetQuotesRequest(const QStringList &symbols) const;
+
+    QNetworkRequest createGetFundamentalsRequest(const QString &symbol) const;
 
     QNetworkRequest createSymbolSearchRequest(const SymbolSearchQuery &query) const;
 

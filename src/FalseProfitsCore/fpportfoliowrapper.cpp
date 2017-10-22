@@ -176,6 +176,8 @@ void FpPortfolioWrapper::onPositionsReceived(GetPositionsResponse *reply)
             rows.append(r);
         }
 
+        util::sortBySymbol(rows.begin(), rows.end());
+
         m_model->resetWithData(rows);
 
         // update market value

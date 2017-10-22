@@ -124,6 +124,11 @@ void FpTransactionsWrapper::setDateRangeLocal(QDate start, QDate end)
     m_endDate = QDateTime(end, QTime(), Qt::LocalTime);
 }
 
+void FpTransactionsWrapper::setShowTradesOnly(bool b)
+{
+    m_showTradesOnly = b;
+}
+
 void FpTransactionsWrapper::unloadTransactions()
 {
     m_model->resetWithData(QVector<TransactionInfo>{});
@@ -144,12 +149,20 @@ void FpTransactionsWrapper::onTransactionsReceived(GetTransactionsResponse *repl
         for (auto i = 0, total = responseItems.size(); i < total; ++i) {
             auto const e = responseItems.at(i);
 
+            auto type = e.type();
+            // TODO(seamus): Use QSortFilterProxyModel instead of a network reload
+            // to filter trade records
+            if (m_showTradesOnly) {
+                if (!type || !(*type == "Buy" || *type == "Sell")) {
+                    continue;
+                }
+            }
+
             TransactionInfo r;
             auto dt = e.timestampUtc();
             if (dt) {
                 r.timestampUtc = *dt;
             }
-            auto type = e.type();
             if (type) {
                 r.type = *type;
             }

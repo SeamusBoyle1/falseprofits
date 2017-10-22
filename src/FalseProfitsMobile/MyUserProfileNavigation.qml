@@ -5,57 +5,112 @@ import QtQuick.Layouts 1.3
 import com.example.fpx 1.0
 
 Page {
-    SwipeView {
-        id: swipeView
+    MyUserProfilePage {
         anchors.fill: parent
-        currentIndex: tabBar.currentIndex
+        id: userProfilePage
+    }
 
-        MyUserProfilePage {
-        }
+    header: ToolBar {
+        implicitHeight: FpStyle.appBarHeight
+        Layout.fillWidth: true
+        RowLayout {
+            anchors.fill: parent
+            ToolButton {
+                contentItem: Image {
+                    fillMode: Image.Pad
+                    horizontalAlignment: Image.AlignHCenter
+                    verticalAlignment: Image.AlignVCenter
+                    source: "qrc:/images/" + FpStyle.iconAccent + "/menu.png"
+                }
+                onClicked: {
+                    appDrawer.open()
+                }
+            }
+            Label {
+                text: qsTr("Profile")
+                elide: Label.ElideRight
+                verticalAlignment: Qt.AlignVCenter
+                Layout.fillWidth: true
+                font.pixelSize: 16
+                font.bold: true
+            }
+            ToolButton {
+                id: refreshButton
+                contentItem: Image {
+                    fillMode: Image.Pad
+                    horizontalAlignment: Image.AlignHCenter
+                    verticalAlignment: Image.AlignVCenter
+                    source: "qrc:/images/" + FpStyle.iconAccent + "/refresh.png"
+                }
+                enabled: visible
+                onClicked: refreshView()
+            }
 
-        TradingAccountsPage {
-
+            ToolButton {
+                id: overflowMenuButton
+                contentItem: Image {
+                    fillMode: Image.Pad
+                    horizontalAlignment: Image.AlignHCenter
+                    verticalAlignment: Image.AlignVCenter
+                    source: "qrc:/images/" + FpStyle.iconAccent + "/more_vert.png"
+                }
+                enabled: visible
+                onClicked: menu.open()
+            }
         }
     }
 
-    header: ColumnLayout {
-        ToolBar {
-            implicitHeight: FpStyle.appBarHeight
-            Layout.fillWidth: true
-            RowLayout {
-                anchors.fill: parent
-                ToolButton {
-                    contentItem: Image {
-                        fillMode: Image.Pad
-                        horizontalAlignment: Image.AlignHCenter
-                        verticalAlignment: Image.AlignVCenter
-                        source: "qrc:/images/" + FpStyle.iconAccent + "/menu.png"
-                    }
-                    onClicked: {
-                        appDrawer.open()
-                    }
-                }
-                Label {
-                    text: qsTr("Profile and Accounts")
-                    elide: Label.ElideRight
-                    verticalAlignment: Qt.AlignVCenter
-                    Layout.fillWidth: true
-                    font.pixelSize: 16
-                    font.bold: true
-                }
-            }
-        }
-        TabBar {
-            id: tabBar
-            currentIndex: swipeView.currentIndex
-            Layout.fillWidth: true
-            TabButton {
-                text: qsTr("Profile")
-            }
+    Menu {
+        id: menu
+        x: parent.width - width
+        y: -FpStyle.appBarHeight + 8
 
-            TabButton {
-                text: qsTr("Accounts")
-            }
+        MenuItem {
+            text: "Reset Account..."
+            onTriggered: resetDialog.open()
         }
+        MenuItem {
+            text: "Delete User..."
+            onTriggered: deleteDialog.open()
+        }
+    }
+
+    function refreshView() {
+        userProfilePage.reloadUserProfile()
+        userProfilePage.updateAccounts()
+    }
+
+    Dialog {
+        id: resetDialog
+        title: qsTr("Danger")
+        modal: true
+        standardButtons: Dialog.Yes | Dialog.No
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+
+        Label {
+            text: qsTr("Really reset your trading account?")
+            anchors.fill: parent
+            wrapMode: Text.WordWrap
+        }
+
+        onAccepted: userProfilePage.resetMyAccount()
+    }
+
+    Dialog {
+        id: deleteDialog
+        title: qsTr("Danger")
+        modal: true
+        standardButtons: Dialog.Yes | Dialog.No
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+
+        Label {
+            text: qsTr("Really delete your user account?")
+            anchors.fill: parent
+            wrapMode: Text.WordWrap
+        }
+
+        onAccepted: userProfilePage.deleteMyAccount()
     }
 }

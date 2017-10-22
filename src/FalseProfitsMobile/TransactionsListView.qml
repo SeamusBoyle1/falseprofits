@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
 
 import com.example.fpx 1.0
+import io.material.xtra 1.0
 import "MaterialComponents"
 
 ListView {
@@ -65,21 +66,23 @@ ListView {
                 Label {
                     text: model.localTime
                     Layout.fillWidth: true
-                    font.pixelSize: 13
+                    font.pixelSize: 14
+                    opacity: ExtraMaterial.secondaryTextOpacity
                 }
 
                 Label {
-                    text: model.amount.toFixed(2)
+                    text: fpLocale.toDecimalString(model.amount, 2)
                     Layout.preferredWidth: 100
                     horizontalAlignment: Text.AlignRight
-                    font.pixelSize: 13
+                    font.pixelSize: 14
                 }
 
                 Label {
-                    text: model.balance.toFixed(2)
+                    text: fpLocale.toDecimalString(model.balance, 2)
                     Layout.preferredWidth: 100
                     horizontalAlignment: Text.AlignRight
-                    font.pixelSize: 13
+                    font.pixelSize: 14
+                    opacity: ExtraMaterial.secondaryTextOpacity
                 }
             }
 

@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import QtQml 2.2
 
 import com.example.fpx 1.0
 
@@ -45,7 +46,8 @@ Page {
                 }
             }
             Label {
-                text: qsTr("Quotes")
+                text: homePageLoader.item && navPan.currentItem === homePageLoader.item ?
+                          Qt.application.displayName : qsTr("Quotes")
                 elide: Label.ElideRight
                 verticalAlignment: Qt.AlignVCenter
                 Layout.fillWidth: true

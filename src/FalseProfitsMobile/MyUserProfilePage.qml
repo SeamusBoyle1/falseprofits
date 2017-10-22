@@ -5,22 +5,88 @@ import QtQuick.Layouts 1.3
 import com.example.fpx 1.0
 
 MyUserProfilePageForm {
+    property int busyIndicatorVisibility: 0
+
+    FpTradingAccounts {
+        id: myTradingAccounts
+        coreClient: fpCore
+    }
+
     Connections {
         target: fpCore
         onAuthStateChanged: {
             reloadUserProfile()
+
+            if (fpCore.authState === Fpx.AuthenticatedState) {
+                updateAccounts()
+            }
         }
     }
 
     Component.onCompleted: {
         reloadUserProfile()
+
+        if (fpCore.authState === Fpx.AuthenticatedState) {
+            updateAccounts()
+        }
     }
 
-    deleteMyAccountButton.onActivated: {
-        busyIndicator.visible = true
+    cancelButton.onClicked: {
+        userDetails.userDisplayNameText = originalDisplayName
+        userDetails.userEmailText = originalEmail
+    }
+
+    saveButton.onClicked: {
+        var newProfile = fpType.makeEditUserArgs()
+
+        if (originalDisplayName != userDetails.userDisplayNameText) {
+            newProfile.displayName = userDetails.userDisplayNameText
+        }
+
+        if (originalEmail != userDetails.userEmailText) {
+            newProfile.email = userDetails.userEmailText
+        }
+
+        incrementBusyIndicatorVisibility()
+        var resp = fpCore.editUserProfile(newProfile)
+        resp.onFinished.connect(function() {
+            decrementBusyIndicatorVisibility()
+            if (!resp.hasError()) {
+                reloadUserProfile()
+            } else {
+                errorDialogText.text = resp.errorMessage()
+                errorDialog.open()
+            }
+        })
+    }
+
+    function resetMyAccount() {
+        // Only handling resetting the first account
+        // since all users only have one account
+        var accountId = myTradingAccounts.model.getAccountId(0)
+        if (accountId === "")
+            return;
+
+        incrementBusyIndicatorVisibility()
+        var resp = fpCore.resetAccount(accountId)
+        resp.onFinished.connect(function() {
+            decrementBusyIndicatorVisibility()
+            if (!resp.hasError()) {
+                infoDialog.title = qsTr("Account Reset")
+                infoDialogText.text = qsTr("Your trading account has been reset, enjoy.")
+                infoDialog.open()
+            } else {
+                errorDialogText.text = resp.errorMessage()
+                errorDialog.open()
+            }
+        })
+    }
+
+    function deleteMyAccount() {
+        incrementBusyIndicatorVisibility()
         var resp = fpCore.deleteUser()
         resp.onFinished.connect(function() {
-            busyIndicator.visible = false
+            decrementBusyIndicatorVisibility()
             if (!resp.hasError()) {
                 infoDialog.title = qsTr("User Deleted")
                 infoDialogText.text = qsTr("Your user account has been annihilated.")
@@ -76,8 +142,24 @@ MyUserProfilePageForm {
         }
     }
 
+    function incrementBusyIndicatorVisibility() {
+        busyIndicator.visible = true
+        busyIndicatorVisibility = busyIndicatorVisibility + 1
+    }
+
+    function decrementBusyIndicatorVisibility() {
+        busyIndicatorVisibility = busyIndicatorVisibility - 1
+        if (busyIndicatorVisibility == 0) {
+            busyIndicator.visible = false
+        }
+    }
+
     function clearUserProfileDisplay()
     {
+        originalDisplayName = ""
+        originalEmail = ""
+
+        headlineGreeting.text = "Hello"
         userDetails.userEmailText = ""
         userDetails.userDisplayNameText = ""
         userDetails.userLevelText = ""
@@ -93,12 +175,16 @@ MyUserProfilePageForm {
     function reloadUserProfile()
     {
         if (fpCore.authState === Fpx.AuthenticatedState) {
-            busyIndicator.visible = true
+            incrementBusyIndicatorVisibility()
             var userProfileResp = fpCore.getUserProfile()
             userProfileResp.onFinished.connect(function() {
-                busyIndicator.visible = false
+                decrementBusyIndicatorVisibility()
                 if (!userProfileResp.hasError()) {
                     var userDetailsDat = fpType.makeJsonUserDetails(userProfileResp.payload())
+                    originalDisplayName = userDetailsDat.displayName
+                    originalEmail = userDetailsDat.email
+
+                    headlineGreeting.text = qsTr("Hi %1!").arg(userDetailsDat.displayName)
                     userDetails.userEmailText = userDetailsDat.email
                     userDetails.userDisplayNameText = userDetailsDat.displayName
                     userDetails.userLevelText = userDetailsDat.level
@@ -109,5 +195,13 @@ MyUserProfilePageForm {
                 }
             })
         }
+    }
+
+    function updateAccounts() {
+        var notifier = myTradingAccounts.updateAccounts()
+        incrementBusyIndicatorVisibility()
+        notifier.onFinished.connect(function() {
+            decrementBusyIndicatorVisibility()
+        })
     }
 }

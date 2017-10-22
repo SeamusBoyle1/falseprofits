@@ -61,16 +61,25 @@ public:
     GetUserProfileResponse *getUserProfile();
 
     Q_INVOKABLE
+    EditUserProfileResponse *editUserProfile(const EditUserArgs &args);
+
+    Q_INVOKABLE
     GetCommissionsResponse *getCommissions(Fpx::CommissionSide side);
 
     Q_INVOKABLE
     GetPositionsResponse *getPositions(const QString &accountId);
 
     Q_INVOKABLE
+    ResetAccountResponse *resetAccount(const QString &accountId);
+
+    Q_INVOKABLE
     GetTransactionsResponse *getTransactions(const TransactionsQuery &query);
 
     Q_INVOKABLE
     GetQuotesResponse *getQuotes(const QStringList &symbols);
+
+    Q_INVOKABLE
+    GetFundamentalsResponse *getFundamentals(const QString &symbol);
 
     Q_INVOKABLE
     GetCandlesResponse *getCandles(const CandlesRequestArgs &args);
@@ -111,6 +120,7 @@ public:
 Q_SIGNALS:
     void launchSettingsLoaded();
     void authStateChanged(Fpx::AuthenticationState);
+    void userProfileChanged();
     void positionsChanged();
     void watchlistChanged(const QString watchlistId, const QString &symbol, bool added);
 

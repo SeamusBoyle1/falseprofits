@@ -19,10 +19,13 @@ private Q_SLOTS:
     void createAuthenticateRequestTest();
     void createDeleteUserRequestTest();
     void createGetUserProfileRequestTest();
+    void createEditUserProfileTest();
     void createGetCommissionsRequestTest();
     void createGetPositionsRequestTest();
+    void createResetAccountRequestTest();
     void createGetTransactionsRequestTest();
     void createGetQuotesRequestTest();
+    void createGetFundamentalsTest();
     void createSymbolSearchRequestTest();
     void createSendOrderRequestTest();
     void createGetWatchlistTest();
@@ -108,6 +111,63 @@ void RequestFactoryTest::createGetUserProfileRequestTest()
     }
 }
 
+void RequestFactoryTest::createEditUserProfileTest()
+{
+    using namespace bsmi;
+
+    // edit both email and display name
+    {
+        InvestorAPIClient c(nullptr, QStringLiteral("http://example.com"));
+
+        c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 20), QTime(1, 37)));
+
+        IInvestorAPIClient::EditUserArgs args;
+        args.displayName = "Seamus";
+        args.email = "seamus@example.com";
+
+        auto resp = c.createEditUserProfileRequest(args);
+        QCOMPARE(resp.first.url(), QUrl(QLatin1String("http://example.com/api/1.0/users")));
+        QCOMPARE(resp.first.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+        QCOMPARE(resp.first.rawHeader("Content-Type"), QByteArray("application/json"));
+        QCOMPARE(resp.second.value("displayName").toString(), QString("Seamus"));
+        QCOMPARE(resp.second.value("email").toString(), QString("seamus@example.com"));
+    }
+
+    // edit email only
+    {
+        InvestorAPIClient c(nullptr, QStringLiteral("http://example.com"));
+
+        c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 20), QTime(1, 37)));
+
+        IInvestorAPIClient::EditUserArgs args;
+        args.email = "seamus@example.com";
+
+        auto resp = c.createEditUserProfileRequest(args);
+        QCOMPARE(resp.first.url(), QUrl(QLatin1String("http://example.com/api/1.0/users")));
+        QCOMPARE(resp.first.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+        QCOMPARE(resp.first.rawHeader("Content-Type"), QByteArray("application/json"));
+        QVERIFY(!resp.second.contains("displayName"));
+        QCOMPARE(resp.second.value("email").toString(), QString("seamus@example.com"));
+    }
+
+    // edit display name only
+    {
+        InvestorAPIClient c(nullptr, QStringLiteral("http://example.com"));
+
+        c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 20), QTime(1, 37)));
+
+        IInvestorAPIClient::EditUserArgs args;
+        args.displayName = "Seamus";
+
+        auto resp = c.createEditUserProfileRequest(args);
+        QCOMPARE(resp.first.url(), QUrl(QLatin1String("http://example.com/api/1.0/users")));
+        QCOMPARE(resp.first.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+        QCOMPARE(resp.first.rawHeader("Content-Type"), QByteArray("application/json"));
+        QCOMPARE(resp.second.value("displayName").toString(), QString("Seamus"));
+        QVERIFY(!resp.second.contains("email"));
+    }
+}
+
 void RequestFactoryTest::createGetCommissionsRequestTest()
 {
     using namespace bsmi;
@@ -145,6 +205,21 @@ void RequestFactoryTest::createGetPositionsRequestTest()
         c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 12), QTime(2, 48)));
 
         auto resp = c.createGetPositionsRequest("fakeAccId");
+        QCOMPARE(resp.url(), QUrl(QLatin1String("http://example.com/api/1.0/accounts/fakeAccId")));
+        QCOMPARE(resp.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+    }
+}
+
+void RequestFactoryTest::createResetAccountRequestTest()
+{
+    using namespace bsmi;
+
+    {
+        InvestorAPIClient c(nullptr, QStringLiteral("http://example.com"));
+
+        c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 12), QTime(2, 48)));
+
+        auto resp = c.createResetAccountRequest("fakeAccId");
         QCOMPARE(resp.url(), QUrl(QLatin1String("http://example.com/api/1.0/accounts/fakeAccId")));
         QCOMPARE(resp.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
     }
@@ -252,6 +327,27 @@ void RequestFactoryTest::createGetQuotesRequestTest()
         QVERIFY(respUrlQuery.hasQueryItem("symbols"));
         auto respSymbols = respUrlQuery.queryItemValue("symbols").split(QLatin1Char(','));
         QCOMPARE(respSymbols.size(), 3 /* the size if the input symbols, less empty parts */);
+    }
+}
+
+void RequestFactoryTest::createGetFundamentalsTest()
+{
+    using namespace bsmi;
+
+    {
+        InvestorAPIClient c(nullptr, QStringLiteral("http://example.com"));
+
+        c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 20), QTime(6, 48)));
+
+        QString symbol("ASYMBOL1");
+
+        auto resp = c.createGetFundamentalsRequest(symbol);
+        auto const respUrl = resp.url();
+        const QUrlQuery respUrlQuery(respUrl.query());
+        QCOMPARE(QUrl(respUrl.toString(QUrl::RemoveQuery)),
+                 QUrl(QLatin1String("http://example.com/api/1.0/shares/ASYMBOL1/fundamentals")));
+        QCOMPARE(resp.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+        QCOMPARE(resp.rawHeader("Content-Type"), QByteArray("application/json"));
     }
 }
 

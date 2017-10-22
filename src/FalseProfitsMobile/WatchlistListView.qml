@@ -107,7 +107,7 @@ ListView {
                 }
 
                 Label {
-                    text: model.lastPrice ? model.lastPrice : ""
+                    text: model.lastPrice ? fpLocale.toShortDecimalString(model.lastPrice) : ""
                     font.pixelSize: 20
                     Layout.preferredWidth: 100
                     horizontalAlignment: Text.AlignRight
@@ -126,7 +126,8 @@ ListView {
 
                 Label {
                     id: changeLabel
-                    text: qsTr("%1 (%2%)").arg(model.change).arg(model.changePercent)
+                    text: qsTr("%1 (%2%)").arg(fpLocale.toShortDecimalString(model.change)).arg(
+                              fpLocale.toShortDecimalString(model.changePercent))
                     // TODO(seamus): Use FpStyle for color
                     color: model.direction === 1 ? "#0b893e" : model.direction
                                                    === -1 ? "#bf1722" : "black"

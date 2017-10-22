@@ -150,12 +150,19 @@ TransactionsPageForm {
                 selectByMouse: true
                 Layout.fillWidth: true
             }
+
+            CheckBox {
+                id: showTradesOnly
+                text: qsTr("Show trades only")
+                Layout.columnSpan: 2
+            }
         }
 
         onAccepted: {
             var start = utilityFunctions.makeDateFromString(startDateInput.text, "yyyy-M-d")
             var end = utilityFunctions.makeDateFromString(endDateInput.text, "yyyy-M-d")
             transactionsWrapper.setDateRangeLocal(start, end)
+            transactionsWrapper.setShowTradesOnly(showTradesOnly.checked)
             refreshTransactions()
         }
     }

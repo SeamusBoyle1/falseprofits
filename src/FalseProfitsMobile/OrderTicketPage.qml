@@ -180,8 +180,7 @@ OrderTicketPageForm {
                 var quotes = fpType.makeJsonQuotes(quoteResp.payload())
                 var quote = quotes.find(currentSymbol)
                 if (quote.isValid) {
-                    // TODO(seamus): Don't use toFixed(), it isn't localized
-                    lastPriceText = quote.last.toFixed(3)
+                    lastPriceText = fpLocale.toShortDecimalString(quote.last)
                     lastPriceValue = quote.last
                 }
             } else {
@@ -203,10 +202,9 @@ OrderTicketPageForm {
             costArgs.side = buySideOption.checked ? OrderParams.BuySide : OrderParams.SellSide
 
             var costResult = brokerageCostCalculator.calcBrokerageCost(costArgs)
-            // TODO(seamus): Don't use toFixed(), it isn't localized
-            orderValueText = costResult.orderValue.toFixed(3)
-            brokerageCostText = costResult.brokerageCost.toFixed(3)
-            totalText = costResult.estimatedTotal.toFixed(3)
+            orderValueText = fpLocale.toDecimalString(costResult.orderValue, 3)
+            brokerageCostText = fpLocale.toDecimalString(costResult.brokerageCost, 3)
+            totalText = fpLocale.toDecimalString(costResult.estimatedTotal, 3)
         }
     }
 

@@ -7,6 +7,7 @@ import com.example.fpx 1.0
 PortfolioPageForm {
     signal symbolClicked(string symbol)
     signal marketOrderTriggered(string symbol, int quantity)
+    signal portfolioLoaded(int positionCount)
 
     property int busyIndicatorVisibility: 0
 
@@ -42,10 +43,10 @@ PortfolioPageForm {
         }
 
         onMarketValueChanged: {
-            marketValueValue = portfolioWrapper.marketValue.toFixed(2)
+            marketValueValue = fpLocale.toDecimalString(portfolioWrapper.marketValue, 2)
         }
         onBalanceChanged: {
-            cashBalanceValue = portfolioWrapper.balance.toFixed(2)
+            cashBalanceValue = fpLocale.toDecimalString(portfolioWrapper.balance, 2)
         }
     }
 
@@ -56,8 +57,8 @@ PortfolioPageForm {
         accountsComboBox.model = myTradingAccounts.model
         listView.model = portfolioWrapper.model
 
-        marketValueValue = portfolioWrapper.marketValue.toFixed(2)
-        cashBalanceValue = portfolioWrapper.balance.toFixed(2)
+        marketValueValue = fpLocale.toDecimalString(portfolioWrapper.marketValue, 2)
+        cashBalanceValue = fpLocale.toDecimalString(portfolioWrapper.balance, 2)
 
         if (fpCore.authState === Fpx.AuthenticatedState) {
             updateAccounts()
@@ -75,6 +76,7 @@ PortfolioPageForm {
             // TODO(seamus): Handle errors
             decrementBusyIndicatorVisibility()
             portfolioEmpty = listView.count == 0
+            portfolioLoaded(listView.count)
         })
     }
 

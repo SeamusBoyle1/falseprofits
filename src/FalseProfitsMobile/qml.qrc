@@ -48,5 +48,6 @@
         <file>AccentPane.qml</file>
         <file>ExtraMaterial.qml</file>
         <file>MaterialComponents/HorizontalDivider.qml</file>
+        <file>DrawerUserProfile.qml</file>
     </qresource>
 </RCC>

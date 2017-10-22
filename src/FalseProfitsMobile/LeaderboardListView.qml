@@ -1,9 +1,10 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import QtQuick.Window 2.2
 
 import com.example.fpx 1.0
-import "MaterialComponents"
+import io.material.xtra 1.0
 
 ListView {
     id: listView
@@ -29,10 +30,20 @@ ListView {
                 Layout.rightMargin: FpStyle.screenEdgeRightMargin
                 Layout.bottomMargin: 3
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                columns: 4
+                columns: 5
+
+                Image {
+                    source: model.gravatarUrl ? model.gravatarUrl + "&size=" +
+                                                (42 * Screen.devicePixelRatio) + "x" +
+                                                (42 * Screen.devicePixelRatio) : ""
+                    Layout.rowSpan: 2
+                    Layout.preferredWidth: 42
+                    Layout.preferredHeight: 42
+                    fillMode: Image.PreserveAspectCrop
+                }
 
                 Label {
-                    text: model.rank
+                    text: fpLocale.toIntString(model.rank)
                     font.pixelSize: 18
                     font.weight: Font.Medium
                     horizontalAlignment: Text.AlignHCenter
@@ -50,23 +61,20 @@ ListView {
                 }
 
                 Label {
-                    text: model.profit.toFixed(2)
+                    text: fpLocale.toDecimalString(model.profit, 2)
                     font.pixelSize: 13
+                    opacity: ExtraMaterial.secondaryTextOpacity
                     horizontalAlignment: Text.AlignRight
                     Layout.preferredWidth: 100
                 }
 
                 Label {
-                    text: qsTr("%1%").arg(model.profitPercent.toFixed(2))
+                    text: qsTr("%1%").arg(fpLocale.toDecimalString(model.profitPercent, 2))
                     font.pixelSize: 16
                     font.weight: Font.Medium
                     horizontalAlignment: Text.AlignRight
                     Layout.preferredWidth: 100
                 }
-            }
-
-            HorizontalDivider {
-                Layout.fillWidth: true
             }
         }
     }

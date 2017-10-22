@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 import com.example.fpx 1.0
+import "MaterialComponents"
 
 ApplicationWindow {
     id: appWindow
@@ -34,41 +35,64 @@ ApplicationWindow {
             dragMargin = !enableDrawer ? 0 : Qt.styleHints.startDragDistance
         }
 
-        ListView {
-            id: listView
-
-            focus: true
-            currentIndex: -1
+        Flickable {
             anchors.fill: parent
-            anchors.topMargin: 8
+            contentWidth: appDrawerContentsLayout.width
+            contentHeight: appDrawerContentsLayout.height
+            clip: true
 
-            delegate: ItemDelegate {
-                width: parent.width
-                height: 48
-                text: model.title
-                font.pixelSize: 14
-                font.weight: Font.Medium
-                opacity: 0.87
-                highlighted: ListView.isCurrentItem
-                onClicked: {
-                    listView.currentIndex = index
-                    if (model.source === "qrc:/SignOutPage.qml") {
-                        showSignOutScreen()
-                        return
-                    }
-                    appNavStack.clear() // limit depth
-                    appNavStack.push(model.source)
-                    appDrawer.close()
+            ColumnLayout {
+                id: appDrawerContentsLayout
+                width: appDrawer.width
+                spacing: 0
+
+                DrawerUserProfile {
+                    Layout.fillWidth: true
                 }
-            }
 
-            model: ListModel {
-                ListElement{ title: qsTr("Quotes"); source: "qrc:/QuotesNavigation.qml" }
-                ListElement{ title: qsTr("Leaderboard"); source: "qrc:/LeaderboardPage.qml" }
-                ListElement{ title: qsTr("My Profile and Accounts");
-                    source: "qrc:/MyUserProfileNavigation.qml" }
-                ListElement{ title: qsTr("Transactions"); source: "qrc:/TransactionsPage.qml" }
-                ListElement{ title: qsTr("Sign Out"); source: "qrc:/SignOutPage.qml" }
+                HorizontalDivider {
+                    Layout.fillWidth: true
+                }
+
+                ListView {
+                    id: listView
+
+                    focus: true
+                    currentIndex: -1
+                    implicitHeight: childrenRect.height
+                    interactive: false
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+                    Layout.topMargin: 8
+
+                    delegate: ItemDelegate {
+                        width: parent.width
+                        height: 48
+                        text: model.title
+                        font.pixelSize: 14
+                        font.weight: Font.Medium
+                        opacity: 0.87
+                        highlighted: ListView.isCurrentItem
+                        onClicked: {
+                            listView.currentIndex = index
+                            if (model.source === "qrc:/SignOutPage.qml") {
+                                showSignOutScreen()
+                                return
+                            }
+                            appNavStack.clear() // limit depth
+                            appNavStack.push(model.source)
+                            appDrawer.close()
+                        }
+                    }
+
+                    model: ListModel {
+                        ListElement{ title: qsTr("Quotes"); source: "qrc:/QuotesNavigation.qml" }
+                        ListElement{ title: qsTr("Leaderboard"); source: "qrc:/LeaderboardPage.qml" }
+                        ListElement{ title: qsTr("Transactions"); source: "qrc:/TransactionsPage.qml" }
+                        ListElement{ title: qsTr("Profile"); source: "qrc:/MyUserProfileNavigation.qml" }
+                        ListElement{ title: qsTr("Sign Out"); source: "qrc:/SignOutPage.qml" }
+                    }
+                }
             }
 
             ScrollIndicator.vertical: ScrollIndicator { }

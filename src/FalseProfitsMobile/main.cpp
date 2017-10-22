@@ -9,6 +9,7 @@
 #include <FalseProfitsCore/fpcore.h>
 #include <FalseProfitsCore/fpleaderboardlistmodel.h>
 #include <FalseProfitsCore/fpleaderboardwrapper.h>
+#include <FalseProfitsCore/fplocale.h>
 #include <FalseProfitsCore/fpdeclarativetypes.h>
 #include <FalseProfitsCore/responsetypes.h>
 #include <FalseProfitsCore/fppositionslistmodel.h>
@@ -118,9 +119,12 @@ int main(int argc, char *argv[])
     qmlRegisterType<AuthenticateResponse>("FpResponses", 1, 0, "AuthenticateResponse");
     qmlRegisterType<DeleteUserResponse>("FpResponses", 1, 0, "DeleteUserResponse");
     qmlRegisterType<GetUserProfileResponse>("FpResponses", 1, 0, "GetUserProfileResponse");
+    qmlRegisterType<EditUserProfileResponse>("FpResponses", 1, 0, "EditUserProfileResponse");
     qmlRegisterType<GetPositionsResponse>("FpResponses", 1, 0, "GetPositionsResponse");
+    qmlRegisterType<ResetAccountResponse>("FpResponses", 1, 0, "ResetAccountResponse");
     qmlRegisterType<GetTransactionsResponse>("FpResponses", 1, 0, "GetTransactionsResponse");
     qmlRegisterType<GetQuotesResponse>("FpResponses", 1, 0, "GetQuotesResponse");
+    qmlRegisterType<GetFundamentalsResponse>("FpResponses", 1, 0, "GetFundamentalsResponse");
     qmlRegisterType<GetCandlesResponse>("FpResponses", 1, 0, "GetCandlesResponse");
     qmlRegisterType<SymbolSearchResponse>("FpResponses", 1, 0, "SymbolSearchResponse");
     qmlRegisterType<GetShareDetailsResponse>("FpResponses", 1, 0, "GetShareDetailsResponse");
@@ -167,6 +171,7 @@ int main(int argc, char *argv[])
     FpSettings fpCoreSettings;
     FpCore fpCore(client, &fpCoreSettings);
     client->setParent(&fpCore);
+    FpLocale fpLocale;
     FalseProfitsDeclarativeTypes fpTypes;
 
     QQmlApplicationEngine engine;
@@ -175,6 +180,7 @@ int main(int argc, char *argv[])
     }
     engine.rootContext()->setContextProperty("utilityFunctions", &utilityFunctions);
     engine.rootContext()->setContextProperty("fpCore", &fpCore);
+    engine.rootContext()->setContextProperty("fpLocale", &fpLocale);
     engine.rootContext()->setContextProperty("fpType", &fpTypes);
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())

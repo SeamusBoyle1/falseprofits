@@ -8,6 +8,8 @@
 #include <QHash>
 #include <QVector>
 
+#include <algorithm>
+
 struct PositionItem
 {
     QString symbol;
@@ -18,6 +20,19 @@ struct PositionItem
     double change{ 0 };
     double changePercent{ 0 };
 };
+
+namespace util {
+
+template <class RandomIt>
+typename std::enable_if<std::is_same<typename std::iterator_traits<RandomIt>::value_type,
+                                     PositionItem>::value>::type
+sortBySymbol(RandomIt first, RandomIt last)
+{
+    std::sort(first, last,
+              [](const PositionItem &a, const PositionItem &b) { return a.symbol < b.symbol; });
+}
+
+} // namespace util
 
 class FpPositionsListModel : public QAbstractListModel
 {

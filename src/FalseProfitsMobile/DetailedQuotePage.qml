@@ -43,6 +43,7 @@ DetailedQuotePageForm {
         updateQuote()
         updateStarredState()
         fillChart()
+        updateFundamentals()
     }
 
     rangeButtonGroup.onClicked2: {
@@ -90,7 +91,9 @@ DetailedQuotePageForm {
         industryText = ""
         lastPriceLabel.text = ""
         bidText = ""
+        bidSizeText = ""
         askText = ""
+        askSizeText = ""
         changePriceText = ""
         direction = 0
         changePercentText = ""
@@ -107,20 +110,27 @@ DetailedQuotePageForm {
                 var quotes = fpType.makeJsonQuotes(quoteResp.payload())
                 var quote = quotes.find(currentSymbol)
                 if (quote.isValid) {
-                    lastPriceLabel.text = quote.last
-                    bidText = quote.bid
-                    askText = quote.ask
+                    lastPriceLabel.text = fpLocale.toShortDecimalString(quote.last)
+                    bidText = fpLocale.toShortDecimalString(quote.bid)
+                    bidSizeText = fpLocale.toIntString(quote.bidSize)
+                    askText = fpLocale.toShortDecimalString(quote.ask)
+                    askSizeText = fpLocale.toIntString(quote.askSize)
 
                     var change = quote.change
-                    changePriceText = change ? quote.change : "-"
                     direction = change > 0 ? 1 : change < 0 ? -1 : 0
+                    var changeSign = direction === 1 ? "+" : ""
+                    changePriceText = change ? (changeSign +
+                                                fpLocale.toShortDecimalString(quote.change)) : "0"
                     priceLineChart.lineSeries.color = direction > 0 ? "#00a95d" : "#f0162f"
 
                     var pctChange = quote.changePercent
-                    changePercentText = pctChange ? qsTr("%1%").arg(pctChange) : "-"
+                    changePercentText = pctChange ?
+                                (changeSign +
+                                 qsTr("%1%").arg(fpLocale.toShortDecimalString(pctChange))) :
+                                qsTr("0%")
 
-                    dayLowText = quote.dayLow
-                    dayHighText = quote.dayHigh
+                    dayLowText = fpLocale.toShortDecimalString(quote.dayLow)
+                    dayHighText = fpLocale.toShortDecimalString(quote.dayHigh)
                 }
             } else {
                 errorDialogText.text = quoteResp.errorMessage()
@@ -138,6 +148,109 @@ DetailedQuotePageForm {
             } else {
                 errorDialogText.text = detailsResp.errorMessage()
                 errorDialog.open()
+            }
+        })
+    }
+
+    function clearFundamentals() {
+        fundamental_marketCap = ""
+        fundamental_volume = ""
+        fundamental_averageDailyVolume = ""
+        fundamental_previousClose = ""
+        fundamental_low52Weeks = ""
+        fundamental_high52Weeks = ""
+        fundamental_dividendShare = ""
+        fundamental_dividendYield = ""
+        fundamental_exDividendDate = ""
+        fundamental_dividendPayDate = ""
+        fundamental_peRatio = ""
+        fundamental_bookValue = ""
+        fundamental_priceBook = ""
+        fundamental_earningsShare = ""
+        fundamental_movingAverage200Days = ""
+        fundamental_movingAverage50Days = ""
+        fundamental_symbol = ""
+        fundamental_name = ""
+        fundamental_industry = ""
+    }
+
+    function updateFundamentals() {
+        incrementBusyIndicatorVisibility()
+        var fundataResp = fpCore.getFundamentals(currentSymbol)
+        fundataResp.onFinished.connect(function() {
+            decrementBusyIndicatorVisibility()
+            clearFundamentals()
+            if (!fundataResp.hasError()) {
+                var fundata = fpType.makeJsonShareFundamentals(fundataResp.payload())
+
+                var marketCap = fundata.marketCap
+                fundamental_marketCap = marketCap ? fpLocale.toIntString(marketCap) : "-"
+
+                var volume = fundata.volume
+                fundamental_volume = volume ? fpLocale.toIntString(volume) : "-"
+
+                var averageDailyVolume = fundata.averageDailyVolume
+                fundamental_averageDailyVolume = averageDailyVolume ?
+                            fpLocale.toIntString(averageDailyVolume) : "-"
+
+                var previousClose = fundata.previousClose
+                fundamental_previousClose = previousClose ?
+                            fpLocale.toShortDecimalString(previousClose) : "-"
+
+                var low52Weeks = fundata.low52Weeks
+                fundamental_low52Weeks = low52Weeks ?
+                            fpLocale.toShortDecimalString(low52Weeks) : "-"
+
+                var high52Weeks = fundata.high52Weeks
+                fundamental_high52Weeks = high52Weeks ? fpLocale.toShortDecimalString(high52Weeks) :
+                                                        "-"
+
+                var dividendShare = fundata.dividendShare
+                fundamental_dividendShare = dividendShare ?
+                            fpLocale.toShortDecimalString(dividendShare) : "-"
+
+                var dividendYield = fundata.dividendYield
+                fundamental_dividendYield = dividendYield ?
+                            qsTr("%1%").arg(fpLocale.toShortDecimalString(dividendYield)) : "-"
+
+                var exDividendDate = fundata.exDividendDate
+                fundamental_exDividendDate = exDividendDate ?
+                            fpLocale.toLocaleDateStringShortFormat(exDividendDate) : "-"
+
+                var dividendPayDate = fundata.dividendPayDate
+                fundamental_dividendPayDate = dividendPayDate ?
+                            fpLocale.toLocaleDateStringShortFormat(dividendPayDate) : "-"
+
+                var peRatio = fundata.peRatio
+                fundamental_peRatio = peRatio ? fpLocale.toShortDecimalString(peRatio) : "-"
+
+                var bookValue = fundata.bookValue
+                fundamental_bookValue = bookValue ? fpLocale.toShortDecimalString(bookValue) : "-"
+
+                var priceBook = fundata.priceBook
+                fundamental_priceBook = priceBook ?
+                            fpLocale.toShortDecimalString(priceBook) : "-"
+
+                var earningsShare = fundata.earningsShare
+                fundamental_earningsShare = earningsShare ?
+                            fpLocale.toShortDecimalString(earningsShare) : "-"
+
+                var movingAverage200Days = fundata.movingAverage200Days
+                fundamental_movingAverage200Days = movingAverage200Days ?
+                            fpLocale.toShortDecimalString(movingAverage200Days) : "-"
+
+                var movingAverage50Days = fundata.movingAverage50Days
+                fundamental_movingAverage50Days = movingAverage50Days ?
+                            fpLocale.toShortDecimalString(movingAverage50Days) : "-"
+
+                var symbol = fundata.symbol
+                fundamental_symbol = symbol ? symbol : "-"
+
+                var name = fundata.name
+                fundamental_name = name ? name : "-"
+
+                var industry = fundata.industry
+                fundamental_industry = industry ? industry : "-"
             }
         })
     }
@@ -235,6 +348,7 @@ DetailedQuotePageForm {
     function onRefreshTriggered() {
         updateQuote()
         fillChart()
+        updateFundamentals()
         newsFeedPage.reloadNews()
     }
 }

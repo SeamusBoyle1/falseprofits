@@ -46,6 +46,13 @@ public:
 
     virtual INetworkReply *getUserProfile() = 0;
 
+    struct EditUserArgs
+    {
+        QString displayName;
+        QString email;
+    };
+    virtual INetworkReply *editUserProfile(const EditUserArgs &args) = 0;
+
     enum class CommissionSide {
         Buy,
         Sell,
@@ -53,6 +60,8 @@ public:
     virtual INetworkReply *getCommissions(CommissionSide side) = 0;
 
     virtual INetworkReply *getPositions(const QString &accountId) = 0;
+
+    virtual INetworkReply *resetAccount(const QString &accountId) = 0;
 
     struct GetTransactionsArgs
     {
@@ -65,6 +74,8 @@ public:
     virtual INetworkReply *getTransactions(const GetTransactionsArgs &query) = 0;
 
     virtual INetworkReply *getQuotes(const QStringList &symbols) = 0;
+
+    virtual INetworkReply *getFundamentals(const QString &symbol) = 0;
 
     struct CandlesRequestArgs
     {
@@ -190,6 +201,8 @@ public:
 
     virtual INetworkReply *get(const QNetworkRequest &request) = 0;
     virtual INetworkReply *post(const QNetworkRequest &request, const QJsonObject &jsonObject) = 0;
+    virtual INetworkReply *put(const QNetworkRequest &request, const QJsonObject &jsonObject) = 0;
+    virtual INetworkReply *put(const QNetworkRequest &request) = 0;
     virtual INetworkReply *deleteResource(const QNetworkRequest &request) = 0;
 };
 

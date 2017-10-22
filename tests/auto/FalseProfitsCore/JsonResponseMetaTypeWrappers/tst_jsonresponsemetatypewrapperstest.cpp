@@ -92,7 +92,7 @@ void JsonResponseMetaTypeWrappersTest::jsonUserDetailsTest()
         QCOMPARE(parser.level(), QVariant(QString("Investor")));
 
         // Test property access by name
-        const QStringList properties{{ "id", "email", "displayName", "level"}};
+        const QStringList properties{{ "id", "email", "displayName", "gravatarUrl", "level"}};
 
         for (auto const &propertyName : properties) {
             auto propertyIndex = parser.staticMetaObject.indexOfProperty(propertyName.toLatin1());

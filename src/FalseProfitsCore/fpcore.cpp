@@ -175,6 +175,37 @@ GetUserProfileResponse *FpCore::getUserProfile()
     return resp;
 }
 
+EditUserProfileResponse *FpCore::editUserProfile(const EditUserArgs &args)
+{
+    QPointer<EditUserProfileResponse> resp(new EditUserProfileResponse);
+
+    bsmi::IInvestorAPIClient::EditUserArgs v;
+    v.displayName = args.displayName();
+    v.email = args.email();
+
+    auto rep = m_client->editUserProfile(v);
+    connect(rep, &bsmi::INetworkReply::finished, this, [resp, rep, this]() {
+        if (!resp) {
+            rep->deleteLater();
+            return;
+        }
+        auto httpStatusCode = readHttpStatusCode(rep);
+        resp->setHttpStatusCode(httpStatusCode);
+        if (rep->error() == QNetworkReply::NoError) {
+            resp->setPayload(rep->readAll());
+
+            QMetaObject::invokeMethod(this, "userProfileChanged", Qt::QueuedConnection);
+        } else {
+            resp->setErrorMessage(readErrorMessage(resp, rep, httpStatusCode));
+        }
+
+        rep->deleteLater();
+        resp->setFinished();
+    });
+
+    return resp;
+}
+
 GetCommissionsResponse *FpCore::getCommissions(Fpx::CommissionSide side)
 {
     QPointer<GetCommissionsResponse> resp(new GetCommissionsResponse);
@@ -207,6 +238,31 @@ GetPositionsResponse *FpCore::getPositions(const QString &accountId)
     QPointer<GetPositionsResponse> resp(new GetPositionsResponse);
 
     auto rep = m_client->getPositions(accountId);
+    connect(rep, &bsmi::INetworkReply::finished, this, [resp, rep, this]() {
+        if (!resp) {
+            rep->deleteLater();
+            return;
+        }
+        auto httpStatusCode = readHttpStatusCode(rep);
+        resp->setHttpStatusCode(httpStatusCode);
+        if (rep->error() == QNetworkReply::NoError) {
+            resp->setPayload(rep->readAll());
+        } else {
+            resp->setErrorMessage(readErrorMessage(resp, rep, httpStatusCode));
+        }
+
+        rep->deleteLater();
+        resp->setFinished();
+    });
+
+    return resp;
+}
+
+ResetAccountResponse *FpCore::resetAccount(const QString &accountId)
+{
+    QPointer<ResetAccountResponse> resp(new ResetAccountResponse);
+
+    auto rep = m_client->resetAccount(accountId);
     connect(rep, &bsmi::INetworkReply::finished, this, [resp, rep, this]() {
         if (!resp) {
             rep->deleteLater();
@@ -264,6 +320,31 @@ GetQuotesResponse *FpCore::getQuotes(const QStringList &symbols)
     QPointer<GetQuotesResponse> resp(new GetQuotesResponse);
 
     auto rep = m_client->getQuotes(symbols);
+    connect(rep, &bsmi::INetworkReply::finished, this, [resp, rep, this]() {
+        if (!resp) {
+            rep->deleteLater();
+            return;
+        }
+        auto httpStatusCode = readHttpStatusCode(rep);
+        resp->setHttpStatusCode(httpStatusCode);
+        if (rep->error() == QNetworkReply::NoError) {
+            resp->setPayload(rep->readAll());
+        } else {
+            resp->setErrorMessage(readErrorMessage(resp, rep, httpStatusCode));
+        }
+
+        rep->deleteLater();
+        resp->setFinished();
+    });
+
+    return resp;
+}
+
+GetFundamentalsResponse *FpCore::getFundamentals(const QString &symbol)
+{
+    QPointer<GetFundamentalsResponse> resp(new GetFundamentalsResponse);
+
+    auto rep = m_client->getFundamentals(symbol);
     connect(rep, &bsmi::INetworkReply::finished, this, [resp, rep, this]() {
         if (!resp) {
             rep->deleteLater();

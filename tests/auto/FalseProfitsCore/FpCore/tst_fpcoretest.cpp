@@ -87,6 +87,12 @@ public:
         return nullptr;
     }
 
+    INetworkReply *editUserProfile(const EditUserArgs &args) override
+    {
+        Q_UNUSED(args)
+        return nullptr;
+    }
+
     INetworkReply *getCommissions(CommissionSide side) override
     {
         Q_UNUSED(side)
@@ -94,6 +100,12 @@ public:
     }
 
     INetworkReply *getPositions(const QString &accountId) override
+    {
+        Q_UNUSED(accountId)
+        return nullptr;
+    }
+
+    INetworkReply *resetAccount(const QString &accountId) override
     {
         Q_UNUSED(accountId)
         return nullptr;
@@ -108,6 +120,12 @@ public:
     INetworkReply *getQuotes(const QStringList &symbols) override
     {
         Q_UNUSED(symbols)
+        return nullptr;
+    }
+
+    INetworkReply *getFundamentals(const QString &symbol) override
+    {
+        Q_UNUSED(symbol)
         return nullptr;
     }
 
@@ -261,6 +279,23 @@ public:
     }
 };
 
+class InvestorAPIClientEditUserProfileMock : public InvestorAPIClientMock
+{
+    Q_OBJECT
+public:
+    InvestorAPIClientEditUserProfileMock() {}
+
+    NetworkReply *m_nextEditProfileReply{ nullptr };
+    QString m_accountId;
+    EditUserArgs m_editProfileArgs;
+
+    INetworkReply *editUserProfile(const EditUserArgs &args) override
+    {
+        m_editProfileArgs = args;
+        return m_nextEditProfileReply;
+    }
+};
+
 class InvestorAPIClientGetPositionsMock : public InvestorAPIClientMock
 {
     Q_OBJECT
@@ -274,6 +309,22 @@ public:
     {
         m_accountId = accountId;
         return m_nextGetPositionsReply;
+    }
+};
+
+class InvestorAPIClientResetAccountMock : public InvestorAPIClientMock
+{
+    Q_OBJECT
+public:
+    InvestorAPIClientResetAccountMock() {}
+
+    NetworkReply *m_nextResetReply{ nullptr };
+    QString m_accountId;
+
+    INetworkReply *resetAccount(const QString &accountId) override
+    {
+        m_accountId = accountId;
+        return m_nextResetReply;
     }
 };
 
@@ -464,7 +515,9 @@ private Q_SLOTS:
     void authenticateTest();
     void deleteUserTest();
     void getUserProfileTest();
+    void editUserProfileTest();
     void getPositionsTest();
+    void resetAccountTest();
     void getTransactionsTest();
     void getQuotesTest();
     void getCandlesTest();
@@ -561,6 +614,8 @@ void FpCoreTest::createNewUserTest()
 
         netCreateRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 201);
         client->m_nextCreateUserReply->setFinished();
+
+        QVERIFY(resp->isFinished());
     }
 }
 
@@ -592,6 +647,8 @@ void FpCoreTest::authenticateTest()
                                 "}";
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextAuthReply->setFinished();
+
+        QVERIFY(resp->isFinished());
 
         QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::AuthenticatedState);
         // TODO(seamus): Test expires is set
@@ -630,6 +687,8 @@ void FpCoreTest::deleteUserTest()
 
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 204);
         client->m_nextDeleteReply->setFinished();
+
+        QVERIFY(resp->isFinished());
 
         QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::NotAuthenticatedState);
         QVERIFY(fpCore->authToken().isEmpty());
@@ -679,9 +738,44 @@ void FpCoreTest::getUserProfileTest()
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextUserProfileReply->setFinished();
 
+        QVERIFY(resp->isFinished());
+
         QVERIFY(!netAuthRep->m_payload.isEmpty());
         QCOMPARE(QJsonDocument::fromJson(resp->payload()),
                  QJsonDocument::fromJson(netAuthRep->m_payload));
+    }
+}
+
+void FpCoreTest::editUserProfileTest()
+{
+    {
+        auto client = new InvestorAPIClientEditUserProfileMock;
+        auto fpCoreSettings = new MockFpSettings;
+        auto fpCore = new FpCore(client, fpCoreSettings);
+        client->setParent(fpCore);
+
+        EditUserArgs editArgsA;
+        editArgsA.setDisplayName("Seamus");
+        editArgsA.setEmail("seamus@example.com");
+
+        // mock success response
+        auto netAuthRep = new QNetworkReplyMock;
+        client->m_nextEditProfileReply = new bsmi::INetworkReply(netAuthRep);
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::NotAuthenticatedState);
+        fpCore->setAccessToken("i_am_very_token", QDateTime::currentDateTimeUtc().addDays(7));
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::AuthenticatedState);
+
+        auto resp = fpCore->editUserProfile(editArgsA);
+        QVERIFY(resp);
+
+        // Test bsmi::IInvestorAPIClient got args
+        QCOMPARE(client->m_editProfileArgs.displayName, editArgsA.displayName());
+        QCOMPARE(client->m_editProfileArgs.email, editArgsA.email());
+
+        netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 204);
+        client->m_nextEditProfileReply->setFinished();
+
+        QVERIFY(resp->isFinished());
     }
 }
 
@@ -729,9 +823,43 @@ void FpCoreTest::getPositionsTest()
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextGetPositionsReply->setFinished();
 
+        QVERIFY(resp->isFinished());
+
         QVERIFY(!netAuthRep->m_payload.isEmpty());
         QCOMPARE(QJsonDocument::fromJson(resp->payload()),
                  QJsonDocument::fromJson(netAuthRep->m_payload));
+    }
+}
+
+void FpCoreTest::resetAccountTest()
+{
+    {
+        auto client = new InvestorAPIClientResetAccountMock;
+        auto fpCoreSettings = new MockFpSettings;
+        auto fpCore = new FpCore(client, fpCoreSettings);
+        client->setParent(fpCore);
+
+        QVERIFY(client->m_accountId.isEmpty());
+
+        QString accIda("valid-fake-id");
+
+        // mock success response
+        auto netAuthRep = new QNetworkReplyMock;
+        client->m_nextResetReply = new bsmi::INetworkReply(netAuthRep);
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::NotAuthenticatedState);
+        fpCore->setAccessToken("i_am_very_token", QDateTime::currentDateTimeUtc().addDays(7));
+        QCOMPARE(fpCore->authState(), Fpx::AuthenticationState::AuthenticatedState);
+
+        auto resp = fpCore->resetAccount(accIda);
+        QVERIFY(resp);
+
+        // Test bsmi::IInvestorAPIClient::resetAccount was called
+        QVERIFY(!client->m_accountId.isEmpty());
+
+        netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 201);
+        client->m_nextResetReply->setFinished();
+
+        QVERIFY(resp->isFinished());
     }
 }
 
@@ -785,6 +913,8 @@ void FpCoreTest::getTransactionsTest()
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextTransactionsReply->setFinished();
 
+        QVERIFY(resp->isFinished());
+
         QVERIFY(!netAuthRep->m_payload.isEmpty());
         QCOMPARE(QJsonDocument::fromJson(resp->payload()),
                  QJsonDocument::fromJson(netAuthRep->m_payload));
@@ -827,6 +957,8 @@ void FpCoreTest::getQuotesTest()
                                 "]";
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextQuotesReply->setFinished();
+
+        QVERIFY(resp->isFinished());
 
         QVERIFY(!netAuthRep->m_payload.isEmpty());
         QCOMPARE(QJsonDocument::fromJson(resp->payload()),
@@ -872,6 +1004,8 @@ void FpCoreTest::getCandlesTest()
                                 "]";
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextCandlesReply->setFinished();
+
+        QVERIFY(resp->isFinished());
 
         QVERIFY(!netAuthRep->m_payload.isEmpty());
         QCOMPARE(QJsonDocument::fromJson(resp->payload()),
@@ -923,6 +1057,8 @@ void FpCoreTest::symbolSearchTest()
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextSearchReply->setFinished();
 
+        QVERIFY(resp->isFinished());
+
         QVERIFY(!netAuthRep->m_payload.isEmpty());
         QCOMPARE(QJsonDocument::fromJson(resp->payload()),
                  QJsonDocument::fromJson(netAuthRep->m_payload));
@@ -966,6 +1102,8 @@ void FpCoreTest::sendOrderTest()
 
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 201);
         client->m_nextSendOrderReply->setFinished();
+
+        QVERIFY(resp->isFinished());
     }
 }
 
@@ -1051,6 +1189,8 @@ void FpCoreTest::getWatchlistTest()
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextGetWatchlistReply->setFinished();
 
+        QVERIFY(resp->isFinished());
+
         QVERIFY(!netAuthRep->m_payload.isEmpty());
         QCOMPARE(QJsonDocument::fromJson(resp->payload()),
                  QJsonDocument::fromJson(netAuthRep->m_payload));
@@ -1084,6 +1224,8 @@ void FpCoreTest::addSymbolToWatchlistTest()
 
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextAddWatchlistSymbolReply->setFinished();
+
+        QVERIFY(resp->isFinished());
     }
 }
 
@@ -1114,6 +1256,8 @@ void FpCoreTest::removeSymbolFromWatchlistTest()
 
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextRemoveWatchlistSymbolReply->setFinished();
+
+        QVERIFY(resp->isFinished());
     }
 }
 
@@ -1162,6 +1306,8 @@ void FpCoreTest::getLeaderboardTest()
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextLeaderboardReply->setFinished();
 
+        QVERIFY(resp->isFinished());
+
         QVERIFY(!netAuthRep->m_payload.isEmpty());
         QCOMPARE(QJsonDocument::fromJson(resp->payload()),
                  QJsonDocument::fromJson(netAuthRep->m_payload));
@@ -1202,6 +1348,8 @@ void FpCoreTest::getLeaderboardMeTest()
                                 "}";
         netAuthRep->overrideAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
         client->m_nextLeaderboardMeReply->setFinished();
+
+        QVERIFY(resp->isFinished());
 
         QVERIFY(!netAuthRep->m_payload.isEmpty());
         QCOMPARE(QJsonDocument::fromJson(resp->payload()),

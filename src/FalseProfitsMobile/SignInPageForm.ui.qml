@@ -23,6 +23,14 @@ Pane {
         anchors.right: parent.right
         anchors.rightMargin: 0
 
+        Image {
+            fillMode: Image.Pad
+            horizontalAlignment: Image.AlignHCenter
+            verticalAlignment: Image.AlignVCenter
+            source: "qrc:/images/logo/AppLogo.png"
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+        }
+
         ColumnLayout {
             spacing: 20
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter

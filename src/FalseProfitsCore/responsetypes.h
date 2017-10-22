@@ -17,6 +17,8 @@ public:
     BaseResponse() {}
     virtual ~BaseResponse() {}
 
+    bool isFinished() const { return m_finished; }
+
     // TODO(seamus): Return enum of error type instead of bool
     Q_INVOKABLE
     bool hasError() const { return m_httpStatusCode < 200 || m_httpStatusCode > 299; }
@@ -142,6 +144,32 @@ public:
     }
 };
 
+class EditUserProfileResponse : public BaseResponse
+{
+    Q_OBJECT
+public:
+    EditUserProfileResponse() {}
+    virtual ~EditUserProfileResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 204:
+            return "User successfully updated";
+        case 400:
+            return "Invalid request";
+        case 401:
+            return "Authentication failed";
+        case 404:
+            return "User not found";
+        default:
+            break;
+        }
+        return QString();
+    }
+};
+
 class GetCommissionsResponse : public BaseResponse
 {
     Q_OBJECT
@@ -168,6 +196,30 @@ public:
     {
         // TODO(seamus): Define enums for errors
         switch (httpStatusCode) {
+        case 401:
+            return "Authorization failed";
+        case 404:
+            return "Account not found";
+        default:
+            break;
+        }
+        return QString();
+    }
+};
+
+class ResetAccountResponse : public BaseResponse
+{
+    Q_OBJECT
+public:
+    ResetAccountResponse() {}
+    virtual ~ResetAccountResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 201:
+            return "Account successfully reset.";
         case 401:
             return "Authorization failed";
         case 404:
@@ -219,6 +271,21 @@ public:
         default:
             break;
         }
+        return QString();
+    }
+};
+
+class GetFundamentalsResponse : public BaseResponse
+{
+    Q_OBJECT
+public:
+    GetFundamentalsResponse() {}
+    virtual ~GetFundamentalsResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        Q_UNUSED(httpStatusCode)
+        // no codes in swagger docs
         return QString();
     }
 };

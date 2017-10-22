@@ -6,12 +6,14 @@
 #include <QAbstractListModel>
 
 #include <QHash>
+#include <QUrl>
 #include <QVector>
 
 struct LeaderBoardUser
 {
     int rank{ 0 };
     QString displayName;
+    QUrl gravatarUrl;
     double totalAccountValue{ 0 };
     double profit{ 0 };
     double profitPercent{ 0 };
@@ -29,6 +31,7 @@ public:
         ProfitRole = Qt::UserRole + 4,
         ProfitPercentRole = Qt::UserRole + 5,
         IsCurrentUserRole = Qt::UserRole + 6,
+        GravatarUrl = Qt::UserRole + 7,
     };
 
     explicit FpLeaderboardListModel(QObject *parent = nullptr);
