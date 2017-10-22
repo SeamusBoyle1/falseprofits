@@ -20,6 +20,7 @@ HEADERS += \
     fpchartdatawrapper.h
 
 RESOURCES += \
+    artwork.qrc \
     material_design_icons.qrc \
     qml.qrc
 
