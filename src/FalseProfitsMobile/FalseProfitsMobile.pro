@@ -37,6 +37,16 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
+ios {
+    QMAKE_INFO_PLIST = ios/Info.plist
+
+    ios_icon.files = $$files($$PWD/ios/AppIcon*.png)
+    QMAKE_BUNDLE_DATA += ios_icon
+
+    ios_artwork.files = $$files($$PWD/ios/iTunesArtwork*.png)
+    QMAKE_BUNDLE_DATA += ios_artwork
+}
+
 INCLUDEPATH += $$PWD/..
 DEPENDPATH += $$PWD/..
 
