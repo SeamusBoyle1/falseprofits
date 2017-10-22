@@ -83,17 +83,32 @@ if [[ ! -f "$OPENSSL_ROOT/libcrypto.so" ]] || [[ ! -f "$OPENSSL_ROOT/libssl.so" 
     fi
     tar -xf openssl-1.0.2l.tar.gz
     (
-        export _ANDROID_NDK="android-ndk-r10"
-        export _ANDROID_EABI="arm-linux-androideabi-4.9"
-        export _ANDROID_ARCH=arch-arm
-        export _ANDROID_API="android-16"
+        if [ "$USE_QT_SPEC" == "android_armv7" ]; then
+            export _ANDROID_NDK="android-ndk-r10"
+            export _ANDROID_EABI="arm-linux-androideabi-4.9"
+            export _ANDROID_ARCH=arch-arm
+            export _ANDROID_API="android-16"
+        elif [ "$USE_QT_SPEC" == "android_x86" ]; then
+            export _ANDROID_NDK="android-ndk-r10"
+            export _ANDROID_EABI="x86-4.9"
+            export _ANDROID_ARCH=arch-x86
+            export _ANDROID_API="android-16"
+        else
+            echo "You need to set USET_QT_SPEC to the mkspec to use"
+            exit
+        fi
 
         cd openssl-1.0.2l
         . "$SOURCE_DIR/scripts/openssl/Setenv-android.sh"
         ./Configure shared android
         make CALC_VERSIONS="SHLIB_COMPAT=; SHLIB_SOVER=" build_libs
-        cp -p libcrypto.so "$OUT_DIR/android-build/libs/armeabi-v7a/"
-        cp -p libssl.so "$OUT_DIR/android-build/libs/armeabi-v7a/"
+        if [ "$USE_QT_SPEC" == "android_armv7" ]; then
+            cp -p libcrypto.so "$OUT_DIR/android-build/libs/armeabi-v7a/"
+            cp -p libssl.so "$OUT_DIR/android-build/libs/armeabi-v7a/"
+        elif [ "$USE_QT_SPEC" == "android_x86" ]; then
+            cp -p libcrypto.so "$OUT_DIR/android-build/libs/x86/"
+            cp -p libssl.so "$OUT_DIR/android-build/libs/x86/"
+        fi
     )
 fi
 
@@ -109,5 +124,9 @@ androiddeployqt \
     --storepass "$KEYSTORE_PASS"
 
 pushd "$OUT_DIR/android-build/build/outputs/apk" && \
-ln android-build-release-signed.apk "$OUT_DIR/FalseProfitsMobile-$GIT_DESCRIBE-android-armv7.apk"
+if [ "$USE_QT_SPEC" == "android_armv7" ]; then
+    ln android-build-release-signed.apk "$OUT_DIR/FalseProfitsMobile-$GIT_DESCRIBE-android-armv7.apk"
+elif [ "$USE_QT_SPEC" == "android_x86" ]; then
+    ln android-build-release-signed.apk "$OUT_DIR/FalseProfitsMobile-$GIT_DESCRIBE-android-x86.apk"
+fi
 popd
