@@ -4,7 +4,6 @@ import QtQuick.Layouts 1.3
 import QtQuick.Window 2.2
 
 import com.example.fpx 1.0
-import "MaterialComponents"
 
 ListView {
     id: listView
