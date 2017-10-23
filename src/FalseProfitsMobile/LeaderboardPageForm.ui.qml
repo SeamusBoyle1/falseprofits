@@ -92,6 +92,7 @@ Page {
             Label {
                 text: currentUserDisplayNameValue
                 font.pixelSize: 13
+                wrapMode: Text.WordWrap
                 Layout.fillWidth: true
             }
             Label {
