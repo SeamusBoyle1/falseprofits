@@ -113,6 +113,7 @@ Page {
                             horizontalAlignment: Image.AlignHCenter
                             verticalAlignment: Image.AlignVCenter
                             source: "qrc:/images/" + FpStyle.iconPrimary + "/gavel.png"
+                            opacity: parent.enabled ? ExtraMaterial.activeIconOnPrimaryOpacity : ExtraMaterial.inactiveIconOnPrimaryOpacity
                         }
                         flat: true
                         hoverEnabled: true
@@ -132,6 +133,7 @@ Page {
                             source: starred ? "qrc:/images/" + FpStyle.iconPrimary
                                               + "/star.png" : "qrc:/images/"
                                               + FpStyle.iconPrimary + "/star_border.png"
+                            opacity: parent.enabled ? ExtraMaterial.activeIconOnPrimaryOpacity : ExtraMaterial.inactiveIconOnPrimaryOpacity
                         }
                         flat: true
                         hoverEnabled: true
@@ -288,6 +290,7 @@ Page {
                                             verticalAlignment: Image.AlignVCenter
                                             source: "qrc:/images/" + FpStyle.iconPrimary
                                                     + "/fullscreen.png"
+                                            opacity: parent.enabled ? ExtraMaterial.activeIconOnPrimaryOpacity : ExtraMaterial.inactiveIconOnPrimaryOpacity
                                         }
                                         flat: true
 

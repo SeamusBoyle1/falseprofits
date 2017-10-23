@@ -32,4 +32,18 @@ Item {
     property double secondaryTextOpacity: .54
 
     property color errorHintTextColor: Material.color(Material.Red, Material.Shade300)
+
+    // Icons opacity
+    // Dark (#000000) icons on light backgrounds
+    // - Active Icon 54%
+    // - Inactive Icon 38%
+    //
+    // Light (#ffffff) icons on dark backgrounds
+    // - Active Icon 100%
+    // - Inactive Icon 50%
+    property double activeIconOnPrimaryOpacity: .54
+    property double inactiveIconOnPrimaryOpacity: .38
+
+    property double activeIconOnAccentOpacity: 1
+    property double inactiveIconOnAccentOpacity: .5
 }

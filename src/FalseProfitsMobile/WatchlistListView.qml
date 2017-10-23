@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 import com.example.fpx 1.0
+import io.material.xtra 1.0
 import "MaterialComponents"
 
 ListView {
@@ -71,6 +72,8 @@ ListView {
                 horizontalAlignment: Image.AlignHCenter
                 verticalAlignment: Image.AlignVCenter
                 source: "qrc:/images/" + FpStyle.iconAccent + "/delete_forever.png"
+                opacity: parent.enabled ? ExtraMaterial.activeIconOnAccentOpacity :
+                                          ExtraMaterial.inactiveIconOnAccentOpacity
             }
         }
 

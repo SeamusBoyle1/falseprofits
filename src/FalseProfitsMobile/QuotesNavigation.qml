@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQml 2.2
 
 import com.example.fpx 1.0
+import io.material.xtra 1.0
 
 Page {
     FpWatchlists {
@@ -35,6 +36,8 @@ Page {
                     source: navPan.depth > 1 ? "qrc:/images/" + FpStyle.iconAccent
                                                + "/arrow_back.png"
                                              : "qrc:/images/" + FpStyle.iconAccent + "/menu.png"
+                    opacity: parent.enabled ? ExtraMaterial.activeIconOnAccentOpacity :
+                                              ExtraMaterial.inactiveIconOnAccentOpacity
                 }
                 onClicked: {
                     if (navPan.depth > 1) {
@@ -60,6 +63,8 @@ Page {
                     horizontalAlignment: Image.AlignHCenter
                     verticalAlignment: Image.AlignVCenter
                     source: "qrc:/images/" + FpStyle.iconAccent + "/search.png"
+                    opacity: parent.enabled ? ExtraMaterial.activeIconOnAccentOpacity :
+                                              ExtraMaterial.inactiveIconOnAccentOpacity
                 }
                 enabled: visible
                 visible: symbolSearchPageLoader.item ?
@@ -72,6 +77,8 @@ Page {
                     horizontalAlignment: Image.AlignHCenter
                     verticalAlignment: Image.AlignVCenter
                     source: "qrc:/images/" + FpStyle.iconAccent + "/refresh.png"
+                    opacity: parent.enabled ? ExtraMaterial.activeIconOnAccentOpacity :
+                                              ExtraMaterial.inactiveIconOnAccentOpacity
                 }
                 enabled: visible
                 visible: navPan.currentItem &&

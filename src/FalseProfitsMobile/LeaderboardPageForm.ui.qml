@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
 
 import com.example.fpx 1.0
+import io.material.xtra 1.0
 
 Page {
 //    width: 400
@@ -31,6 +32,7 @@ Page {
                     horizontalAlignment: Image.AlignHCenter
                     verticalAlignment: Image.AlignVCenter
                     source: "qrc:/images/" + FpStyle.iconAccent + "/menu.png"
+                    opacity: parent.enabled ? ExtraMaterial.activeIconOnAccentOpacity : ExtraMaterial.inactiveIconOnAccentOpacity
                 }
             }
             Label {
@@ -48,6 +50,7 @@ Page {
                     horizontalAlignment: Image.AlignHCenter
                     verticalAlignment: Image.AlignVCenter
                     source: "qrc:/images/" + FpStyle.iconAccent + "/refresh.png"
+                    opacity: parent.enabled ? ExtraMaterial.activeIconOnAccentOpacity : ExtraMaterial.inactiveIconOnAccentOpacity
                 }
                 enabled: visible
             }

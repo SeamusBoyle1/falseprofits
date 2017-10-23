@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 import com.example.fpx 1.0
+import io.material.xtra 1.0
 
 Page {
     width: 400
@@ -39,6 +40,7 @@ Page {
                         horizontalAlignment: Image.AlignHCenter
                         verticalAlignment: Image.AlignVCenter
                         source: "qrc:/images/" + FpStyle.iconPrimary + "/search.png"
+                        opacity: parent.enabled ? ExtraMaterial.activeIconOnPrimaryOpacity : ExtraMaterial.inactiveIconOnPrimaryOpacity
                     }
                     flat: true
                 }
