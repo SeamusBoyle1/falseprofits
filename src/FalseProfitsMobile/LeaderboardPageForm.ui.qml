@@ -12,7 +12,6 @@ Page {
     property bool gotCurrentUserRank: false
     property string currentUserRankNumber: ""
     property string currentUserDisplayNameValue: ""
-    property string currentUserProfitNumber: ""
     property string currentUserProfitPercentNumber: ""
     property alias busyIndicator: busyIndicator
     property alias listView: listView
@@ -96,17 +95,10 @@ Page {
                 Layout.fillWidth: true
             }
             Label {
-                text: currentUserProfitNumber
-                font.pixelSize: 16
-                horizontalAlignment: Text.AlignRight
-                Layout.preferredWidth: 100
-            }
-            Label {
                 text: currentUserProfitPercentNumber
                 font.pixelSize: 18
                 font.weight: Font.Medium
                 horizontalAlignment: Text.AlignRight
-                Layout.preferredWidth: 100
             }
         }
     }

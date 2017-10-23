@@ -61,19 +61,11 @@ ListView {
                 }
 
                 Label {
-                    text: fpLocale.toDecimalString(model.profit, 2)
-                    font.pixelSize: 13
-                    opacity: ExtraMaterial.secondaryTextOpacity
-                    horizontalAlignment: Text.AlignRight
-                    Layout.preferredWidth: 100
-                }
-
-                Label {
                     text: qsTr("%1%").arg(fpLocale.toDecimalString(model.profitPercent, 2))
                     font.pixelSize: 16
                     font.weight: Font.Medium
                     horizontalAlignment: Text.AlignRight
-                    Layout.preferredWidth: 100
+                    Layout.rowSpan: 2
                 }
             }
         }
