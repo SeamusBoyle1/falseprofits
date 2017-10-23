@@ -185,7 +185,6 @@ Page {
                                 // back to Light when Roboto font is used on iOS.
                                 font.pixelSize: 34
                                 //font.weight: Font.Light
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
                             }
 
                             Label {
@@ -195,8 +194,7 @@ Page {
                                                         == -1 ? "#bf1722" :
                                                                 ExtraMaterial.primaryTextColor
                                 font.pixelSize: 32
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
-                                Layout.bottomMargin: 7
+                                anchors.baseline: lastPriceLabel.baseline
                             }
 
                             Label {
@@ -206,8 +204,7 @@ Page {
                                 color: direction == 1 ? "#0b893e" : direction
                                                         == -1 ? "#bf1722" :
                                                                 ExtraMaterial.primaryTextColor
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
-                                Layout.bottomMargin: 7
+                                anchors.baseline: lastPriceLabel.baseline
                             }
 
                             Label {
@@ -218,8 +215,7 @@ Page {
                                                         == -1 ? "#bf1722" :
                                                                 ExtraMaterial.primaryTextColor
                                 horizontalAlignment: Text.AlignRight
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
-                                Layout.bottomMargin: 7
+                                anchors.baseline: lastPriceLabel.baseline
                             }
                         }
 
