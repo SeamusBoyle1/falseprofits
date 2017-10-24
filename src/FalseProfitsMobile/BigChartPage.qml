@@ -30,6 +30,14 @@ BigChartPageForm {
         chartDataWrapper.hackRemoveAllSeriesAndAxes(bigChartView.candleSeries)
     }
 
+    bigChartView.onWidthChanged: {
+        updateLastPriceLabel()
+    }
+
+    bigChartView.onHeightChanged: {
+        updateLastPriceLabel()
+    }
+
     onCurrentSymbolChanged: {
         symbolText = currentSymbol
         fillChart()
@@ -93,6 +101,34 @@ BigChartPageForm {
         }
     }
 
+    function updateLastPriceLabel() {
+        // This function uses historyData instead of getting the last
+        // price from the series as CandlestickSeries.at() doesn't work
+        // (always returns null)
+
+        if (!historyData) {
+            return;
+        }
+
+        var lastClosePrice = historyData.close.length > 0 ?
+                    historyData.close[historyData.close.length - 1] : undefined
+        var lastBarIndex = historyData.xData.length >= historyData.close.length ?
+                    historyData.close.length : undefined
+
+        if (lastBarIndex && lastClosePrice) {
+            axisLastPriceLabel.visible = true
+            axisLastPriceLabel.text = fpLocale.toShortDecimalString(lastClosePrice)
+            var lastPoint = bigChartView.mapToPosition(
+                        Qt.point(lastBarIndex, lastClosePrice),
+                        !bigChartView.candleSeries.visible ? bigChartView.lineSeries :
+                                                             bigChartView.candleSeries)
+            axisLastPriceLabel.xBackbone = lastPoint.x
+            axisLastPriceLabel.lastPricePixel = lastPoint.y
+        } else {
+            axisLastPriceLabel.visible = false
+        }
+    }
+
     function incrementBusyIndicatorVisibility() {
         busyIndicator.visible = true
         busyIndicatorVisibility = busyIndicatorVisibility + 1
@@ -136,6 +172,8 @@ BigChartPageForm {
 
         bigChartView.xAxis.min = 0
         bigChartView.xAxis.max = historyData.xData.length
+
+        updateLastPriceLabel()
     }
 
     function updateTickLabels() {

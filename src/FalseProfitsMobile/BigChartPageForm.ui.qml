@@ -9,8 +9,10 @@ Page {
     property alias candleCharTypeButton: candleCharTypeButton
     property alias lineChartTypeButton: lineChartTypeButton
     property alias rangeButtonGroup: rangeButtonGroup
+    property alias axisLastPriceLabel: axisLastPriceLabel
     property string symbolText
     property string intervalText
+    property string smallChartTitle
     property alias busyIndicator: busyIndicator
     property alias bigChartView: bigChartView
     property bool maybeHasChartData: true
@@ -35,6 +37,24 @@ Page {
         anchors.centerIn: bigChartView
         opacity: 0.25
         visible: !emptyChartLabel.visible
+    }
+
+    Label {
+        id: axisLastPriceLabel
+        font.pixelSize: 11
+        property double xBackbone: 0
+        property double lastPricePixel: 0
+        x: xBackbone
+        y: lastPricePixel - (height * 0.5)
+        color: "white"
+        visible: false
+
+        padding: 3
+
+        background: Rectangle {
+            anchors.fill: parent
+            color: "darkBlue"
+        }
     }
 
     Label {
