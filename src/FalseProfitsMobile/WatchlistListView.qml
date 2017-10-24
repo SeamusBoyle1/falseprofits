@@ -61,6 +61,7 @@ ListView {
                         listView.model.remove(index)
                         triggerRemoveSymbol(symbol)
                     }
+                    onPressed: mouse.accepted = false
                 }
             }
 
