@@ -9,21 +9,21 @@
         <file>images/black/arrow_back@3x.png</file>
         <file>images/black/arrow_back@4x.png</file>
         <file>images/black/delete_forever.png</file>
-        <file>images/black/delete_forever@2.png</file>
-        <file>images/black/delete_forever@3.png</file>
-        <file>images/black/delete_forever@4.png</file>
+        <file>images/black/delete_forever@2x.png</file>
+        <file>images/black/delete_forever@3x.png</file>
+        <file>images/black/delete_forever@4x.png</file>
         <file>images/black/filter_list.png</file>
-        <file>images/black/filter_list@2.png</file>
-        <file>images/black/filter_list@3.png</file>
-        <file>images/black/filter_list@4.png</file>
+        <file>images/black/filter_list@2x.png</file>
+        <file>images/black/filter_list@3x.png</file>
+        <file>images/black/filter_list@4x.png</file>
         <file>images/black/fullscreen.png</file>
-        <file>images/black/fullscreen@2.png</file>
-        <file>images/black/fullscreen@3.png</file>
-        <file>images/black/fullscreen@4.png</file>
+        <file>images/black/fullscreen@2x.png</file>
+        <file>images/black/fullscreen@3x.png</file>
+        <file>images/black/fullscreen@4x.png</file>
         <file>images/black/gavel.png</file>
-        <file>images/black/gavel@2.png</file>
-        <file>images/black/gavel@3.png</file>
-        <file>images/black/gavel@4.png</file>
+        <file>images/black/gavel@2x.png</file>
+        <file>images/black/gavel@3x.png</file>
+        <file>images/black/gavel@4x.png</file>
         <file>images/black/menu.png</file>
         <file>images/black/menu@2x.png</file>
         <file>images/black/menu@3x.png</file>
@@ -41,13 +41,13 @@
         <file>images/black/search@3x.png</file>
         <file>images/black/search@4x.png</file>
         <file>images/black/star.png</file>
-        <file>images/black/star@2.png</file>
-        <file>images/black/star@3.png</file>
-        <file>images/black/star@4.png</file>
+        <file>images/black/star@2x.png</file>
+        <file>images/black/star@3x.png</file>
+        <file>images/black/star@4x.png</file>
         <file>images/black/star_border.png</file>
-        <file>images/black/star_border@2.png</file>
-        <file>images/black/star_border@3.png</file>
-        <file>images/black/star_border@4.png</file>
+        <file>images/black/star_border@2x.png</file>
+        <file>images/black/star_border@3x.png</file>
+        <file>images/black/star_border@4x.png</file>
         <file>images/white/add.png</file>
         <file>images/white/add@2x.png</file>
         <file>images/white/add@3x.png</file>
@@ -57,21 +57,21 @@
         <file>images/white/arrow_back@3x.png</file>
         <file>images/white/arrow_back@4x.png</file>
         <file>images/white/delete_forever.png</file>
-        <file>images/white/delete_forever@2.png</file>
-        <file>images/white/delete_forever@3.png</file>
-        <file>images/white/delete_forever@4.png</file>
+        <file>images/white/delete_forever@2x.png</file>
+        <file>images/white/delete_forever@3x.png</file>
+        <file>images/white/delete_forever@4x.png</file>
         <file>images/white/filter_list.png</file>
-        <file>images/white/filter_list@2.png</file>
-        <file>images/white/filter_list@3.png</file>
-        <file>images/white/filter_list@4.png</file>
+        <file>images/white/filter_list@2x.png</file>
+        <file>images/white/filter_list@3x.png</file>
+        <file>images/white/filter_list@4x.png</file>
         <file>images/white/fullscreen.png</file>
-        <file>images/white/fullscreen@2.png</file>
-        <file>images/white/fullscreen@3.png</file>
-        <file>images/white/fullscreen@4.png</file>
+        <file>images/white/fullscreen@2x.png</file>
+        <file>images/white/fullscreen@3x.png</file>
+        <file>images/white/fullscreen@4x.png</file>
         <file>images/white/gavel.png</file>
-        <file>images/white/gavel@2.png</file>
-        <file>images/white/gavel@3.png</file>
-        <file>images/white/gavel@4.png</file>
+        <file>images/white/gavel@2x.png</file>
+        <file>images/white/gavel@3x.png</file>
+        <file>images/white/gavel@4x.png</file>
         <file>images/white/menu.png</file>
         <file>images/white/menu@2x.png</file>
         <file>images/white/menu@3x.png</file>
@@ -89,12 +89,12 @@
         <file>images/white/search@3x.png</file>
         <file>images/white/search@4x.png</file>
         <file>images/white/star.png</file>
-        <file>images/white/star@2.png</file>
-        <file>images/white/star@3.png</file>
-        <file>images/white/star@4.png</file>
+        <file>images/white/star@2x.png</file>
+        <file>images/white/star@3x.png</file>
+        <file>images/white/star@4x.png</file>
         <file>images/white/star_border.png</file>
-        <file>images/white/star_border@2.png</file>
-        <file>images/white/star_border@3.png</file>
-        <file>images/white/star_border@4.png</file>
+        <file>images/white/star_border@2x.png</file>
+        <file>images/white/star_border@3x.png</file>
+        <file>images/white/star_border@4x.png</file>
     </qresource>
 </RCC>
