@@ -40,6 +40,15 @@ Page {
     }
 
     Label {
+        text: smallChartTitle
+        font.pixelSize: 12
+        anchors.top: bigChartView.top
+        anchors.left: bigChartView.left
+        anchors.topMargin: 8
+        anchors.leftMargin: 24
+    }
+
+    Label {
         id: axisLastPriceLabel
         font.pixelSize: 11
         property double xBackbone: 0
