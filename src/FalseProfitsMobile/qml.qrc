@@ -49,5 +49,6 @@
         <file>ExtraMaterial.qml</file>
         <file>MaterialComponents/HorizontalDivider.qml</file>
         <file>DrawerUserProfile.qml</file>
+        <file>FpDividendsColumnChartWidget.qml</file>
     </qresource>
 </RCC>

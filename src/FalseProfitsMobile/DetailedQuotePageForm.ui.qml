@@ -12,6 +12,7 @@ Page {
     property alias chartFullScreenButton: chartFullScreenButton
     property alias rangeButtonGroup: rangeButtonGroup
     property alias priceLineChart: priceLineChart
+    property alias dividendHistoryChart: dividendHistoryChart
     property alias starButton: starButton
     property string symbolText
     property string companyNameText
@@ -334,7 +335,6 @@ Page {
                             Layout.fillWidth: true
                             Layout.leftMargin: 16
                             Layout.rightMargin: 16
-                            Layout.bottomMargin: 38
                             columns: parent.width < 500 ? 1 : 2
                             columnSpacing: 32
 
@@ -531,6 +531,15 @@ Page {
                                     horizontalAlignment: Text.AlignRight
                                 }
                             }
+                        }
+
+                        FpDividendsColumnChartWidget {
+                            id: dividendHistoryChart
+                            Layout.minimumHeight: 215
+                            Layout.maximumWidth: parent.width < 1260 ? -1 : 420
+                            Layout.fillWidth: true
+                            Layout.bottomMargin: 38
+                            backgroundRoundness: 0
                         }
                     }
                 }

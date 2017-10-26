@@ -5,7 +5,10 @@
 #include <FalseProfitsCore/fpcore.h>
 #include <FalseProfitsCore/fpdeclarativetypes.h>
 #include <FalseProfitsCore/responsetypes.h>
+#include <InvestorAPIClient/jsonobjectwrappers.h>
 
+#include <QBarCategoryAxis>
+#include <QBarSet>
 #include <QCandlestickSeries>
 #include <QCandlestickSet>
 #include <QChart>
@@ -14,6 +17,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QMap>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
@@ -26,6 +30,7 @@
 #include <boost/polymorphic_cast.hpp>
 
 #include <algorithm>
+#include <limits>
 
 FpChartDataWrapper::FpChartDataWrapper(QObject *parent)
     : QObject(parent)
@@ -33,6 +38,7 @@ FpChartDataWrapper::FpChartDataWrapper(QObject *parent)
 {
     qRegisterMetaType<FpChartCandleSeriesData>();
     qRegisterMetaType<FpChartLineSeriesData>();
+    qRegisterMetaType<FpChartDateSeriesData>();
 }
 
 GetCandlesResponse *FpChartDataWrapper::getCandles(const CandlesRequestArgs &args)
@@ -403,4 +409,109 @@ void FpChartDataWrapper::hackRemoveAllSeriesAndAxes(QAbstractSeries *s) const
     }
 
     qDeleteAll(axes);
+}
+
+FpChartDateSeriesData FpChartDataWrapper::loadDividends(const QByteArray &ba) const
+{
+    auto doc = QJsonDocument::fromJson(ba);
+    bsmi::JsonObjectWrappers::ShareDividendsArray d;
+    d.jsonItems = doc.array();
+
+    FpChartDateSeriesData r;
+    r.m_x.resize(d.size());
+    r.m_y.resize(d.size());
+
+    for (auto i = 0, total = d.size(); i < total; ++i) {
+        auto const e = d.at(i);
+        auto dt = e.date();
+        auto val = e.value();
+        r.m_x[i] = dt ? *dt : QDate();
+        r.m_y[i] = val ? *val : std::numeric_limits<double>::quiet_NaN();
+    }
+
+    return r;
+}
+
+FpChartDateSeriesData
+FpChartDataWrapper::convertToAnnualDividends(const FpChartDateSeriesData &biannual,
+                                             int numYears) const
+{
+    QMap<QDate, double> mapped;
+
+    for (auto i = 0, total = std::min(biannual.m_x.size(), biannual.m_y.size()); i < total; ++i) {
+        auto cat = biannual.m_x[i];
+        if (!cat.isValid()) {
+            continue;
+        }
+        auto newCat = QDate(cat.year(), 1, 1);
+
+        auto val = biannual.m_y[i];
+        if (!qIsNaN(val)) {
+            if (!qIsNaN(mapped.value(newCat))) {
+                mapped[newCat] += val;
+            }
+        } else {
+            mapped[newCat] = std::numeric_limits<double>::quiet_NaN();
+        }
+    }
+
+    FpChartDateSeriesData r;
+    r.m_x.reserve(mapped.size());
+    r.m_y.reserve(mapped.size());
+
+    auto first = mapped.constBegin();
+    if (numYears > 0 && numYears < mapped.size()) {
+        auto trimStart = mapped.size() - numYears;
+        std::advance(first, trimStart);
+    }
+
+    for (auto it = first, last = mapped.constEnd(); it != last; ++it) {
+        if (!qIsNaN(it.value())) {
+            r.m_x.append(it.key());
+            r.m_y.append(it.value());
+        }
+    }
+
+    return r;
+}
+
+void FpChartDataWrapper::updateDividendsSeries(QAbstractAxis *categories, QBarSeries *values,
+                                               const FpChartDateSeriesData &in) const
+{
+    auto categoryAxis = boost::polymorphic_downcast<QBarCategoryAxis *>(categories);
+    auto barSeries = boost::polymorphic_downcast<QBarSeries *>(values);
+
+    // Update category labels
+    if (categoryAxis != nullptr) {
+        QStringList newCategories;
+        QString dateFormat{ "yyyy" };
+        QLocale locale_;
+        for (auto i = 0, total = in.m_x.size(); i < total; ++i) {
+            newCategories.append(locale_.toString(in.m_x.at(i), dateFormat));
+        }
+        categoryAxis->setCategories(newCategories);
+    }
+
+    // Update values and scale y axis from 0 to max dividend + 3% padding
+    if (barSeries != nullptr) {
+        barSeries->clear();
+
+        auto barSet = new QBarSet("", barSeries);
+        for (auto i = 0, total = in.m_y.size(); i < total; ++i) {
+            barSet->append(in.m_y.at(i));
+        }
+        barSeries->append(barSet);
+
+        if (barSeries->chart()) {
+            auto chart = barSeries->chart();
+            if (auto yAxis = chart->axisY(barSeries)) {
+                yAxis->setMin(0);
+                auto maxIt = std::max_element(in.m_y.constBegin(), in.m_y.constEnd());
+                if (maxIt != in.m_y.constEnd()) {
+                    auto padding = *maxIt * 0.03;
+                    yAxis->setMax(*maxIt + padding);
+                }
+            }
+        }
+    }
 }
