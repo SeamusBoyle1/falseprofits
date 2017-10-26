@@ -82,6 +82,9 @@ public:
     GetFundamentalsResponse *getFundamentals(const QString &symbol);
 
     Q_INVOKABLE
+    GetDividendsResponse *getDividends(const QString &symbol, const QString &range);
+
+    Q_INVOKABLE
     GetCandlesResponse *getCandles(const CandlesRequestArgs &args);
 
     Q_INVOKABLE

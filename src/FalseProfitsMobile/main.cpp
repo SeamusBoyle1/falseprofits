@@ -125,6 +125,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<GetTransactionsResponse>("FpResponses", 1, 0, "GetTransactionsResponse");
     qmlRegisterType<GetQuotesResponse>("FpResponses", 1, 0, "GetQuotesResponse");
     qmlRegisterType<GetFundamentalsResponse>("FpResponses", 1, 0, "GetFundamentalsResponse");
+    qmlRegisterType<GetDividendsResponse>("FpResponses", 1, 0, "GetDividendsResponse");
     qmlRegisterType<GetCandlesResponse>("FpResponses", 1, 0, "GetCandlesResponse");
     qmlRegisterType<SymbolSearchResponse>("FpResponses", 1, 0, "SymbolSearchResponse");
     qmlRegisterType<GetShareDetailsResponse>("FpResponses", 1, 0, "GetShareDetailsResponse");
