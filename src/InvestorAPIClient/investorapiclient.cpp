@@ -101,6 +101,11 @@ INetworkReply *InvestorAPIClient::getFundamentals(const QString &symbol)
     return m_requestQueue->get(createGetFundamentalsRequest(symbol));
 }
 
+INetworkReply *InvestorAPIClient::getDividends(const QString &symbol, const QString &range)
+{
+    return m_requestQueue->get(createGetDividendsRequest(symbol, range));
+}
+
 INetworkReply *InvestorAPIClient::getCandles(const CandlesRequestArgs &args)
 {
     return m_requestQueue->get(createGetCandlesRequest(args));
@@ -317,6 +322,20 @@ QNetworkRequest InvestorAPIClient::createGetFundamentalsRequest(const QString &s
 {
     QUrl url(m_apiUrl + QStringLiteral("/api/1.0/shares/") + symbol
              + QStringLiteral("/fundamentals"));
+    return makeAuthenticatedRequest(url);
+}
+
+QNetworkRequest InvestorAPIClient::createGetDividendsRequest(const QString &symbol,
+                                                             const QString &range) const
+{
+    QUrl url(m_apiUrl + QStringLiteral("/api/1.0/shares/") + symbol + QStringLiteral("/dividends"));
+
+    if (!range.isEmpty()) {
+        QUrlQuery urlQuery;
+        urlQuery.addQueryItem(QStringLiteral("range"), range);
+        url.setQuery(urlQuery);
+    }
+
     return makeAuthenticatedRequest(url);
 }
 

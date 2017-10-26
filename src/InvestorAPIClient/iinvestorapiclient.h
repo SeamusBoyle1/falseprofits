@@ -77,6 +77,8 @@ public:
 
     virtual INetworkReply *getFundamentals(const QString &symbol) = 0;
 
+    virtual INetworkReply *getDividends(const QString &symbol, const QString &range) = 0;
+
     struct CandlesRequestArgs
     {
         QString symbol;

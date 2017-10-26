@@ -26,6 +26,7 @@ private Q_SLOTS:
     void createGetTransactionsRequestTest();
     void createGetQuotesRequestTest();
     void createGetFundamentalsTest();
+    void createGetDividendsTest();
     void createSymbolSearchRequestTest();
     void createSendOrderRequestTest();
     void createGetWatchlistTest();
@@ -348,6 +349,50 @@ void RequestFactoryTest::createGetFundamentalsTest()
                  QUrl(QLatin1String("http://example.com/api/1.0/shares/ASYMBOL1/fundamentals")));
         QCOMPARE(resp.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
         QCOMPARE(resp.rawHeader("Content-Type"), QByteArray("application/json"));
+    }
+}
+
+void RequestFactoryTest::createGetDividendsTest()
+{
+    using namespace bsmi;
+
+    // Without range (default range)
+    {
+        InvestorAPIClient c(nullptr, QStringLiteral("http://example.com"));
+
+        c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 20), QTime(7, 51)));
+
+        QString symbol{ "WBC" };
+        QString range;
+
+        auto resp = c.createGetDividendsRequest(symbol, range);
+        auto const respUrl = resp.url();
+        const QUrlQuery respUrlQuery(respUrl.query());
+        QCOMPARE(QUrl(respUrl.toString(QUrl::RemoveQuery)),
+                 QUrl(QLatin1String("http://example.com/api/1.0/shares/WBC/dividends")));
+        QCOMPARE(resp.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+        QCOMPARE(resp.rawHeader("Content-Type"), QByteArray("application/json"));
+        QVERIFY(!respUrlQuery.hasQueryItem("range"));
+    }
+
+    // With range = 5y
+    {
+        InvestorAPIClient c(nullptr, QStringLiteral("http://example.com"));
+
+        c.setAuthToken(QLatin1String("fake-token"), QDateTime(QDate(2017, 9, 20), QTime(7, 51)));
+
+        QString symbol{ "CBA" };
+        QString range{ "5y" };
+
+        auto resp = c.createGetDividendsRequest(symbol, range);
+        auto const respUrl = resp.url();
+        const QUrlQuery respUrlQuery(respUrl.query());
+        QCOMPARE(QUrl(respUrl.toString(QUrl::RemoveQuery)),
+                 QUrl(QLatin1String("http://example.com/api/1.0/shares/CBA/dividends")));
+        QCOMPARE(resp.rawHeader("Authorization"), QByteArray("Bearer fake-token"));
+        QCOMPARE(resp.rawHeader("Content-Type"), QByteArray("application/json"));
+        QVERIFY(respUrlQuery.hasQueryItem("range"));
+        QCOMPARE(respUrlQuery.queryItemValue("range"), range);
     }
 }
 

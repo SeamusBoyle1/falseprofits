@@ -37,6 +37,17 @@ inline boost::optional<QDateTime> getOptionalStringAsDateTime(const QJsonObject 
 }
 
 template <typename String>
+inline boost::optional<QDate> getOptionalStringAsDate(const QJsonObject &o, const String &key)
+{
+    auto v = o.value(key);
+    if (v.isString()) {
+        auto dt = QDate::fromString(v.toString(), Qt::ISODate);
+        return boost::make_optional(dt.isValid(), dt);
+    }
+    return boost::none;
+}
+
+template <typename String>
 inline boost::optional<double>
 getOptionalDouble(const QJsonObject &o, const String &key,
                   double magic = std::numeric_limits<double>::quiet_NaN())
@@ -483,6 +494,36 @@ public:
     {
         return { d.value(QLatin1String("shares")).toArray() };
     }
+};
+
+class ShareDividendsArrayItem
+{
+public:
+    QJsonObject d;
+
+    bool isValid() const { return !d.isEmpty(); }
+
+    boost::optional<QDate> date() const
+    {
+        return util::getOptionalStringAsDate(d, QLatin1String("date"));
+    }
+
+    boost::optional<double> value() const
+    {
+        return util::getOptionalDouble(d, QLatin1String("value"));
+    }
+};
+
+class ShareDividendsArray
+{
+public:
+    QJsonArray jsonItems;
+
+    bool isEmpty() const { return jsonItems.isEmpty(); }
+
+    int size() const { return jsonItems.size(); }
+
+    ShareDividendsArrayItem at(int i) const { return { jsonItems.at(i).toObject() }; }
 };
 
 class CandleResponse
