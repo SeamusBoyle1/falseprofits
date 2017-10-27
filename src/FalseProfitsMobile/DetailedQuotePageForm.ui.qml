@@ -306,8 +306,8 @@ Page {
 
                             FpLineChartWidget {
                                 id: priceLineChart
-                                Layout.minimumHeight: 215
-                                Layout.maximumWidth: parent.width < 1260 ? -1 : 420
+                                Layout.minimumHeight: 260
+                                Layout.maximumWidth: parent.width < 1260 ? -1 : 840
                                 Layout.fillWidth: true
                                 backgroundRoundness: 0
                                 lineSeries.visible: maybeHasChartData
@@ -535,8 +535,8 @@ Page {
 
                         FpDividendsColumnChartWidget {
                             id: dividendHistoryChart
-                            Layout.minimumHeight: 215
-                            Layout.maximumWidth: parent.width < 1260 ? -1 : 420
+                            Layout.minimumHeight: 260
+                            Layout.maximumWidth: parent.width < 1260 ? -1 : 840
                             Layout.fillWidth: true
                             Layout.bottomMargin: 38
                             backgroundRoundness: 0
