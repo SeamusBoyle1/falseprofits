@@ -30,7 +30,8 @@ Page {
                 // RegExp source: https://stackoverflow.com/a/16148388
                 regExp: /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/
             }
-            inputMethodHints: Qt.ImhEmailCharactersOnly
+            inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhPreferLowercase
+                              | Qt.ImhEmailCharactersOnly
             Layout.fillWidth: true
 
             Label {
