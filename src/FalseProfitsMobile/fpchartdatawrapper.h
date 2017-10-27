@@ -7,6 +7,8 @@
 
 #include <QAbstractSeries>
 #include <QAbstractAxis>
+#include <QBarSeries>
+#include <QDate>
 #include <QString>
 #include <QVector>
 
@@ -51,6 +53,19 @@ public:
     QVector<qreal> m_y;
 
     QVector<qreal> xData() const { return m_x; }
+    QVector<qreal> yData() const { return m_y; }
+};
+
+class FpChartDateSeriesData
+{
+    Q_GADGET
+    Q_PROPERTY(QVector<QDate> xData READ xData)
+    Q_PROPERTY(QVector<qreal> yData READ yData)
+public:
+    QVector<QDate> m_x;
+    QVector<qreal> m_y;
+
+    QVector<QDate> xData() const { return m_x; }
     QVector<qreal> yData() const { return m_y; }
 };
 
@@ -184,6 +199,17 @@ public:
     Q_INVOKABLE
     void hackRemoveAllSeriesAndAxes(QAbstractSeries *s) const;
 
+    Q_INVOKABLE
+    FpChartDateSeriesData loadDividends(const QByteArray &ba) const;
+
+    Q_INVOKABLE
+    FpChartDateSeriesData convertToAnnualDividends(const FpChartDateSeriesData &biannual,
+                                                   int numYears) const;
+
+    Q_INVOKABLE
+    void updateDividendsSeries(QAbstractAxis *categories, QBarSeries *values,
+                               const FpChartDateSeriesData &in) const;
+
 signals:
 
 public slots:
@@ -195,5 +221,6 @@ private:
 
 Q_DECLARE_METATYPE(FpChartCandleSeriesData)
 Q_DECLARE_METATYPE(FpChartLineSeriesData)
+Q_DECLARE_METATYPE(FpChartDateSeriesData)
 
 #endif // FPCHARTDATAWRAPPER_H

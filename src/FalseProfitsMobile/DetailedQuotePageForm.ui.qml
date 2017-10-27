@@ -12,6 +12,7 @@ Page {
     property alias chartFullScreenButton: chartFullScreenButton
     property alias rangeButtonGroup: rangeButtonGroup
     property alias priceLineChart: priceLineChart
+    property alias dividendHistoryChart: dividendHistoryChart
     property alias starButton: starButton
     property string symbolText
     property string companyNameText
@@ -113,6 +114,7 @@ Page {
                             horizontalAlignment: Image.AlignHCenter
                             verticalAlignment: Image.AlignVCenter
                             source: "qrc:/images/" + FpStyle.iconPrimary + "/gavel.png"
+                            opacity: parent.enabled ? ExtraMaterial.activeIconOnPrimaryOpacity : ExtraMaterial.inactiveIconOnPrimaryOpacity
                         }
                         flat: true
                         hoverEnabled: true
@@ -132,6 +134,7 @@ Page {
                             source: starred ? "qrc:/images/" + FpStyle.iconPrimary
                                               + "/star.png" : "qrc:/images/"
                                               + FpStyle.iconPrimary + "/star_border.png"
+                            opacity: parent.enabled ? ExtraMaterial.activeIconOnPrimaryOpacity : ExtraMaterial.inactiveIconOnPrimaryOpacity
                         }
                         flat: true
                         hoverEnabled: true
@@ -185,7 +188,6 @@ Page {
                                 // back to Light when Roboto font is used on iOS.
                                 font.pixelSize: 34
                                 //font.weight: Font.Light
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
                             }
 
                             Label {
@@ -195,8 +197,7 @@ Page {
                                                         == -1 ? "#bf1722" :
                                                                 ExtraMaterial.primaryTextColor
                                 font.pixelSize: 32
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
-                                Layout.bottomMargin: 7
+                                anchors.baseline: lastPriceLabel.baseline
                             }
 
                             Label {
@@ -206,8 +207,7 @@ Page {
                                 color: direction == 1 ? "#0b893e" : direction
                                                         == -1 ? "#bf1722" :
                                                                 ExtraMaterial.primaryTextColor
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
-                                Layout.bottomMargin: 7
+                                anchors.baseline: lastPriceLabel.baseline
                             }
 
                             Label {
@@ -218,8 +218,7 @@ Page {
                                                         == -1 ? "#bf1722" :
                                                                 ExtraMaterial.primaryTextColor
                                 horizontalAlignment: Text.AlignRight
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
-                                Layout.bottomMargin: 7
+                                anchors.baseline: lastPriceLabel.baseline
                             }
                         }
 
@@ -292,6 +291,7 @@ Page {
                                             verticalAlignment: Image.AlignVCenter
                                             source: "qrc:/images/" + FpStyle.iconPrimary
                                                     + "/fullscreen.png"
+                                            opacity: parent.enabled ? ExtraMaterial.activeIconOnPrimaryOpacity : ExtraMaterial.inactiveIconOnPrimaryOpacity
                                         }
                                         flat: true
 
@@ -306,8 +306,8 @@ Page {
 
                             FpLineChartWidget {
                                 id: priceLineChart
-                                Layout.minimumHeight: 215
-                                Layout.maximumWidth: parent.width < 1260 ? -1 : 420
+                                Layout.minimumHeight: 260
+                                Layout.maximumWidth: parent.width < 1260 ? -1 : 840
                                 Layout.fillWidth: true
                                 backgroundRoundness: 0
                                 lineSeries.visible: maybeHasChartData
@@ -335,7 +335,6 @@ Page {
                             Layout.fillWidth: true
                             Layout.leftMargin: 16
                             Layout.rightMargin: 16
-                            Layout.bottomMargin: 38
                             columns: parent.width < 500 ? 1 : 2
                             columnSpacing: 32
 
@@ -532,6 +531,15 @@ Page {
                                     horizontalAlignment: Text.AlignRight
                                 }
                             }
+                        }
+
+                        FpDividendsColumnChartWidget {
+                            id: dividendHistoryChart
+                            Layout.minimumHeight: 260
+                            Layout.maximumWidth: parent.width < 1260 ? -1 : 840
+                            Layout.fillWidth: true
+                            Layout.bottomMargin: 38
+                            backgroundRoundness: 0
                         }
                     }
                 }

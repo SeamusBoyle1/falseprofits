@@ -54,7 +54,8 @@ Pane {
                 Layout.fillWidth: true
                 placeholderText: qsTr("Email address")
                 selectByMouse: true
-                inputMethodHints: Qt.ImhEmailCharactersOnly
+                inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhPreferLowercase
+                                  | Qt.ImhEmailCharactersOnly
                 validator: RegExpValidator {
                     // RegExp source: https://stackoverflow.com/a/16148388
                     regExp: /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/

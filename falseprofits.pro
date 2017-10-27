@@ -6,5 +6,6 @@ SUBDIRS += \
 
 OTHER_FILES += \
     README.md \
+    $$files(dist/changes-*.md) \
     .appveyor.yml \
     .travis.yml

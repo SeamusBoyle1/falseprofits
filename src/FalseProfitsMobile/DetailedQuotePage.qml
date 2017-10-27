@@ -44,6 +44,7 @@ DetailedQuotePageForm {
         updateStarredState()
         fillChart()
         updateFundamentals()
+        updateDividendsHistoryChart()
     }
 
     rangeButtonGroup.onClicked2: {
@@ -255,6 +256,25 @@ DetailedQuotePageForm {
         })
     }
 
+    function updateDividendsHistoryChart() {
+        if (!currentSymbol || currentSymbol.length === 0) {
+            return;
+        }
+
+        var resp = fpCore.getDividends(currentSymbol, "5y")
+        incrementBusyIndicatorVisibility()
+        dividendHistoryChart.mySeries.visible = false
+        resp.onFinished.connect(function() {
+            decrementBusyIndicatorVisibility()
+            dividendHistoryChart.mySeries.visible = true
+            var biannual = chartDataWrapper.loadDividends(resp.payload())
+            var annual = chartDataWrapper.convertToAnnualDividends(biannual, 5)
+
+            chartDataWrapper.updateDividendsSeries(dividendHistoryChart.xAxis,
+                                                   dividendHistoryChart.mySeries, annual)
+        })
+    }
+
     function updateStarredState() {
         starred = watchlistWrapper.model.getRowOfSymbol(currentSymbol) >= 0
     }
@@ -349,6 +369,7 @@ DetailedQuotePageForm {
         updateQuote()
         fillChart()
         updateFundamentals()
+        updateDividendsHistoryChart()
         newsFeedPage.reloadNews()
     }
 }

@@ -47,6 +47,8 @@ public:
 
     INetworkReply *getFundamentals(const QString &symbol) override;
 
+    INetworkReply *getDividends(const QString &symbol, const QString &range) override;
+
     INetworkReply *getCandles(const CandlesRequestArgs &args) override;
 
     INetworkReply *symbolSearch(const SymbolSearchQuery &query) override;
@@ -99,6 +101,8 @@ public:
     QNetworkRequest createGetQuotesRequest(const QStringList &symbols) const;
 
     QNetworkRequest createGetFundamentalsRequest(const QString &symbol) const;
+
+    QNetworkRequest createGetDividendsRequest(const QString &symbol, const QString &range) const;
 
     QNetworkRequest createSymbolSearchRequest(const SymbolSearchQuery &query) const;
 

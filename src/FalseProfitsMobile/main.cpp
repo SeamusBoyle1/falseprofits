@@ -61,13 +61,13 @@ void loadRobotoFont()
     std::array<QString, 18> fonts{ {
         // Workaround for Normal weighted font must be inserted
         // before heavier fonts. Keep fonts group ordering the
-        // same as QFont::Weight
+        // same as QFont::Weight, but with Regular first.
 
+        "Roboto-Regular.ttf", //
         "Roboto-Thin.ttf", //
         "Roboto-ThinItalic.ttf", //
         "Roboto-Light.ttf", //
         "Roboto-LightItalic.ttf", //
-        "Roboto-Regular.ttf", //
         "Roboto-Italic.ttf", //
         "Roboto-Medium.ttf", //
         "Roboto-MediumItalic.ttf", //
@@ -76,9 +76,9 @@ void loadRobotoFont()
         "Roboto-Black.ttf", //
         "Roboto-BlackItalic.ttf", //
 
+        "RobotoCondensed-Regular.ttf", //
         "RobotoCondensed-Light.ttf", //
         "RobotoCondensed-LightItalic.ttf", //
-        "RobotoCondensed-Regular.ttf", //
         "RobotoCondensed-Italic.ttf", //
         "RobotoCondensed-Bold.ttf", //
         "RobotoCondensed-BoldItalic.ttf", //
@@ -125,6 +125,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<GetTransactionsResponse>("FpResponses", 1, 0, "GetTransactionsResponse");
     qmlRegisterType<GetQuotesResponse>("FpResponses", 1, 0, "GetQuotesResponse");
     qmlRegisterType<GetFundamentalsResponse>("FpResponses", 1, 0, "GetFundamentalsResponse");
+    qmlRegisterType<GetDividendsResponse>("FpResponses", 1, 0, "GetDividendsResponse");
     qmlRegisterType<GetCandlesResponse>("FpResponses", 1, 0, "GetCandlesResponse");
     qmlRegisterType<SymbolSearchResponse>("FpResponses", 1, 0, "SymbolSearchResponse");
     qmlRegisterType<GetShareDetailsResponse>("FpResponses", 1, 0, "GetShareDetailsResponse");

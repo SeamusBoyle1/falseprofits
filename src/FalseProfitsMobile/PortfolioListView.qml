@@ -63,6 +63,7 @@ ListView {
                         var qty = listView.model.getQuantityForRow(index)
                         marketOrderTriggered(symbol, qty)
                     }
+                    onPressed: mouse.accepted = false
                 }
             }
         }

@@ -129,6 +129,13 @@ public:
         return nullptr;
     }
 
+    INetworkReply *getDividends(const QString &symbol, const QString &range) override
+    {
+        Q_UNUSED(symbol)
+        Q_UNUSED(range)
+        return nullptr;
+    }
+
     INetworkReply *getCandles(const CandlesRequestArgs &args) override
     {
         Q_UNUSED(args)

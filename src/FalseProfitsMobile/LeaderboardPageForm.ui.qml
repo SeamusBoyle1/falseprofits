@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
 
 import com.example.fpx 1.0
+import io.material.xtra 1.0
 
 Page {
 //    width: 400
@@ -12,7 +13,6 @@ Page {
     property bool gotCurrentUserRank: false
     property string currentUserRankNumber: ""
     property string currentUserDisplayNameValue: ""
-    property string currentUserProfitNumber: ""
     property string currentUserProfitPercentNumber: ""
     property alias busyIndicator: busyIndicator
     property alias listView: listView
@@ -32,6 +32,7 @@ Page {
                     horizontalAlignment: Image.AlignHCenter
                     verticalAlignment: Image.AlignVCenter
                     source: "qrc:/images/" + FpStyle.iconAccent + "/menu.png"
+                    opacity: parent.enabled ? ExtraMaterial.activeIconOnAccentOpacity : ExtraMaterial.inactiveIconOnAccentOpacity
                 }
             }
             Label {
@@ -49,6 +50,7 @@ Page {
                     horizontalAlignment: Image.AlignHCenter
                     verticalAlignment: Image.AlignVCenter
                     source: "qrc:/images/" + FpStyle.iconAccent + "/refresh.png"
+                    opacity: parent.enabled ? ExtraMaterial.activeIconOnAccentOpacity : ExtraMaterial.inactiveIconOnAccentOpacity
                 }
                 enabled: visible
             }
@@ -93,20 +95,14 @@ Page {
             Label {
                 text: currentUserDisplayNameValue
                 font.pixelSize: 13
+                wrapMode: Text.WordWrap
                 Layout.fillWidth: true
-            }
-            Label {
-                text: currentUserProfitNumber
-                font.pixelSize: 16
-                horizontalAlignment: Text.AlignRight
-                Layout.preferredWidth: 100
             }
             Label {
                 text: currentUserProfitPercentNumber
                 font.pixelSize: 18
                 font.weight: Font.Medium
                 horizontalAlignment: Text.AlignRight
-                Layout.preferredWidth: 100
             }
         }
     }

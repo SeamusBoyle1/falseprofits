@@ -69,10 +69,6 @@ LeaderboardPageForm {
                 currentUserDisplayNameValue = leaderboardWrapper.currentUserDisplayName()
                 currentUserRankNumber = fpLocale.toIntString(leaderboardWrapper.currentUserRank())
 
-                var profit = leaderboardWrapper.currentUserProfit()
-                currentUserProfitNumber = profit ? fpLocale.toDecimalString(parseFloat(profit), 2)
-                                                 : ""
-
                 var profitPct = leaderboardWrapper.currentUserProfitPercent()
                 currentUserProfitPercentNumber = profitPct ?
                             qsTr("%1%").arg(fpLocale.toDecimalString(parseFloat(profitPct), 2)) : ""

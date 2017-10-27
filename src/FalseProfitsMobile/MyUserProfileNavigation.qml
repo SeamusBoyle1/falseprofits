@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 import com.example.fpx 1.0
+import io.material.xtra 1.0
 
 Page {
     MyUserProfilePage {
@@ -21,6 +22,8 @@ Page {
                     horizontalAlignment: Image.AlignHCenter
                     verticalAlignment: Image.AlignVCenter
                     source: "qrc:/images/" + FpStyle.iconAccent + "/menu.png"
+                    opacity: parent.enabled ? ExtraMaterial.activeIconOnAccentOpacity :
+                                              ExtraMaterial.inactiveIconOnAccentOpacity
                 }
                 onClicked: {
                     appDrawer.open()
@@ -41,6 +44,8 @@ Page {
                     horizontalAlignment: Image.AlignHCenter
                     verticalAlignment: Image.AlignVCenter
                     source: "qrc:/images/" + FpStyle.iconAccent + "/refresh.png"
+                    opacity: parent.enabled ? ExtraMaterial.activeIconOnAccentOpacity :
+                                              ExtraMaterial.inactiveIconOnAccentOpacity
                 }
                 enabled: visible
                 onClicked: refreshView()
@@ -53,6 +58,8 @@ Page {
                     horizontalAlignment: Image.AlignHCenter
                     verticalAlignment: Image.AlignVCenter
                     source: "qrc:/images/" + FpStyle.iconAccent + "/more_vert.png"
+                    opacity: parent.enabled ? ExtraMaterial.activeIconOnAccentOpacity :
+                                              ExtraMaterial.inactiveIconOnAccentOpacity
                 }
                 enabled: visible
                 onClicked: menu.open()

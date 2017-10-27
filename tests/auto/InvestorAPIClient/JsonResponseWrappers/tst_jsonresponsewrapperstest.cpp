@@ -47,6 +47,7 @@ private Q_SLOTS:
     void transactionsResponseTest();
     void symbolSearchTest();
     void watchlistResponseTest();
+    void dividendsResponseTest();
     void candlesResponseTest();
     void leaderboardResponseTest();
 };
@@ -349,6 +350,39 @@ void JsonResponseWrappersTest::watchlistResponseTest()
             }
         }
         QVERIFY(foundCBA);
+    }
+}
+
+void JsonResponseWrappersTest::dividendsResponseTest()
+{
+    using namespace bsmi;
+
+    {
+        QString testFile("dividends5y.json");
+        auto doc = readFileContentsAsJson(srcDirFile(testFile));
+        if (doc.isNull()) {
+            QSKIP("Unable to open test file");
+        }
+
+        JsonObjectWrappers::ShareDividendsArray parser;
+        parser.jsonItems = doc.array();
+
+        QVERIFY(!parser.isEmpty());
+        QCOMPARE(parser.size(), 10);
+
+        auto e3 = parser.at(3);
+        QVERIFY(e3.isValid());
+        QCOMPARE(*e3.date(), QDate::fromString("2014-05-14", Qt::ISODate));
+        QCOMPARE(*e3.value(), 1.28571);
+
+        auto e7 = parser.at(7);
+        QVERIFY(e7.isValid());
+        QCOMPARE(*e7.date(), QDate::fromString("2016-05-12", Qt::ISODate));
+        QCOMPARE(*e7.value(), 1.34286);
+
+        // out-of-range, item should not be valid
+        auto e10 = parser.at(10);
+        QVERIFY(!e10.isValid());
     }
 }
 

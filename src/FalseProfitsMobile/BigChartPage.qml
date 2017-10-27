@@ -30,13 +30,23 @@ BigChartPageForm {
         chartDataWrapper.hackRemoveAllSeriesAndAxes(bigChartView.candleSeries)
     }
 
+    bigChartView.onWidthChanged: {
+        updateLastPriceLabel()
+    }
+
+    bigChartView.onHeightChanged: {
+        updateLastPriceLabel()
+    }
+
     onCurrentSymbolChanged: {
         symbolText = currentSymbol
+        updateSmallChartTitle()
         fillChart()
     }
 
     onChartIntervalChanged: {
         intervalText = chartInterval.toUpperCase()
+        updateSmallChartTitle()
     }
 
     onChartDataRangeChanged: {
@@ -93,6 +103,34 @@ BigChartPageForm {
         }
     }
 
+    function updateLastPriceLabel() {
+        // This function uses historyData instead of getting the last
+        // price from the series as CandlestickSeries.at() doesn't work
+        // (always returns null)
+
+        if (!historyData) {
+            return;
+        }
+
+        var lastClosePrice = historyData.close.length > 0 ?
+                    historyData.close[historyData.close.length - 1] : undefined
+        var lastBarIndex = historyData.xData.length >= historyData.close.length ?
+                    historyData.close.length : undefined
+
+        if (lastBarIndex && lastClosePrice) {
+            axisLastPriceLabel.visible = true
+            axisLastPriceLabel.text = fpLocale.toShortDecimalString(lastClosePrice)
+            var lastPoint = bigChartView.mapToPosition(
+                        Qt.point(lastBarIndex, lastClosePrice),
+                        !bigChartView.candleSeries.visible ? bigChartView.lineSeries :
+                                                             bigChartView.candleSeries)
+            axisLastPriceLabel.xBackbone = lastPoint.x
+            axisLastPriceLabel.lastPricePixel = lastPoint.y
+        } else {
+            axisLastPriceLabel.visible = false
+        }
+    }
+
     function incrementBusyIndicatorVisibility() {
         busyIndicator.visible = true
         busyIndicatorVisibility = busyIndicatorVisibility + 1
@@ -136,6 +174,9 @@ BigChartPageForm {
 
         bigChartView.xAxis.min = 0
         bigChartView.xAxis.max = historyData.xData.length
+
+        updateLastPriceLabel()
+        updateSmallChartTitle()
     }
 
     function updateTickLabels() {
@@ -187,6 +228,40 @@ BigChartPageForm {
             fitDataRange()
             updateTickLabels()
         })
+    }
+
+    function updateSmallChartTitle() {
+        // This function uses historyData instead of getting the last
+        // price from the series as CandlestickSeries.at() doesn't work
+        // (always returns null)
+
+        var haveTitle = false
+
+        if (historyData) {
+            var lastClosePrice = historyData.close.length > 0 ?
+                        historyData.close[historyData.close.length - 1] : undefined
+            var lastOpenPrice = historyData.close.length >= historyData.open.length ?
+                        historyData.open[historyData.close.length - 1] : undefined
+            var lastHighPrice = historyData.close.length >= historyData.high.length ?
+                        historyData.high[historyData.high.length - 1] : undefined
+            var lastLowPrice = historyData.close.length >= historyData.low.length ?
+                        historyData.low[historyData.close.length - 1] : undefined
+            var lastBarIndex = historyData.xData.length >= historyData.close.length ?
+                        historyData.close.length : undefined
+
+            if (lastBarIndex && lastClosePrice && lastOpenPrice && lastHighPrice && lastLowPrice) {
+                smallChartTitle = symbolText + ", " + intervalText + ",  O: " +
+                        fpLocale.toShortDecimalString(lastOpenPrice) + "  H: " +
+                        fpLocale.toShortDecimalString(lastHighPrice) + "  L: " +
+                        fpLocale.toShortDecimalString(lastLowPrice) + "  C: " +
+                        fpLocale.toShortDecimalString(lastClosePrice)
+                haveTitle = true
+            }
+        }
+
+        if (!haveTitle) {
+            smallChartTitle = symbolText + ", " + intervalText
+        }
     }
 
     function onRefreshTriggered() {
