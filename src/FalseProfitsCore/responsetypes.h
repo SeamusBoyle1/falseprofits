@@ -554,4 +554,37 @@ public:
     }
 };
 
+class GetPredictionsResponse : public BaseResponse
+{
+    Q_OBJECT
+    Q_PROPERTY(QString symbol READ symbol WRITE setSymbol NOTIFY symbolChanged)
+public:
+    GetPredictionsResponse() {}
+    virtual ~GetPredictionsResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        Q_UNUSED(httpStatusCode)
+        return QString();
+    }
+
+    QString symbol() const { return m_symbol; }
+
+public slots:
+    void setSymbol(QString symbol)
+    {
+        if (m_symbol == symbol)
+            return;
+
+        m_symbol = symbol;
+        emit symbolChanged(m_symbol);
+    }
+
+signals:
+    void symbolChanged(QString symbol);
+
+private:
+    QString m_symbol;
+};
+
 #endif // RESPONSETYPES_H

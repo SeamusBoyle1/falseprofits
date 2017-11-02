@@ -6,6 +6,7 @@ import com.example.fpx 1.0
 DetailedQuotePageForm {
     signal tradeButtonClicked(string symbol)
     signal chartButtonClicked(string symbol, string interval, string dataRange)
+    signal pricePredictionChartButtonClicked(string symbol)
 
     property string currentSymbol
     property string chartDataRange: "1d"
@@ -65,6 +66,12 @@ DetailedQuotePageForm {
     chartFullScreenButton.onClicked: {
         if (currentSymbol !== "") {
             chartButtonClicked(currentSymbol, chartInterval, chartDataRange)
+        }
+    }
+
+    pricePredictionChartButton.onClicked: {
+        if (currentSymbol !== "") {
+            pricePredictionChartButtonClicked(currentSymbol)
         }
     }
 

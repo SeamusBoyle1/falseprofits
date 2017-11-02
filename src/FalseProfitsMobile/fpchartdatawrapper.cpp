@@ -39,6 +39,7 @@ FpChartDataWrapper::FpChartDataWrapper(QObject *parent)
     qRegisterMetaType<FpChartCandleSeriesData>();
     qRegisterMetaType<FpChartLineSeriesData>();
     qRegisterMetaType<FpChartDateSeriesData>();
+    qRegisterMetaType<FpChartLinePredictionSeriesData>();
 }
 
 GetCandlesResponse *FpChartDataWrapper::getCandles(const CandlesRequestArgs &args)
@@ -81,6 +82,34 @@ GetCandlesResponse *FpChartDataWrapper::getCandlesFromYahoo(const CandlesRequest
         if (rep->error() == QNetworkReply::NoError) {
             auto converted = convertYahooData(rep->readAll(), args.range());
             resp->setPayload(converted.toJson(QJsonDocument::Compact));
+        } else {
+            resp->setErrorMessage(rep->errorString() + QString("(code: %1)").arg(httpStatusCode));
+        }
+
+        rep->deleteLater();
+        resp->setFinished();
+    });
+
+    return resp;
+}
+
+GetPredictionsResponse *FpChartDataWrapper::getPredictions(const QString &symbol)
+{
+    QPointer<GetPredictionsResponse> resp(new GetPredictionsResponse);
+    resp->setSymbol(symbol);
+
+    QUrl url("https://falseprophecies.herokuapp.com/1/predict/" + symbol);
+
+    auto rep = m_network->get(QNetworkRequest(url));
+    connect(rep, &QNetworkReply::finished, this, [symbol, resp, rep, this]() {
+        if (!resp) {
+            rep->deleteLater();
+            return;
+        }
+        auto httpStatusCode = rep->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        resp->setHttpStatusCode(httpStatusCode);
+        if (rep->error() == QNetworkReply::NoError) {
+            resp->setPayload(rep->readAll());
         } else {
             resp->setErrorMessage(rep->errorString() + QString("(code: %1)").arg(httpStatusCode));
         }
@@ -359,6 +388,34 @@ void FpChartDataWrapper::updateSeries(QAbstractSeries *series,
     xySeries->replace(points);
 }
 
+void FpChartDataWrapper::updatePredictionSeries(QAbstractSeries *predictionSeries,
+                                                QAbstractSeries *truePriceSeries,
+                                                const FpChartLinePredictionSeriesData &data) const
+{
+    if (predictionSeries == nullptr || truePriceSeries == nullptr) {
+        return;
+    }
+
+    auto predictionSeries_ = static_cast<QXYSeries *>(predictionSeries);
+    auto truePriceSeries_ = static_cast<QXYSeries *>(truePriceSeries);
+
+    QVector<QPointF> predictionPoints(data.m_x.size());
+    for (auto i = 0, total = data.m_x.size(); i < total; ++i) {
+        predictionPoints[i].rx() = data.m_x.at(i);
+        predictionPoints[i].ry() = data.m_yPrediction.at(i);
+    }
+
+    QVector<QPointF> truePricePoints(data.m_x.size());
+    for (auto i = 0, total = data.m_x.size(); i < total; ++i) {
+        truePricePoints[i].rx() = data.m_x.at(i);
+        truePricePoints[i].ry() = data.m_yTruePrice.at(i);
+    }
+
+    // Use replace instead of clear + append, it's optimized for performance
+    predictionSeries_->replace(predictionPoints);
+    truePriceSeries_->replace(truePricePoints);
+}
+
 void FpChartDataWrapper::hackMargin(QAbstractSeries *s) const
 {
     // Source: https://stackoverflow.com/a/39243275
@@ -514,4 +571,56 @@ void FpChartDataWrapper::updateDividendsSeries(QAbstractAxis *categories, QBarSe
             }
         }
     }
+}
+
+FpChartLinePredictionSeriesData FpChartDataWrapper::loadPredictions(const QByteArray &json) const
+{
+    auto doc = QJsonDocument::fromJson(json);
+    auto const obj = doc.object();
+    auto const predictionArr = obj.value(QLatin1String("prediction")).toArray();
+    auto const true_dataArr = obj.value(QLatin1String("true_data")).toArray();
+
+    FpChartLinePredictionSeriesData r;
+    auto size = std::max(predictionArr.size(), true_dataArr.size());
+    r.m_x.resize(size);
+    r.m_yPrediction.reserve(size);
+    r.m_yTruePrice.reserve(size);
+
+    for (auto i = 0; i < size; ++i) {
+        r.m_x[i] = i;
+    }
+
+    if (predictionArr.size() < size) {
+        for (auto i = 0, totalShort = predictionArr.size() - size; i < totalShort; ++i) {
+            r.m_yPrediction.append(0);
+        }
+    }
+
+    for (auto const &in : predictionArr) {
+        r.m_yPrediction.append(in.toDouble());
+    }
+
+    if (true_dataArr.size() < size) {
+        for (auto i = 0, totalShort = true_dataArr.size() - size; i < totalShort; ++i) {
+            r.m_yTruePrice.append(0);
+        }
+    }
+
+    for (auto const &in : true_dataArr) {
+        r.m_yTruePrice.append(in.toDouble());
+    }
+
+    return r;
+}
+
+double FpChartDataWrapper::predictionPercentDifference(const FpChartLinePredictionSeriesData &data) const
+{
+    if (data.m_yPrediction.isEmpty() || data.m_yTruePrice.isEmpty()) {
+        return 0;
+    }
+
+    auto lastPrediction = data.m_yPrediction.last();
+    auto lastTruePrice = data.m_yTruePrice.last();
+
+    return (lastPrediction - lastTruePrice) / lastTruePrice * 100;
 }

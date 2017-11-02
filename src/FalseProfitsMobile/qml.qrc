@@ -50,5 +50,8 @@
         <file>MaterialComponents/HorizontalDivider.qml</file>
         <file>DrawerUserProfile.qml</file>
         <file>FpDividendsColumnChartWidget.qml</file>
+        <file>PricePredictionChartPage.qml</file>
+        <file>PricePredictionChartPageForm.ui.qml</file>
+        <file>FpPricePredictionChartWidget.qml</file>
     </qresource>
 </RCC>
