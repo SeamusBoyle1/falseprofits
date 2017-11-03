@@ -93,6 +93,19 @@ ApplicationWindow {
                         ListElement{ title: qsTr("Sign Out"); source: "qrc:/SignOutPage.qml" }
                     }
                 }
+                HorizontalDivider {
+                    Layout.fillWidth: true
+                }
+
+                ItemDelegate {
+                    text: qsTr("About")
+                    Layout.fillWidth: true
+                    onClicked: {
+                        listView.currentIndex = -1
+                        appNavStack.push("qrc:/AboutPage.qml")
+                        appDrawer.close()
+                    }
+                }
             }
 
             ScrollIndicator.vertical: ScrollIndicator { }
