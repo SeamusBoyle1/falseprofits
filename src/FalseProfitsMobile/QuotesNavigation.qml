@@ -135,6 +135,7 @@ Page {
                 item.currentSymbol = tickerSymbol
                 item.onTradeButtonClicked.connect(showOrderTicket)
                 item.onChartButtonClicked.connect(showBigChart)
+                item.onPricePredictionChartButtonClicked.connect(showPricePredictionChart)
                 navPan.push(item)
             }
         }
@@ -163,6 +164,18 @@ Page {
                 item.currentSymbol = tickerSymbol
                 item.chartInterval = interval
                 item.chartDataRange = dataRange
+                navPan.push(item)
+            }
+        }
+
+        Loader {
+            id: pricePredictionChartLoader
+            property string tickerSymbol
+            active: false
+            source: "qrc:/PricePredictionChartPage.qml"
+            anchors.fill: parent
+            onLoaded: {
+                item.currentSymbol = tickerSymbol
                 navPan.push(item)
             }
         }
@@ -231,6 +244,22 @@ Page {
             bigChartLoader.interval = interval
             bigChartLoader.dataRange = dataRange
             bigChartLoader.active = true
+        }
+    }
+
+    function showPricePredictionChart(ticker)
+    {
+        if (pricePredictionChartLoader.active) {
+            pricePredictionChartLoader.item.currentSymbol = ticker
+            var index = pricePredictionChartLoader.item.StackView.index
+            if (index >= 0) {
+                navPan.pop(pricePredictionChartLoader.item)
+            } else {
+                navPan.push(pricePredictionChartLoader.item)
+            }
+        } else {
+            pricePredictionChartLoader.tickerSymbol = ticker
+            pricePredictionChartLoader.active = true
         }
     }
 }

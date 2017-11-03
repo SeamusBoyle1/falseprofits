@@ -20,6 +20,7 @@ class QNetworkAccessManager;
 class CandlesRequestArgs;
 class FpCore;
 class GetCandlesResponse;
+class GetPredictionsResponse;
 
 class FpChartCandleSeriesData
 {
@@ -69,6 +70,22 @@ public:
     QVector<qreal> yData() const { return m_y; }
 };
 
+class FpChartLinePredictionSeriesData
+{
+    Q_GADGET
+    Q_PROPERTY(QVector<qreal> xData READ xData)
+    Q_PROPERTY(QVector<qreal> yPredictionData READ yPredictionData)
+    Q_PROPERTY(QVector<qreal> yTruePriceData READ yTruePriceData)
+public:
+    QVector<qreal> m_x;
+    QVector<qreal> m_yPrediction;
+    QVector<qreal> m_yTruePrice;
+
+    QVector<qreal> xData() const { return m_x; }
+    QVector<qreal> yPredictionData() const { return m_yPrediction; }
+    QVector<qreal> yTruePriceData() const { return m_yTruePrice; }
+};
+
 class FpChartDataWrapper : public QObject
 {
     Q_OBJECT
@@ -84,6 +101,9 @@ public:
 
     Q_INVOKABLE
     GetCandlesResponse *getCandlesFromYahoo(const CandlesRequestArgs &args);
+
+    Q_INVOKABLE
+    GetPredictionsResponse *getPredictions(const QString &symbol);
 
     QJsonDocument convertYahooData(const QByteArray &json, const QString &range) const;
 
@@ -129,6 +149,10 @@ public:
     void updateSeries(QAbstractSeries *series, const FpChartLineSeriesData &data) const;
 
     Q_INVOKABLE
+    void updatePredictionSeries(QAbstractSeries *predictionSeries, QAbstractSeries *truePriceSeries,
+                                const FpChartLinePredictionSeriesData &data) const;
+
+    Q_INVOKABLE
     double minPrice(const QVector<qreal> &yData) const
     {
         auto it = std::min_element(yData.begin(), yData.end());
@@ -144,6 +168,12 @@ public:
     double minPrice(const FpChartLineSeriesData &data) const { return minPrice(data.m_y); }
 
     Q_INVOKABLE
+    double minPrice(const FpChartLinePredictionSeriesData &data) const
+    {
+        return std::min(minPrice(data.m_yPrediction), minPrice(data.m_yTruePrice));
+    }
+
+    Q_INVOKABLE
     double maxPrice(const QVector<qreal> &yData) const
     {
         auto it = std::max_element(yData.begin(), yData.end());
@@ -157,6 +187,12 @@ public:
 
     Q_INVOKABLE
     double maxPrice(const FpChartLineSeriesData &data) const { return maxPrice(data.m_y); }
+
+    Q_INVOKABLE
+    double maxPrice(const FpChartLinePredictionSeriesData &data) const
+    {
+        return std::max(maxPrice(data.m_yPrediction), maxPrice(data.m_yTruePrice));
+    }
 
     Q_INVOKABLE
     double minDate(const QVector<qreal> &xData) const
@@ -210,6 +246,12 @@ public:
     void updateDividendsSeries(QAbstractAxis *categories, QBarSeries *values,
                                const FpChartDateSeriesData &in) const;
 
+    Q_INVOKABLE
+    FpChartLinePredictionSeriesData loadPredictions(const QByteArray &json) const;
+
+    Q_INVOKABLE
+    double predictionPercentDifference(const FpChartLinePredictionSeriesData &data) const;
+
 signals:
 
 public slots:
@@ -222,5 +264,6 @@ private:
 Q_DECLARE_METATYPE(FpChartCandleSeriesData)
 Q_DECLARE_METATYPE(FpChartLineSeriesData)
 Q_DECLARE_METATYPE(FpChartDateSeriesData)
+Q_DECLARE_METATYPE(FpChartLinePredictionSeriesData)
 
 #endif // FPCHARTDATAWRAPPER_H

@@ -10,6 +10,7 @@ Page {
     width: 400
     height: 400
     property alias chartFullScreenButton: chartFullScreenButton
+    property alias pricePredictionChartButton: pricePredictionChartButton
     property alias rangeButtonGroup: rangeButtonGroup
     property alias priceLineChart: priceLineChart
     property alias dividendHistoryChart: dividendHistoryChart
@@ -319,6 +320,15 @@ Page {
                                          && !maybeHasChartData
                                 anchors.centerIn: priceLineChart
                             }
+                        }
+
+                        ToolButton {
+                            id: pricePredictionChartButton
+                            text: qsTr("Price Prediction")
+                            flat: true
+
+                            ToolTip.visible: hovered
+                            ToolTip.text: qsTr("View price prediction")
                         }
                     }
                 }

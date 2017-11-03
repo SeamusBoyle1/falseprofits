@@ -59,6 +59,14 @@ DISTFILES += \
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
+mac {
+    ICON = $$PWD/mac/icon.icns
+}
+
+win32 {
+    RC_ICONS = $$PWD/win32/icon.ico
+}
+
 INCLUDEPATH += $$PWD/..
 DEPENDPATH += $$PWD/..
 
