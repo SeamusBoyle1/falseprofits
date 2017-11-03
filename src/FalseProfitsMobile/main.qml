@@ -100,6 +100,7 @@ ApplicationWindow {
                 ItemDelegate {
                     text: qsTr("About")
                     Layout.fillWidth: true
+                    opacity: 0.87
                     onClicked: {
                         listView.currentIndex = -1
                         appNavStack.push("qrc:/AboutPage.qml")
