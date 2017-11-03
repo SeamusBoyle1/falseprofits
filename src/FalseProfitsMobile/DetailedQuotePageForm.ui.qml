@@ -351,13 +351,16 @@ Page {
                         anchors.right: parent.right
                         anchors.topMargin: 4
 
-                        GridLayout {
+                        Grid {
+                            id: grid
                             rowSpacing: 20
                             Layout.fillWidth: true
                             Layout.leftMargin: 16
                             Layout.rightMargin: 16
                             columns: parent.width < 500 ? 1 : 2
                             columnSpacing: 32
+
+                            property real columnWidth: parent.width / columns - columnSpacing
 
                             // Unused fundamental fields
                             //Label { text: fundamental_bookValue }
@@ -366,6 +369,7 @@ Page {
                             //Label { text: fundamental_industry }
                             GridLayout {
                                 columns: 2
+                                width: grid.columnWidth
 
                                 Label {
                                     text: qsTr("Trading")
@@ -419,6 +423,7 @@ Page {
 
                             GridLayout {
                                 columns: 2
+                                width: grid.columnWidth
                                 Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
 
                                 Label {
@@ -465,6 +470,7 @@ Page {
 
                             GridLayout {
                                 columns: 2
+                                width: grid.columnWidth
 
                                 Label {
                                     text: qsTr("Stock Market History")
@@ -510,6 +516,7 @@ Page {
 
                             GridLayout {
                                 columns: 2
+                                width: grid.columnWidth
 
                                 Label {
                                     text: qsTr("Dividends")
