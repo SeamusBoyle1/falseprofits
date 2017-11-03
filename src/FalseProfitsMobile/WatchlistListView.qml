@@ -150,6 +150,4 @@ ListView {
             symbolClicked(model.symbol)
         }
     }
-
-    ScrollIndicator.vertical: ScrollIndicator {}
 }

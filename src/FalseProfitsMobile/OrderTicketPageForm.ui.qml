@@ -23,7 +23,7 @@ Page {
     property alias placeOrderButton: placeOrderButton
     property alias busyIndicator: busyIndicator
 
-    Flickable {
+    ScrollView {
         id: flickable
         anchors.fill: parent
         contentWidth: mlay.width
@@ -177,9 +177,6 @@ Page {
                              && quantityField.acceptableInput
                 }
             }
-        }
-
-        ScrollIndicator.vertical: ScrollIndicator {
         }
     }
 

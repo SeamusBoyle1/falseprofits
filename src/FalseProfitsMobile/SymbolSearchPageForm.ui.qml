@@ -47,27 +47,27 @@ Page {
             }
         }
 
-        SymbolSearchListView {
-            id: listView
+        ScrollView {
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.minimumHeight: 300
             Layout.minimumWidth: 300
             Layout.preferredWidth: 600
 
-            ScrollIndicator.vertical: ScrollIndicator {
-            }
+            SymbolSearchListView {
+                id: listView
 
-            BusyIndicator {
-                id: busyIndicator
-                visible: false
-                anchors.centerIn: parent
-            }
+                BusyIndicator {
+                    id: busyIndicator
+                    visible: false
+                    anchors.centerIn: parent
+                }
 
-            Label {
-                text: qsTr("No companies")
-                visible: !busyIndicator.visible && zeroSearchResults
-                anchors.centerIn: parent
+                Label {
+                    text: qsTr("No companies")
+                    visible: !busyIndicator.visible && zeroSearchResults
+                    anchors.centerIn: parent
+                }
             }
         }
     }

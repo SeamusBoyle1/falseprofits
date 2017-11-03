@@ -65,6 +65,4 @@ ListView {
             accountClicked(model.id)
         }
     }
-
-    ScrollIndicator.vertical: ScrollIndicator {}
 }

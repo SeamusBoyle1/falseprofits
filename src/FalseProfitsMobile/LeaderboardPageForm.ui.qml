@@ -60,12 +60,15 @@ Page {
     ColumnLayout {
         anchors.fill: parent
 
-        LeaderboardListView {
-            id: listView
+        ScrollView {
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.topMargin: 8
-            bottomMargin: gotCurrentUserRank ? currentUserRank.height : 0
+
+            LeaderboardListView {
+                id: listView
+                bottomMargin: gotCurrentUserRank ? currentUserRank.height : 0
+            }
         }
     }
 

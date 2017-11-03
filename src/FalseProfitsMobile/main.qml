@@ -35,7 +35,7 @@ ApplicationWindow {
             dragMargin = !enableDrawer ? 0 : Qt.styleHints.startDragDistance
         }
 
-        Flickable {
+        ScrollView {
             anchors.fill: parent
             contentWidth: appDrawerContentsLayout.width
             contentHeight: appDrawerContentsLayout.height
@@ -107,8 +107,6 @@ ApplicationWindow {
                     }
                 }
             }
-
-            ScrollIndicator.vertical: ScrollIndicator { }
         }
     }
 

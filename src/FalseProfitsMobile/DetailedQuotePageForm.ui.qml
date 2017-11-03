@@ -59,7 +59,7 @@ Page {
         id: rangeButtonGroup
     }
 
-    Flickable {
+    ScrollView {
         id: flickable
         anchors.fill: parent
         contentWidth: mlay.width
@@ -571,9 +571,6 @@ Page {
                     enableRelativeTimeUpdates: SwipeView.isCurrentItem
                 }
             }
-        }
-
-        ScrollIndicator.vertical: ScrollIndicator {
         }
     }
 

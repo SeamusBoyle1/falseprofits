@@ -30,11 +30,14 @@ Page {
             Layout.topMargin: 8
         }
 
-        PortfolioListView {
-            id: listView
+        ScrollView {
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.topMargin: !accountsComboBox.visible ? 8 : 0
+
+            PortfolioListView {
+                id: listView
+            }
         }
 
         GridLayout {
