@@ -17,8 +17,7 @@ Column {
     Label {
         width: parent.width
         padding: 10
-        text: "FalseProfits is a stockmarket simulation game using data collected " +
-              "from the Yahoo Stock API. Created by students of the " +
+        text: "FalseProfits is a stockmarket simulation game. Created by students of the " +
               "<a href=\"https://www.rmit.edu.au/\">Royal Melbourne Institute of Technology</a> " +
               "via <a href=\"https://www.open.edu.au/\">Open Universities Australia,</a> as part " +
               "of the 2017 Programming Project."
