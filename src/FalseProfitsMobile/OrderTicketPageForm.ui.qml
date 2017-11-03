@@ -10,6 +10,7 @@ Page {
     width: 400
     height: 400
     property string currentSymbol
+    property string availableCashText
     property string lastPriceText
     property string orderValueText
     property string brokerageCostText
@@ -98,6 +99,18 @@ Page {
                 GridLayout {
                     rowSpacing: 12
                     columns: 2
+
+                    Label {
+                        text: qsTr("Total Cash ($):")
+                        Layout.fillWidth: true
+                        horizontalAlignment: Text.AlignRight
+                    }
+
+                    Label {
+                        text: availableCashText
+                        horizontalAlignment: Text.AlignRight
+                        Layout.fillWidth: true
+                    }
 
                     Label {
                         text: qsTr("Last Price ($):")

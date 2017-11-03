@@ -28,6 +28,10 @@ OrderTicketPageForm {
                 updateCommissionTables()
             }
         }
+        onPositionsChanged: {
+            // Update accounts to get the new available cash balance
+            updateAccounts()
+        }
     }
 
     Component.onCompleted: {
@@ -65,6 +69,10 @@ OrderTicketPageForm {
 
     onLastPriceValueChanged: {
         updateEstimatedTotal()
+    }
+
+    accountsComboBox.onCurrentIndexChanged: {
+        updateAvailableCashDisplay()
     }
 
     function doPlaceOrder() {
@@ -147,6 +155,8 @@ OrderTicketPageForm {
             decrementBusyIndicatorVisibility()
             if (accountsComboBox.currentIndex == -1) {
                 accountsComboBox.incrementCurrentIndex()
+            } else {
+                updateAvailableCashDisplay()
             }
         })
     }
@@ -206,6 +216,11 @@ OrderTicketPageForm {
             brokerageCostText = fpLocale.toDecimalString(costResult.brokerageCost, 3)
             totalText = fpLocale.toDecimalString(costResult.estimatedTotal, 3)
         }
+    }
+
+    function updateAvailableCashDisplay() {
+        var cashBalance = accountsComboBox.model.getBalance(accountsComboBox.currentIndex)
+        availableCashText = cashBalance ? fpLocale.toDecimalString(cashBalance, 2) : "-"
     }
 
     function onRefreshTriggered() {
