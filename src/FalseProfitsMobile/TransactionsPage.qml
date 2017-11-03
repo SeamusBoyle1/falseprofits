@@ -180,7 +180,7 @@ TransactionsPageForm {
             Row
             {
                 Label {
-                    text: qsTr("End Date")
+                    text: qsTr("End Date  ")
                     rightPadding: 10
                     MouseArea {
                         anchors.fill: parent
