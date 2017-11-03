@@ -6,8 +6,6 @@ import com.example.fpx 1.0
 OrderTicketPageForm {
     signal orderCompleted
 
-    property int busyIndicatorVisibility: 0
-
     property double lastPriceValue: 0
 
     FpTradingAccounts {
@@ -84,9 +82,9 @@ OrderTicketPageForm {
         orderArgs.side = buySideOption.checked ? OrderParams.BuySide : OrderParams.SellSide
 
         var resp = fpCore.sendOrder(accountId, orderArgs)
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         resp.onFinished.connect(function() {
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
             if (!resp.hasError()) {
                 // TODO(seamus): Add order price (from response) to text
                 infoDialogText.text = infoDialogText.text = qsTr("%1 %2 %3 shares.").arg(
@@ -136,23 +134,11 @@ OrderTicketPageForm {
         }
     }
 
-    function incrementBusyIndicatorVisibility() {
-        busyIndicator.visible = true
-        busyIndicatorVisibility = busyIndicatorVisibility + 1
-    }
-
-    function decrementBusyIndicatorVisibility() {
-        busyIndicatorVisibility = busyIndicatorVisibility - 1
-        if (busyIndicatorVisibility == 0) {
-            busyIndicator.visible = false
-        }
-    }
-
     function updateAccounts() {
         var notifier = myTradingAccounts.updateAccounts()
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         notifier.onFinished.connect(function() {
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
             if (accountsComboBox.currentIndex == -1) {
                 accountsComboBox.incrementCurrentIndex()
             } else {
@@ -163,15 +149,15 @@ OrderTicketPageForm {
 
     function updateCommissionTables() {
         var buyNotifier = brokerageCostCalculator.updateBuyCommission()
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         buyNotifier.onFinished.connect(function() {
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
         })
 
         var sellNotifier = brokerageCostCalculator.updateSellCommission()
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         sellNotifier.onFinished.connect(function() {
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
         })
     }
 
@@ -182,10 +168,10 @@ OrderTicketPageForm {
         if (currentSymbol === "")
             return
 
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         var quoteResp = fpCore.getQuotes(currentSymbol)
         quoteResp.onFinished.connect(function() {
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
             if (!quoteResp.hasError()) {
                 var quotes = fpType.makeJsonQuotes(quoteResp.payload())
                 var quote = quotes.find(currentSymbol)

@@ -57,5 +57,6 @@
         <file>AboutPageContent.qml</file>
         <file>AboutPageForm.ui.qml</file>
         <file>FpCalendarStyle.qml</file>
+        <file>VeryBusyIndicator.qml</file>
     </qresource>
 </RCC>

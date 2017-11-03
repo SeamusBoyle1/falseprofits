@@ -5,8 +5,6 @@ import QtQuick.Layouts 1.3
 import com.example.fpx 1.0
 
 MyUserProfilePageForm {
-    property int busyIndicatorVisibility: 0
-
     FpTradingAccounts {
         id: myTradingAccounts
         coreClient: fpCore
@@ -47,10 +45,10 @@ MyUserProfilePageForm {
             newProfile.email = userDetails.userEmailText
         }
 
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         var resp = fpCore.editUserProfile(newProfile)
         resp.onFinished.connect(function() {
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
             if (!resp.hasError()) {
                 reloadUserProfile()
             } else {
@@ -67,10 +65,10 @@ MyUserProfilePageForm {
         if (accountId === "")
             return;
 
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         var resp = fpCore.resetAccount(accountId)
         resp.onFinished.connect(function() {
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
             if (!resp.hasError()) {
                 infoDialog.title = qsTr("Account Reset")
                 infoDialogText.text = qsTr("Your trading account has been reset, enjoy.")
@@ -83,10 +81,10 @@ MyUserProfilePageForm {
     }
 
     function deleteMyAccount() {
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         var resp = fpCore.deleteUser()
         resp.onFinished.connect(function() {
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
             if (!resp.hasError()) {
                 infoDialog.title = qsTr("User Deleted")
                 infoDialogText.text = qsTr("Your user account has been annihilated.")
@@ -142,18 +140,6 @@ MyUserProfilePageForm {
         }
     }
 
-    function incrementBusyIndicatorVisibility() {
-        busyIndicator.visible = true
-        busyIndicatorVisibility = busyIndicatorVisibility + 1
-    }
-
-    function decrementBusyIndicatorVisibility() {
-        busyIndicatorVisibility = busyIndicatorVisibility - 1
-        if (busyIndicatorVisibility == 0) {
-            busyIndicator.visible = false
-        }
-    }
-
     function clearUserProfileDisplay()
     {
         originalDisplayName = ""
@@ -175,10 +161,10 @@ MyUserProfilePageForm {
     function reloadUserProfile()
     {
         if (fpCore.authState === Fpx.AuthenticatedState) {
-            incrementBusyIndicatorVisibility()
+            busyIndicator.incrementVisibility()
             var userProfileResp = fpCore.getUserProfile()
             userProfileResp.onFinished.connect(function() {
-                decrementBusyIndicatorVisibility()
+                busyIndicator.decrementVisibility()
                 if (!userProfileResp.hasError()) {
                     var userDetailsDat = fpType.makeJsonUserDetails(userProfileResp.payload())
                     originalDisplayName = userDetailsDat.displayName
@@ -199,9 +185,9 @@ MyUserProfilePageForm {
 
     function updateAccounts() {
         var notifier = myTradingAccounts.updateAccounts()
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         notifier.onFinished.connect(function() {
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
         })
     }
 }

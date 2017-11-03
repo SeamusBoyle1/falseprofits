@@ -89,7 +89,7 @@ Page {
         }
     }
 
-    BusyIndicator {
+    VeryBusyIndicator {
         id: busyIndicator
         anchors.centerIn: parent
         visible: false

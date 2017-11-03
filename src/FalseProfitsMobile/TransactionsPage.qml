@@ -6,8 +6,6 @@ import QtQuick.Layouts 1.3
 import com.example.fpx 1.0
 
 TransactionsPageForm {
-    property int busyIndicatorVisibility: 0
-
     FpTransactionsWrapper {
         id: transactionsWrapper
         coreClient: fpCore
@@ -45,10 +43,10 @@ TransactionsPageForm {
     accountsComboBox.onActivated: {
         var accountId = myTradingAccounts.model.getAccountId(accountsComboBox.currentIndex)
         var notifier = transactionsWrapper.loadTransactions(accountId)
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         notifier.onFinished.connect(function() {
             // TODO(seamus): Handle errors
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
             transactionsEmpty = listView.count == 0
         })
     }
@@ -72,23 +70,11 @@ TransactionsPageForm {
         }
     }
 
-    function incrementBusyIndicatorVisibility() {
-        busyIndicator.visible = true
-        busyIndicatorVisibility = busyIndicatorVisibility + 1
-    }
-
-    function decrementBusyIndicatorVisibility() {
-        busyIndicatorVisibility = busyIndicatorVisibility - 1
-        if (busyIndicatorVisibility == 0) {
-            busyIndicator.visible = false
-        }
-    }
-
     function updateAccounts() {
         var notifier = myTradingAccounts.updateAccounts()
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         notifier.onFinished.connect(function() {
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
             if (accountsComboBox.currentIndex == -1) {
                 accountsComboBox.incrementCurrentIndex()
             }
@@ -97,10 +83,10 @@ TransactionsPageForm {
 
     function refreshTransactions() {
         var notifier = transactionsWrapper.refreshTransactions()
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         notifier.onFinished.connect(function() {
             // TODO(seamus): Handle errors
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
             transactionsEmpty = listView.count == 0
         })
     }
@@ -110,9 +96,9 @@ TransactionsPageForm {
             return
 
         var notifier = transactionsWrapper.getNextPage()
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         notifier.onFinished.connect(function() {
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
         })
     }
 

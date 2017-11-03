@@ -5,8 +5,6 @@ import QtQuick.Layouts 1.3
 import com.example.fpx 1.0
 
 LeaderboardPageForm {
-    property int busyIndicatorVisibility: 0
-
     FpLeaderboardWrapper {
         id: leaderboardWrapper
         coreClient: fpCore
@@ -46,24 +44,12 @@ LeaderboardPageForm {
         }
     }
 
-    function incrementBusyIndicatorVisibility() {
-        busyIndicator.visible = true
-        busyIndicatorVisibility = busyIndicatorVisibility + 1
-    }
-
-    function decrementBusyIndicatorVisibility() {
-        busyIndicatorVisibility = busyIndicatorVisibility - 1
-        if (busyIndicatorVisibility == 0) {
-            busyIndicator.visible = false
-        }
-    }
-
     function updateCurrentUserRank() {
         var notifier = leaderboardWrapper.refreshLeaderboardMe()
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         gotCurrentUserRank = false
         notifier.onFinished.connect(function() {
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
             gotCurrentUserRank = leaderboardWrapper.gotCurrentUserRank()
             if (leaderboardWrapper.gotCurrentUserRank()) {
                 currentUserDisplayNameValue = leaderboardWrapper.currentUserDisplayName()
@@ -78,10 +64,10 @@ LeaderboardPageForm {
 
     function refreshLeaderboard() {
         var notifier = leaderboardWrapper.refreshLeaderboard()
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         notifier.onFinished.connect(function() {
             // TODO(seamus): Handle errors
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
             leaderboardEmpty = listView.count == 0
 
             // refresh current user ranking when leaderboard refresh completed
@@ -94,9 +80,9 @@ LeaderboardPageForm {
             return
 
         var notifier = leaderboardWrapper.getNextPage()
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         notifier.onFinished.connect(function() {
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
         })
     }
 

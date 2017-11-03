@@ -70,7 +70,7 @@ Page {
         anchors.bottom: parent.bottom
     }
 
-    BusyIndicator {
+    VeryBusyIndicator {
         id: busyIndicator
         anchors.centerIn: parent
         visible: false

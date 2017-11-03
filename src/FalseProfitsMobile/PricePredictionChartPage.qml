@@ -6,7 +6,6 @@ import com.example.fpx 1.0
 PricePredictionChartPageForm {
     property string currentSymbol : "market"
     property int predictionRequestId: 0
-    property int busyIndicatorVisibility: 0
 
     FpChartDataWrapper {
         id: chartDataWrapper
@@ -29,25 +28,13 @@ PricePredictionChartPageForm {
         fillChart()
     }
 
-    function incrementBusyIndicatorVisibility() {
-        busyIndicator.visible = true
-        busyIndicatorVisibility = busyIndicatorVisibility + 1
-    }
-
-    function decrementBusyIndicatorVisibility() {
-        busyIndicatorVisibility = busyIndicatorVisibility - 1
-        if (busyIndicatorVisibility == 0) {
-            busyIndicator.visible = false
-        }
-    }
-
     function fillChart() {
         var predictionResp = chartDataWrapper.getPredictions(currentSymbol)
         var thisRequestId = predictionRequestId + 1
         predictionRequestId = thisRequestId
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         predictionResp.onFinished.connect(function() {
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
 
             if (thisRequestId < predictionRequestId) {
                 return
