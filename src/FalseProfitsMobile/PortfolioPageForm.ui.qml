@@ -3,12 +3,14 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 import com.example.fpx 1.0
+import io.material.xtra 1.0
 
 Page {
     width: 400
     height: 400
     property string marketValueValue
     property string cashBalanceValue
+    property string lastUpdatedString
     property bool portfolioEmpty: false
     property alias busyIndicator: busyIndicator
     property alias listView: listView
@@ -28,11 +30,14 @@ Page {
             Layout.topMargin: 8
         }
 
-        PortfolioListView {
-            id: listView
+        ScrollView {
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.topMargin: !accountsComboBox.visible ? 8 : 0
+
+            PortfolioListView {
+                id: listView
+            }
         }
 
         GridLayout {
@@ -40,7 +45,7 @@ Page {
             columns: 2
             Layout.leftMargin: FpStyle.screenEdgeLeftMargin
             Layout.rightMargin: FpStyle.screenEdgeRightMargin
-            Layout.bottomMargin: FpStyle.screenEdgeRightMargin
+            Layout.bottomMargin: 8
 
             Label {
                 text: qsTr("Total Stocks ($):")
@@ -64,6 +69,14 @@ Page {
             Label {
                 text: cashBalanceValue
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+            }
+
+            Label {
+                text: lastUpdatedString
+                font.pixelSize: 12
+                opacity: ExtraMaterial.secondaryTextOpacity
+                visible: lastUpdatedString && lastUpdatedString.length > 0
+                Layout.columnSpan: 2
             }
         }
     }

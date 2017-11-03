@@ -59,6 +59,8 @@ PricePredictionChartPageForm {
             chartDataWrapper.updatePredictionSeries(pricePredictionChartView.predictionSeries,
                                                     pricePredictionChartView.truePriceSeries,
                                                     preds)
+            chartDataWrapper.updatePredictionHorizontalLine(
+                        pricePredictionChartView.predictionHorizontalLine, preds)
 
             var minPrice = chartDataWrapper.minPrice(preds)
             var maxPrice = chartDataWrapper.maxPrice(preds)

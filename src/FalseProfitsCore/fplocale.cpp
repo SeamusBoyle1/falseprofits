@@ -41,3 +41,9 @@ QString FpLocale::toLocaleDateStringShortFormat(const QDate &d) const
     QLocale locale_;
     return locale_.toString(d, QLocale::ShortFormat);
 }
+
+QString FpLocale::toLocaleDateTimeStringNarrowFormat(const QDateTime &d) const
+{
+    QLocale locale_;
+    return locale_.toString(d, QLocale::NarrowFormat);
+}

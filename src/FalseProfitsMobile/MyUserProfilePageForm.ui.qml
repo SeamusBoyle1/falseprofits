@@ -17,7 +17,7 @@ Page {
     property alias busyIndicator: busyIndicator
     property bool _inDesktopMode: FpStyle.selector === "desktop"
 
-    Flickable {
+    ScrollView {
         id: flickable
         anchors.fill: parent
         contentWidth: mlay.width
@@ -72,9 +72,6 @@ Page {
                     }
                 }
             }
-        }
-
-        ScrollIndicator.vertical: ScrollIndicator {
         }
     }
 

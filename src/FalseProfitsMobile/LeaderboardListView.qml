@@ -70,6 +70,4 @@ ListView {
             }
         }
     }
-
-    ScrollIndicator.vertical: ScrollIndicator {}
 }

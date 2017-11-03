@@ -10,6 +10,7 @@ Page {
     width: 400
     height: 400
     property string currentSymbol
+    property string availableCashText
     property string lastPriceText
     property string orderValueText
     property string brokerageCostText
@@ -22,7 +23,7 @@ Page {
     property alias placeOrderButton: placeOrderButton
     property alias busyIndicator: busyIndicator
 
-    Flickable {
+    ScrollView {
         id: flickable
         anchors.fill: parent
         contentWidth: mlay.width
@@ -100,6 +101,18 @@ Page {
                     columns: 2
 
                     Label {
+                        text: qsTr("Total Cash ($):")
+                        Layout.fillWidth: true
+                        horizontalAlignment: Text.AlignRight
+                    }
+
+                    Label {
+                        text: availableCashText
+                        horizontalAlignment: Text.AlignRight
+                        Layout.fillWidth: true
+                    }
+
+                    Label {
                         text: qsTr("Last Price ($):")
                         Layout.fillWidth: true
                         horizontalAlignment: Text.AlignRight
@@ -164,9 +177,6 @@ Page {
                              && quantityField.acceptableInput
                 }
             }
-        }
-
-        ScrollIndicator.vertical: ScrollIndicator {
         }
     }
 

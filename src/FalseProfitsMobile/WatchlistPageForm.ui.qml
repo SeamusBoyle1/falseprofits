@@ -9,6 +9,7 @@ Page {
     width: 400
     height: 400
     property bool watchlistEmpty: false
+    property string lastUpdatedString
     property alias busyIndicator: busyIndicator
     property alias addButton: addButton
     property alias listView: listView
@@ -28,12 +29,25 @@ Page {
             Layout.topMargin: 8
         }
 
-        WatchlistListView {
-            id: listView
+        ScrollView {
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.topMargin: !watchlistsComboBox.visible ? 8 : 0
-            bottomMargin: addButton.visible ? addButton.parent.height - addButton.y : 0
+
+            WatchlistListView {
+                id: listView
+                bottomMargin: addButton.visible ? addButton.parent.height - addButton.y : 0
+            }
+        }
+
+        Label {
+            text: lastUpdatedString
+            font.pixelSize: 11
+            opacity: ExtraMaterial.secondaryTextOpacity
+            visible: lastUpdatedString && lastUpdatedString.length > 0
+            Layout.leftMargin: FpStyle.screenEdgeLeftMargin
+            Layout.rightMargin: FpStyle.screenEdgeRightMargin
+            Layout.bottomMargin: 8
         }
     }
 

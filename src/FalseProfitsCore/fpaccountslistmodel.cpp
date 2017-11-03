@@ -2,6 +2,8 @@
 
 #include "fpaccountslistmodel.h"
 
+#include <limits>
+
 FpAccountsListModel::FpAccountsListModel(QObject *parent)
     : QAbstractListModel(parent)
 {
@@ -31,6 +33,13 @@ QString FpAccountsListModel::getAccountId(int row) const
     if (row >= m_rows.size() || row < 0)
         return QString();
     return m_rows.at(row).id;
+}
+
+double FpAccountsListModel::getBalance(int row) const
+{
+    if (row >= m_rows.size() || row < 0)
+        return std::numeric_limits<double>::quiet_NaN();
+    return m_rows.at(row).balance;
 }
 
 int FpAccountsListModel::rowCount(const QModelIndex &parent) const
