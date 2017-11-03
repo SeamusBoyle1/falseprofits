@@ -63,6 +63,10 @@ mac {
     ICON = $$PWD/mac/icon.icns
 }
 
+win32 {
+    ICON_RC = $$PWD/win32/icon.ico
+}
+
 INCLUDEPATH += $$PWD/..
 DEPENDPATH += $$PWD/..
 
