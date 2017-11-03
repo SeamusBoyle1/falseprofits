@@ -144,6 +144,7 @@ DetailedQuotePageForm {
                 errorDialogText.text = quoteResp.errorMessage()
                 errorDialog.open()
             }
+            updateLastUpdateDisplay()
         })
 
         incrementBusyIndicatorVisibility()
@@ -370,6 +371,10 @@ DetailedQuotePageForm {
                 priceLineChart.xAxis.format = "dd MMM yy"
             }
         })
+    }
+
+    function updateLastUpdateDisplay() {
+        lastUpdatedString = qsTr("Last updated %1").arg(fpLocale.toLocaleDateTimeStringNarrowFormat(new Date))
     }
 
     function onRefreshTriggered() {

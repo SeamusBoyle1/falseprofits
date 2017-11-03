@@ -29,6 +29,7 @@ Page {
     property string dayHighText
     property bool starred: false
     property bool maybeHasChartData: true
+    property string lastUpdatedString
     property alias lastPriceLabel: lastPriceLabel
     property alias orderButton: orderButton
     property alias newsFeedPage: newsFeedPage
@@ -329,6 +330,16 @@ Page {
 
                             ToolTip.visible: hovered
                             ToolTip.text: qsTr("View price prediction")
+                        }
+
+                        Label {
+                            text: lastUpdatedString
+                            font.pixelSize: 11
+                            opacity: ExtraMaterial.secondaryTextOpacity
+                            visible: lastUpdatedString && lastUpdatedString.length > 0
+                            Layout.leftMargin: FpStyle.screenEdgeLeftMargin
+                            Layout.rightMargin: FpStyle.screenEdgeRightMargin
+                            Layout.bottomMargin: 8
                         }
                     }
                 }

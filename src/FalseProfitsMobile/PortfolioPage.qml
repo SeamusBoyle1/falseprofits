@@ -77,6 +77,7 @@ PortfolioPageForm {
             decrementBusyIndicatorVisibility()
             portfolioEmpty = listView.count == 0
             portfolioLoaded(listView.count)
+            updateLastUpdateDisplay()
         })
     }
 
@@ -114,6 +115,7 @@ PortfolioPageForm {
             // TODO(seamus): Handle errors
             decrementBusyIndicatorVisibility()
             portfolioEmpty = listView.count == 0
+            updateLastUpdateDisplay()
         })
     }
 
@@ -135,6 +137,10 @@ PortfolioPageForm {
                 errorDialog.open()
             }
         })
+    }
+
+    function updateLastUpdateDisplay() {
+        lastUpdatedString = qsTr("Last updated %1").arg(fpLocale.toLocaleDateTimeStringNarrowFormat(new Date))
     }
 
     Dialog {

@@ -60,6 +60,7 @@ WatchlistPageForm {
             // TODO(seamus): Handle errors
             decrementBusyIndicatorVisibility()
             watchlistEmpty = listView.count == 0
+            updateLastUpdateDisplay()
         })
     }
 
@@ -88,6 +89,7 @@ WatchlistPageForm {
             // TODO(seamus): Handle errors
             decrementBusyIndicatorVisibility()
             watchlistEmpty = listView.count == 0
+            updateLastUpdateDisplay()
         })
     }
 
@@ -129,6 +131,10 @@ WatchlistPageForm {
         if (busyIndicatorVisibility == 0) {
             busyIndicator.visible = false
         }
+    }
+
+    function updateLastUpdateDisplay() {
+        lastUpdatedString = qsTr("Last updated %1").arg(fpLocale.toLocaleDateTimeStringNarrowFormat(new Date))
     }
 
     Dialog {
