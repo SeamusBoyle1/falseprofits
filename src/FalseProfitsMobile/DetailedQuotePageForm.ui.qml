@@ -300,6 +300,15 @@ Page {
                                         ToolTip.visible: hovered
                                         ToolTip.text: qsTr("Fullscreen")
                                     }
+
+                                    ToolButton {
+                                        id: pricePredictionChartButton
+                                        text: qsTr("Price Prediction")
+                                        flat: true
+
+                                        ToolTip.visible: hovered
+                                        ToolTip.text: qsTr("View price prediction")
+                                    }
                                 }
 
                                 ScrollIndicator.horizontal: ScrollIndicator {
@@ -321,15 +330,6 @@ Page {
                                          && !maybeHasChartData
                                 anchors.centerIn: priceLineChart
                             }
-                        }
-
-                        ToolButton {
-                            id: pricePredictionChartButton
-                            text: qsTr("Price Prediction")
-                            flat: true
-
-                            ToolTip.visible: hovered
-                            ToolTip.text: qsTr("View price prediction")
                         }
 
                         Label {
