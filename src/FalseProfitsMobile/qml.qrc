@@ -56,5 +56,6 @@
         <file>AboutPage.qml</file>
         <file>AboutPageContent.qml</file>
         <file>AboutPageForm.ui.qml</file>
+        <file>FpCalendarStyle.qml</file>
     </qresource>
 </RCC>

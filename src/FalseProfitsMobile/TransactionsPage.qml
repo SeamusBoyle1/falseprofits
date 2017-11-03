@@ -1,5 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
+import QtQuick.Controls 1.4 as OldControl
 import QtQuick.Layouts 1.3
 
 import com.example.fpx 1.0
@@ -117,50 +118,150 @@ TransactionsPageForm {
 
     Dialog {
         id: transactionQueryPopup
-        modal: true
         focus: true
         standardButtons: Dialog.Ok | Dialog.Cancel
+        modal: visible
 
-        x: (parent.width - width) / 2
-        y: (parent.height - height) / 2
+        x: (parent.width - width) / 2 //parent.width - width - 5
+        y: 5 //(parent.height - height) / 2
 
         title: qsTr("Filter Transactions")
 
-        GridLayout {
-            columns: 2
+        onAboutToHide: {
+            startCalendar.visible = false;
+            endCalendar.visible = false
+        }
+
+        ColumnLayout {
 
             Label {
-                text: qsTr("First Date")
+                text: "Select, then choose from the calendar."
             }
 
-            TextField {
-                id: startDateInput
-                placeholderText: "yyyy-M-d"
-                selectByMouse: true
-                Layout.fillWidth: true
+            Row {
+                Label {
+                    text: qsTr("Start Date")
+                    rightPadding: 10
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            startCalendar.visible = true;
+                            endCalendar.visible = false
+                        }
+
+                    }
+                }
+
+                OldControl.TextField {
+                    id: startdateText
+                    text: Qt.formatDate(startCalendar.selectedDate, "dd/MM/yyyy")
+                    inputMask: "99/99/9999"
+
+                    onEditingFinished: {
+                        var newDate = new Date();
+                        newDate.setDate(text.substr(0, 2));
+                        newDate.setMonth(text.substr(3, 2) - 1);
+                        newDate.setFullYear(text.substr(6, 4));
+                        startCalendar.selectedDate = newDate;
+                        startCalendar.visible = false
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            startCalendar.visible = true;
+                            endCalendar.visible = false
+                        }
+
+                    }
+                }
             }
 
-            Label {
-                text: qsTr("Last Date")
+            Row
+            {
+                Label {
+                    text: qsTr("End Date")
+                    rightPadding: 10
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            startCalendar.visible = false;
+                            endCalendar.visible = true
+                        }
+
+                    }
+                }
+
+                OldControl.TextField {
+                    id: endDateText
+                    text: Qt.formatDate(endCalendar.selectedDate, "dd/MM/yyyy")
+                    inputMask: "99/99/9999"
+
+                    onEditingFinished: {
+                        var newDate = new Date();
+                        newDate.setDate(text.substr(0, 2));
+                        newDate.setMonth(text.substr(3, 2) - 1);
+                        newDate.setFullYear(text.substr(6, 4));
+                        endCalendar.selectedDate = newDate;
+                        endCalendar.visible = false
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            startCalendar.visible = false;
+                            endCalendar.visible = true
+                        }
+                    }
+                }
             }
 
-            TextField {
-                id: endDateInput
-                placeholderText: "yyyy-M-d"
-                selectByMouse: true
-                Layout.fillWidth: true
+            Row{
+                OldControl.Calendar
+                {
+                    id: startCalendar
+                    visible: false
+                    width: 230
+                    height: width
+
+                    focus: visible
+                    onClicked: visible = false
+                    Keys.onBackPressed: {
+                        event.accepted = true;
+                        visible = false
+                    }
+
+                    style: FpCalendarStyle {
+                    }
+                }
+                OldControl.Calendar {
+                    id: endCalendar
+                    visible: false
+                    width: 230
+                    height: width
+
+                    focus: visible
+                    onClicked: visible = false
+                    Keys.onBackPressed: {
+                        event.accepted = true;
+                        visible = false
+                    }
+
+                    style: FpCalendarStyle {
+                    }
+                }
             }
 
             CheckBox {
                 id: showTradesOnly
                 text: qsTr("Show trades only")
-                Layout.columnSpan: 2
             }
+
         }
 
         onAccepted: {
-            var start = utilityFunctions.makeDateFromString(startDateInput.text, "yyyy-M-d")
-            var end = utilityFunctions.makeDateFromString(endDateInput.text, "yyyy-M-d")
+            var start = startCalendar.selectedDate
+            var end = endCalendar.selectedDate
             transactionsWrapper.setDateRangeLocal(start, end)
             transactionsWrapper.setShowTradesOnly(showTradesOnly.checked)
             refreshTransactions()

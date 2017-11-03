@@ -8,6 +8,10 @@
         <file>images/black/arrow_back@2x.png</file>
         <file>images/black/arrow_back@3x.png</file>
         <file>images/black/arrow_back@4x.png</file>
+        <file>images/black/arrow_forward.png</file>
+        <file>images/black/arrow_forward@2x.png</file>
+        <file>images/black/arrow_forward@3x.png</file>
+        <file>images/black/arrow_forward@4x.png</file>
         <file>images/black/delete_forever.png</file>
         <file>images/black/delete_forever@2x.png</file>
         <file>images/black/delete_forever@3x.png</file>
@@ -56,6 +60,10 @@
         <file>images/white/arrow_back@2x.png</file>
         <file>images/white/arrow_back@3x.png</file>
         <file>images/white/arrow_back@4x.png</file>
+        <file>images/white/arrow_forward.png</file>
+        <file>images/white/arrow_forward@2x.png</file>
+        <file>images/white/arrow_forward@3x.png</file>
+        <file>images/white/arrow_forward@4x.png</file>
         <file>images/white/delete_forever.png</file>
         <file>images/white/delete_forever@2x.png</file>
         <file>images/white/delete_forever@3x.png</file>
