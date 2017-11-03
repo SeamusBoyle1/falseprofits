@@ -99,7 +99,6 @@ ApplicationWindow {
 
                 ItemDelegate {
                     text: qsTr("About")
-                    opacity: 0.87
                     Layout.fillWidth: true
                     opacity: 0.87
                     onClicked: {
