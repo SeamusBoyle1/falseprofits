@@ -121,7 +121,7 @@ FinishNotifier *FpTransactionsWrapper::loadTransactions(const QString &accountId
 void FpTransactionsWrapper::setDateRangeLocal(QDate start, QDate end)
 {
     m_startDate = QDateTime(start, QTime(), Qt::LocalTime);
-    m_endDate = QDateTime(end, QTime(), Qt::LocalTime);
+    m_endDate = QDateTime(end, QTime(23,59,59,999), Qt::LocalTime);
 }
 
 void FpTransactionsWrapper::setShowTradesOnly(bool b)
