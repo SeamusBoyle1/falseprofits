@@ -123,7 +123,7 @@ TransactionsPageForm {
         modal: visible
 
         x: (parent.width - width) / 2 //parent.width - width - 5
-        y: 5 //(parent.height - height) / 2
+        y: (parent.height - height) / 2
 
         title: qsTr("Filter Transactions")
 
@@ -141,20 +141,23 @@ TransactionsPageForm {
             Row {
                 Label {
                     text: qsTr("Start Date")
+                    topPadding: 8
                     rightPadding: 10
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
                             startCalendar.visible = true;
                             endCalendar.visible = false
+                            transactionQueryPopup.height = transactionQueryPopup.implicitHeight
                         }
 
                     }
                 }
 
-                OldControl.TextField {
+                TextField {
                     id: startdateText
                     text: Qt.formatDate(startCalendar.selectedDate, "dd/MM/yyyy")
+                    font.pixelSize: 14
                     inputMask: "99/99/9999"
 
                     onEditingFinished: {
@@ -182,6 +185,7 @@ TransactionsPageForm {
                 Label {
                     text: qsTr("End Date  ")
                     rightPadding: 10
+                    topPadding: 8
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
@@ -192,9 +196,10 @@ TransactionsPageForm {
                     }
                 }
 
-                OldControl.TextField {
+                TextField {
                     id: endDateText
                     text: Qt.formatDate(endCalendar.selectedDate, "dd/MM/yyyy")
+                    font.pixelSize: 14
                     inputMask: "99/99/9999"
 
                     onEditingFinished: {
