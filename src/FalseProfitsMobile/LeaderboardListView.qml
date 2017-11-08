@@ -70,4 +70,17 @@ ListView {
             }
         }
     }
+
+    // Pull to refresh.
+    onContentYChanged: {
+        // If listView is pulled 200 points beyond it's maximum,
+        // and it's not busy doing something, then refresh.
+        if(contentY < -200){
+            if(busyIndicator.visible){
+                return;
+            } else {
+                refreshLeaderboard()
+            }
+        }
+    }
 }
