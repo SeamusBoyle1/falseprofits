@@ -104,6 +104,11 @@ TransactionsPageForm {
 
     Dialog {
         id: transactionQueryPopup
+
+        // The minimum height required by the Dialog. Added to contentHeight
+        // value to determine total required height for forced resize.
+        property int dialogBaseHeight: 115
+
         focus: true
         standardButtons: Dialog.Ok | Dialog.Cancel
         modal: visible
@@ -113,16 +118,18 @@ TransactionsPageForm {
 
         title: qsTr("Filter Transactions")
 
+        // Forces resize of Dialog - required due to lack of automatic resize
+        // under certain conditions in combination with calendar visibility toggle.
+        onContentHeightChanged: {
+            height = contentHeight + dialogBaseHeight
+        }
+
         onAboutToHide: {
             startCalendar.visible = false;
             endCalendar.visible = false
         }
 
         ColumnLayout {
-
-            Label {
-                text: "Select, then choose from the calendar."
-            }
 
             Row {
                 Label {
@@ -134,9 +141,7 @@ TransactionsPageForm {
                         onClicked: {
                             startCalendar.visible = true;
                             endCalendar.visible = false
-                            transactionQueryPopup.height = transactionQueryPopup.implicitHeight
                         }
-
                     }
                 }
 
@@ -207,7 +212,10 @@ TransactionsPageForm {
                 }
             }
 
-            Row{
+            Row
+            {
+                id: calendarRow
+
                 OldControl.Calendar
                 {
                     id: startCalendar
@@ -225,6 +233,7 @@ TransactionsPageForm {
                     style: FpCalendarStyle {
                     }
                 }
+
                 OldControl.Calendar {
                     id: endCalendar
                     visible: false

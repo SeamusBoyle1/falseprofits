@@ -22,7 +22,7 @@ CalendarStyle {
         Label {
             id: dateText
             text: styleData.title
-            font.pixelSize: 12
+            font.pixelSize: 13
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             fontSizeMode: Text.Fit
