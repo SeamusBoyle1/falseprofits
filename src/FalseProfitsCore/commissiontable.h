@@ -8,6 +8,7 @@
 #include <boost/optional.hpp>
 
 #include <algorithm>
+#include <cmath>
 #include <tuple>
 
 struct FixedCommission
@@ -40,6 +41,8 @@ struct CommissionTable
     boost::optional<double> percentCommission(int quantity) const;
 
     std::tuple<boost::optional<double>, boost::optional<double>> commissions(int quantity) const;
+
+    int maxQuantity() const;
 };
 
 inline void CommissionTable::clear()
@@ -94,6 +97,13 @@ inline std::tuple<boost::optional<double>, boost::optional<double>>
 CommissionTable::commissions(int quantity) const
 {
     return std::make_tuple(fixedCommission(quantity), percentCommission(quantity));
+}
+
+inline int CommissionTable::maxQuantity() const
+{
+    auto maxFixedQuantity_ = !fixed.isEmpty() ? fixed.last().upperBound : 0;
+    auto maxPercentQuantity_ = !percent.isEmpty() ? percent.last().upperBound : 0;
+    return std::min(maxFixedQuantity_, maxPercentQuantity_);
 }
 
 #endif // COMMISSIONTABLE_H

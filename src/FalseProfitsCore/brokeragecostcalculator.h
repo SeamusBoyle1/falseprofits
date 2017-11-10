@@ -59,6 +59,12 @@ public:
     Q_INVOKABLE
     BrokerCostCalcResult calcBrokerageCost(const BrokerCostCalcArgs &args) const;
 
+    Q_INVOKABLE
+    int maxBuyQuantity() const;
+
+    Q_INVOKABLE
+    int maxSellQuantity() const;
+
 public Q_SLOTS:
     void unloadCommissions();
 

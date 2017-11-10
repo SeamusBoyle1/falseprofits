@@ -15,6 +15,7 @@ Page {
     property string orderValueText
     property string brokerageCostText
     property string totalText
+    property int maxOrderSize: 0
     property alias sellSideOption: sellSideOption
     property alias buySideOption: buySideOption
     property alias accountsComboBox: accountsComboBox
@@ -93,6 +94,7 @@ Page {
                     inputMethodHints: Qt.ImhDigitsOnly
                     validator: IntValidator {
                         bottom: 0
+                        top: maxOrderSize
                     }
                 }
 

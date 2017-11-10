@@ -59,6 +59,8 @@ OrderTicketPageForm {
 
     buySideOption.onCheckedChanged: {
         updateEstimatedTotal()
+        maxOrderSize = buySideOption.checked ? brokerageCostCalculator.maxBuyQuantity() :
+                                               brokerageCostCalculator.maxSellQuantity()
     }
 
     quantityField.onTextChanged: {
@@ -152,12 +154,20 @@ OrderTicketPageForm {
         busyIndicator.incrementVisibility()
         buyNotifier.onFinished.connect(function() {
             busyIndicator.decrementVisibility()
+
+            if (buySideOption.checked) {
+                maxOrderSize =  brokerageCostCalculator.maxBuyQuantity()
+            }
         })
 
         var sellNotifier = brokerageCostCalculator.updateSellCommission()
         busyIndicator.incrementVisibility()
         sellNotifier.onFinished.connect(function() {
             busyIndicator.decrementVisibility()
+
+            if (!buySideOption.checked) {
+                maxOrderSize = brokerageCostCalculator.maxSellQuantity()
+            }
         })
     }
 
