@@ -96,6 +96,14 @@ ListView {
     onContentYChanged: {
         // If listView is pulled 200 points beyond it's maximum,
         // and it's not busy doing something, then refresh.
+        if (contentY < -30 && contentY > -150)
+        {
+            if(!busyIndicator.visible)
+                refreshTip.visible = true;
+        }else {
+            refreshTip.visible = false;
+        }
+
         if(contentY < -200){
             if(busyIndicator.visible){
                 return;
@@ -103,5 +111,18 @@ ListView {
                 refreshTransactions()
             }
         }
+    }
+
+    // Label to indicate Pull to Refresh feature
+    // Appears slightly below top of list, when list is pulled down a bit.
+    Label {
+        id: refreshTip
+        text: "Pull to refresh..."
+        visible: false
+        parent: listView
+        font.italic: true
+        topPadding: 20
+        anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
     }
 }
