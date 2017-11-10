@@ -10,6 +10,7 @@ ListView {
     focus: true
     clip: true
     currentIndex: -1
+    boundsBehavior: Flickable.DragOverBounds
 
     signal symbolClicked(string symbol)
     signal marketOrderTriggered(string symbol, int quantity)

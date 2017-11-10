@@ -10,6 +10,7 @@ ListView {
     focus: true
     clip: true
     currentIndex: -1
+    boundsBehavior: Flickable.DragOverBounds
 
     signal accountClicked(string accountId)
 

@@ -11,6 +11,7 @@ ListView {
     focus: true
     clip: true
     currentIndex: -1
+    boundsBehavior: Flickable.DragOverBounds
 
     signal symbolClicked(string symbol)
     signal triggerRemoveSymbol(string symbol)

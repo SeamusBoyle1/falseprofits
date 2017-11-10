@@ -11,6 +11,7 @@ ListView {
     focus: true
     clip: true
     currentIndex: -1
+    boundsBehavior: Flickable.DragOverBounds
 
     delegate: ItemDelegate {
         height: delegateContent.height

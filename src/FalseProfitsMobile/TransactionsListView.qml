@@ -12,6 +12,7 @@ ListView {
     focus: true
     clip: true
     currentIndex: -1
+    boundsBehavior: Flickable.DragOverBounds
 
     Component {
         id: sectionHeading
