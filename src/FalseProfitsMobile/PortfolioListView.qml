@@ -55,16 +55,16 @@ ListView {
 
             background: Rectangle {
                 // TODO(seamus): Use FpStyle for color
-                color: closePositionLabel.SwipeDelegate.pressed ? Qt.darker("tomato", 1.1) :
-                                                                  "tomato"
+                color: closePositionLabelMouseArea.pressed ? Qt.darker("tomato", 1.1) : "tomato"
+
                 MouseArea {
+                    id: closePositionLabelMouseArea
                     anchors.fill: parent
                     onClicked: {
                         var symbol = listView.model.getSymbolForRow(index)
                         var qty = listView.model.getQuantityForRow(index)
                         marketOrderTriggered(symbol, qty)
                     }
-                    onPressed: mouse.accepted = false
                 }
             }
         }
