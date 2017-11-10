@@ -13,6 +13,7 @@ Page {
     ScrollView {
         anchors.fill: parent
         anchors.topMargin: 8
+        contentWidth: accountsListView.width
 
         TradingAccountsListView {
             id: accountsListView

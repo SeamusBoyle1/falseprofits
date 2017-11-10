@@ -53,6 +53,7 @@ Page {
             Layout.minimumHeight: 300
             Layout.minimumWidth: 300
             Layout.preferredWidth: 600
+            contentWidth: listView.width
 
             SymbolSearchListView {
                 id: listView

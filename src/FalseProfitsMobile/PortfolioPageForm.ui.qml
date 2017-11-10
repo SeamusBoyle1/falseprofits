@@ -34,6 +34,7 @@ Page {
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.topMargin: !accountsComboBox.visible ? 8 : 0
+            contentWidth: listView.width
 
             PortfolioListView {
                 id: listView

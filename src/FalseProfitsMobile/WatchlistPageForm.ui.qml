@@ -33,6 +33,7 @@ Page {
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.topMargin: !watchlistsComboBox.visible ? 8 : 0
+            contentWidth: listView.width
 
             WatchlistListView {
                 id: listView

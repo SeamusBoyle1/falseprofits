@@ -82,6 +82,7 @@ Page {
             Layout.fillWidth: true
             Layout.topMargin: !accountsComboBox.visible ? 8 : 0
             ScrollBar.vertical.policy: ScrollBar.AlwaysOn
+            contentWidth: listView.width
 
             TransactionsListView {
                 id: listView
