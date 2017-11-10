@@ -35,7 +35,7 @@ ApplicationWindow {
             dragMargin = !enableDrawer ? 0 : Qt.styleHints.startDragDistance
         }
 
-        Flickable {
+        ScrollView {
             anchors.fill: parent
             contentWidth: appDrawerContentsLayout.width
             contentHeight: appDrawerContentsLayout.height
@@ -93,9 +93,21 @@ ApplicationWindow {
                         ListElement{ title: qsTr("Sign Out"); source: "qrc:/SignOutPage.qml" }
                     }
                 }
-            }
+                HorizontalDivider {
+                    Layout.fillWidth: true
+                }
 
-            ScrollIndicator.vertical: ScrollIndicator { }
+                ItemDelegate {
+                    text: qsTr("About")
+                    Layout.fillWidth: true
+                    opacity: 0.87
+                    onClicked: {
+                        listView.currentIndex = -1
+                        appNavStack.push("qrc:/AboutPage.qml")
+                        appDrawer.close()
+                    }
+                }
+            }
         }
     }
 

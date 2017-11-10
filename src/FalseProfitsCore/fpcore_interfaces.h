@@ -21,10 +21,21 @@ public:
         boost::optional<QString> accessToken;
         boost::optional<QDateTime> expiry;
     };
+    /*!
+     * Reads the settings normally required near the applications
+     * launch time.
+     */
     virtual LaunchSettings readLaunchSettings() = 0;
 
+    /*!
+     * Save the authentication token \a token and expiry date-time
+     * \a expiryDate.
+     */
     virtual void writeAccessToken(const QString &token, const QDateTime &expiryDate) = 0;
 
+    /*!
+     * Clear any saved token and expiry date-time.
+     */
     virtual void clearAccessToken() = 0;
 };
 

@@ -34,6 +34,9 @@ public:
     Q_INVOKABLE
     QString getAccountId(int row) const;
 
+    Q_INVOKABLE
+    double getBalance(int row) const;
+
 signals:
 
 public slots:

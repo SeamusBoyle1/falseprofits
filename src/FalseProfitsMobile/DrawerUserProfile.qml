@@ -8,7 +8,6 @@ import com.example.fpx 1.0
 
 Page {
     property var gravatarUrl
-    property int busyIndicatorVisibility: 0
 
     //height: 147
     implicitHeight: mainLay.implicitHeight
@@ -65,22 +64,10 @@ Page {
         }
     }
 
-    BusyIndicator {
+    VeryBusyIndicator {
         id: busyIndicator
         anchors.centerIn: parent
         visible: false
-    }
-
-    function incrementBusyIndicatorVisibility() {
-        busyIndicator.visible = true
-        busyIndicatorVisibility = busyIndicatorVisibility + 1
-    }
-
-    function decrementBusyIndicatorVisibility() {
-        busyIndicatorVisibility = busyIndicatorVisibility - 1
-        if (busyIndicatorVisibility == 0) {
-            busyIndicator.visible = false
-        }
     }
 
     function clearUserProfileDisplay()
@@ -92,11 +79,11 @@ Page {
 
     function reloadUserProfile()
     {
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         var userProfileResp = fpCore.getUserProfile()
         clearUserProfileDisplay()
         userProfileResp.onFinished.connect(function() {
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
             if (!userProfileResp.hasError()) {
                 var userDetailsDat = fpType.makeJsonUserDetails(userProfileResp.payload())
 

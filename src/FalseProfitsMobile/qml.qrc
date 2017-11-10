@@ -53,5 +53,10 @@
         <file>PricePredictionChartPage.qml</file>
         <file>PricePredictionChartPageForm.ui.qml</file>
         <file>FpPricePredictionChartWidget.qml</file>
+        <file>AboutPage.qml</file>
+        <file>AboutPageContent.qml</file>
+        <file>AboutPageForm.ui.qml</file>
+        <file>FpCalendarStyle.qml</file>
+        <file>VeryBusyIndicator.qml</file>
     </qresource>
 </RCC>

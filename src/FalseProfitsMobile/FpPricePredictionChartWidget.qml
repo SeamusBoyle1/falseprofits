@@ -4,6 +4,7 @@ import QtCharts 2.2
 ChartView {
     property alias predictionSeries: predictionSeries
     property alias truePriceSeries: truePriceSeries
+    property alias predictionHorizontalLine: predictionHorizontalLine
     property alias xAxis: dateTimeAxis2
     property alias yAxis: axisYRight2
 
@@ -29,6 +30,7 @@ ChartView {
         name: "Prediction"
         axisX: dateTimeAxis2
         axisYRight: axisYRight2
+        visible: false
     }
 
     LineSeries {
@@ -36,5 +38,13 @@ ChartView {
         name: "True Price"
         axisX: dateTimeAxis2
         axisYRight: axisYRight2
+    }
+
+    LineSeries {
+        id: predictionHorizontalLine
+        name: "Prediction"
+        axisX: dateTimeAxis2
+        axisYRight: axisYRight2
+        visible: predictionSeries ? !predictionSeries.visible : true
     }
 }

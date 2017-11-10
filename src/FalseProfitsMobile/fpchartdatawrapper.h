@@ -153,6 +153,10 @@ public:
                                 const FpChartLinePredictionSeriesData &data) const;
 
     Q_INVOKABLE
+    void updatePredictionHorizontalLine(QAbstractSeries *predictionHorizontalLine,
+                                        const FpChartLinePredictionSeriesData &data) const;
+
+    Q_INVOKABLE
     double minPrice(const QVector<qreal> &yData) const
     {
         auto it = std::min_element(yData.begin(), yData.end());

@@ -26,6 +26,9 @@ public:
     Q_INVOKABLE
     QString toLocaleDateStringShortFormat(const QDate &d) const;
 
+    Q_INVOKABLE
+    QString toLocaleDateTimeStringNarrowFormat(const QDateTime &d) const;
+
 signals:
 
 public slots:

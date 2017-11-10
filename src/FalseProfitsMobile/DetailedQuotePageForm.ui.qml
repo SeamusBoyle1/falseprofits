@@ -29,6 +29,7 @@ Page {
     property string dayHighText
     property bool starred: false
     property bool maybeHasChartData: true
+    property string lastUpdatedString
     property alias lastPriceLabel: lastPriceLabel
     property alias orderButton: orderButton
     property alias newsFeedPage: newsFeedPage
@@ -58,7 +59,7 @@ Page {
         id: rangeButtonGroup
     }
 
-    Flickable {
+    ScrollView {
         id: flickable
         anchors.fill: parent
         contentWidth: mlay.width
@@ -299,6 +300,15 @@ Page {
                                         ToolTip.visible: hovered
                                         ToolTip.text: qsTr("Fullscreen")
                                     }
+
+                                    ToolButton {
+                                        id: pricePredictionChartButton
+                                        text: qsTr("Price Prediction")
+                                        flat: true
+
+                                        ToolTip.visible: hovered
+                                        ToolTip.text: qsTr("View price prediction")
+                                    }
                                 }
 
                                 ScrollIndicator.horizontal: ScrollIndicator {
@@ -322,13 +332,14 @@ Page {
                             }
                         }
 
-                        ToolButton {
-                            id: pricePredictionChartButton
-                            text: qsTr("Price Prediction")
-                            flat: true
-
-                            ToolTip.visible: hovered
-                            ToolTip.text: qsTr("View price prediction")
+                        Label {
+                            text: lastUpdatedString
+                            font.pixelSize: 11
+                            opacity: ExtraMaterial.secondaryTextOpacity
+                            visible: lastUpdatedString && lastUpdatedString.length > 0
+                            Layout.leftMargin: FpStyle.screenEdgeLeftMargin
+                            Layout.rightMargin: FpStyle.screenEdgeRightMargin
+                            Layout.bottomMargin: 8
                         }
                     }
                 }
@@ -340,13 +351,16 @@ Page {
                         anchors.right: parent.right
                         anchors.topMargin: 4
 
-                        GridLayout {
+                        Grid {
+                            id: grid
                             rowSpacing: 20
                             Layout.fillWidth: true
                             Layout.leftMargin: 16
                             Layout.rightMargin: 16
                             columns: parent.width < 500 ? 1 : 2
                             columnSpacing: 32
+
+                            property real columnWidth: parent.width / columns - columnSpacing
 
                             // Unused fundamental fields
                             //Label { text: fundamental_bookValue }
@@ -355,6 +369,7 @@ Page {
                             //Label { text: fundamental_industry }
                             GridLayout {
                                 columns: 2
+                                width: grid.columnWidth
 
                                 Label {
                                     text: qsTr("Trading")
@@ -408,6 +423,7 @@ Page {
 
                             GridLayout {
                                 columns: 2
+                                width: grid.columnWidth
                                 Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
 
                                 Label {
@@ -454,6 +470,7 @@ Page {
 
                             GridLayout {
                                 columns: 2
+                                width: grid.columnWidth
 
                                 Label {
                                     text: qsTr("Stock Market History")
@@ -499,6 +516,7 @@ Page {
 
                             GridLayout {
                                 columns: 2
+                                width: grid.columnWidth
 
                                 Label {
                                     text: qsTr("Dividends")
@@ -561,12 +579,9 @@ Page {
                 }
             }
         }
-
-        ScrollIndicator.vertical: ScrollIndicator {
-        }
     }
 
-    BusyIndicator {
+    VeryBusyIndicator {
         id: busyIndicator
         anchors.centerIn: parent
         visible: false

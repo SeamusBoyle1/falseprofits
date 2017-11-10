@@ -4,27 +4,17 @@ import QtQuick.Controls 2.2
 SignupPageForm {
     signal showSignInScreenRequested
 
-    signupButton.onClicked: {
-        var newUser = fpType.makeNewUserDetails()
-        newUser.displayName = displayNameField.text
-        newUser.email = emailField.text
-        newUser.password = passwordField.text
-
-        busyIndicator.visible = true
-        var resp = fpCore.createNewUser(newUser)
-        resp.onFinished.connect(function() {
-            busyIndicator.visible = false
-            if (!resp.hasError()) {
-            } else {
-                errorDialogText.text = resp.errorMessage()
-                errorDialog.open()
-            }
-        })
-    }
+    signupButton.onClicked: doMakeUser()
 
     signInPageButton.onClicked: {
         showSignInScreenRequested()
     }
+
+    displayNameField.onAccepted: doMakeUser()
+
+    emailField.onAccepted: doMakeUser()
+
+    passwordField.onAccepted: doMakeUser()
 
     Dialog {
         id: errorDialog
@@ -42,5 +32,27 @@ SignupPageForm {
             anchors.fill: parent
             wrapMode: Text.WordWrap
         }
+    }
+
+    function doMakeUser() {
+        if (!signupButton.enabled) {
+            return
+        }
+
+        var newUser = fpType.makeNewUserDetails()
+        newUser.displayName = displayNameField.text
+        newUser.email = emailField.text
+        newUser.password = passwordField.text
+
+        busyIndicator.visible = true
+        var resp = fpCore.createNewUser(newUser)
+        resp.onFinished.connect(function() {
+            busyIndicator.visible = false
+            if (!resp.hasError()) {
+            } else {
+                errorDialogText.text = resp.errorMessage()
+                errorDialog.open()
+            }
+        })
     }
 }

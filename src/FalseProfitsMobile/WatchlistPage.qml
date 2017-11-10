@@ -8,8 +8,6 @@ WatchlistPageForm {
     signal symbolClicked(string symbol)
     signal triggerAddWatchlistSymbol(string watchlistId)
 
-    property int busyIndicatorVisibility: 0
-
     FpSymbolSearchWrapper {
         id: symbolSearchWrapper
         coreClient: fpCore
@@ -55,11 +53,12 @@ WatchlistPageForm {
     watchlistsComboBox.onActivated: {
         var watchlistId = watchlistsComboBox.model.getWatchlistId(watchlistsComboBox.currentIndex)
         var notifier = watchlistWrapper.loadWatchlist(watchlistId)
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         notifier.onFinished.connect(function() {
             // TODO(seamus): Handle errors
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
             watchlistEmpty = listView.count == 0
+            updateLastUpdateDisplay()
         })
     }
 
@@ -71,10 +70,10 @@ WatchlistPageForm {
 
     function updateAvailableWatchlists() {
         var notifier = watchlistsListWrapper.updateWatchlistList()
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         notifier.onFinished.connect(function() {
             // TODO(seamus): Handle errors
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
             if (watchlistsComboBox.currentIndex === -1) {
                 watchlistsComboBox.incrementCurrentIndex()
             }
@@ -83,11 +82,12 @@ WatchlistPageForm {
 
     function refreshWatchlist() {
         var notifier = watchlistWrapper.refreshWatchlist()
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         notifier.onFinished.connect(function() {
             // TODO(seamus): Handle errors
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
             watchlistEmpty = listView.count == 0
+            updateLastUpdateDisplay()
         })
     }
 
@@ -119,16 +119,8 @@ WatchlistPageForm {
         })
     }
 
-    function incrementBusyIndicatorVisibility() {
-        busyIndicator.visible = true
-        busyIndicatorVisibility = busyIndicatorVisibility + 1
-    }
-
-    function decrementBusyIndicatorVisibility() {
-        busyIndicatorVisibility = busyIndicatorVisibility - 1
-        if (busyIndicatorVisibility == 0) {
-            busyIndicator.visible = false
-        }
+    function updateLastUpdateDisplay() {
+        lastUpdatedString = qsTr("Last updated %1").arg(fpLocale.toLocaleDateTimeStringNarrowFormat(new Date))
     }
 
     Dialog {

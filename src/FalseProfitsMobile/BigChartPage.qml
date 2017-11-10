@@ -10,7 +10,6 @@ BigChartPageForm {
     property int candleOpenMode: 0
     property int candlesRequestId: 0
     property var historyData
-    property int busyIndicatorVisibility: 0
     property int tickCountForWidth: 5
 
     FpChartDataWrapper {
@@ -131,18 +130,6 @@ BigChartPageForm {
         }
     }
 
-    function incrementBusyIndicatorVisibility() {
-        busyIndicator.visible = true
-        busyIndicatorVisibility = busyIndicatorVisibility + 1
-    }
-
-    function decrementBusyIndicatorVisibility() {
-        busyIndicatorVisibility = busyIndicatorVisibility - 1
-        if (busyIndicatorVisibility == 0) {
-            busyIndicator.visible = false
-        }
-    }
-
     function syncRangeButtonGroupWithChartInterval() {
         for (var i = 0; i < rangeButtonGroup.buttons.length; ++i) {
             if (rangeButtonGroup.buttons[i].text.toLowerCase() === chartDataRange.toLowerCase()) {
@@ -206,9 +193,9 @@ BigChartPageForm {
         var candlesResp = chartDataWrapper.getCandles(reqArgs)
         var thisRequestId = candlesRequestId + 1
         candlesRequestId = thisRequestId
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         candlesResp.onFinished.connect(function() {
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
 
             if (thisRequestId < candlesRequestId) {
                 return

@@ -9,8 +9,6 @@ PortfolioPageForm {
     signal marketOrderTriggered(string symbol, int quantity)
     signal portfolioLoaded(int positionCount)
 
-    property int busyIndicatorVisibility: 0
-
     FpPortfolioWrapper {
         id: portfolioWrapper
         coreClient: fpCore
@@ -71,12 +69,13 @@ PortfolioPageForm {
     accountsComboBox.onActivated: {
         var accountId = myTradingAccounts.model.getAccountId(accountsComboBox.currentIndex)
         var notifier = portfolioWrapper.loadPositions(accountId)
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         notifier.onFinished.connect(function() {
             // TODO(seamus): Handle errors
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
             portfolioEmpty = listView.count == 0
             portfolioLoaded(listView.count)
+            updateLastUpdateDisplay()
         })
     }
 
@@ -84,23 +83,11 @@ PortfolioPageForm {
         doPlaceOrder(symbol, quantity, OrderParams.SellSide)
     }
 
-    function incrementBusyIndicatorVisibility() {
-        busyIndicator.visible = true
-        busyIndicatorVisibility = busyIndicatorVisibility + 1
-    }
-
-    function decrementBusyIndicatorVisibility() {
-        busyIndicatorVisibility = busyIndicatorVisibility - 1
-        if (busyIndicatorVisibility == 0) {
-            busyIndicator.visible = false
-        }
-    }
-
     function updateAccounts() {
         var notifier = myTradingAccounts.updateAccounts()
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         notifier.onFinished.connect(function() {
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
             if (accountsComboBox.currentIndex == -1) {
                 accountsComboBox.incrementCurrentIndex()
             }
@@ -109,11 +96,12 @@ PortfolioPageForm {
 
     function refreshPositions() {
         var notifier = portfolioWrapper.refreshPositions()
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         notifier.onFinished.connect(function() {
             // TODO(seamus): Handle errors
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
             portfolioEmpty = listView.count == 0
+            updateLastUpdateDisplay()
         })
     }
 
@@ -126,15 +114,19 @@ PortfolioPageForm {
         orderArgs.side = side
 
         var resp = fpCore.sendOrder(accountId, orderArgs)
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         resp.onFinished.connect(function() {
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
             if (!resp.hasError()) {
             } else {
                 errorDialogText.text = resp.errorMessage()
                 errorDialog.open()
             }
         })
+    }
+
+    function updateLastUpdateDisplay() {
+        lastUpdatedString = qsTr("Last updated %1").arg(fpLocale.toLocaleDateTimeStringNarrowFormat(new Date))
     }
 
     Dialog {

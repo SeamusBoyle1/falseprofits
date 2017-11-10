@@ -10,10 +10,13 @@ Page {
         coreClient: fpCore
     }
 
-    TradingAccountsListView {
-        id: accountsListView
+    ScrollView {
         anchors.fill: parent
         anchors.topMargin: 8
+
+        TradingAccountsListView {
+            id: accountsListView
+        }
     }
 
     BusyIndicator {

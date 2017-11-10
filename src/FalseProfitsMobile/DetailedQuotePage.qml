@@ -12,7 +12,6 @@ DetailedQuotePageForm {
     property string chartDataRange: "1d"
     property string chartInterval: "2m"
     property int candlesRequestId: 0
-    property int busyIndicatorVisibility: 0
 
     FpChartDataWrapper {
         id: chartDataWrapper
@@ -110,10 +109,10 @@ DetailedQuotePageForm {
     }
 
     function updateQuote() {
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         var quoteResp = fpCore.getQuotes(currentSymbol)
         quoteResp.onFinished.connect(function() {
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
             if (!quoteResp.hasError()) {
                 var quotes = fpType.makeJsonQuotes(quoteResp.payload())
                 var quote = quotes.find(currentSymbol)
@@ -144,12 +143,13 @@ DetailedQuotePageForm {
                 errorDialogText.text = quoteResp.errorMessage()
                 errorDialog.open()
             }
+            updateLastUpdateDisplay()
         })
 
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         var detailsResp = fpCore.getShareDetails(currentSymbol)
         detailsResp.onFinished.connect(function() {
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
             if (!detailsResp.hasError()) {
                 companyNameText = detailsResp.companyName
                 industryText = detailsResp.industry
@@ -183,10 +183,10 @@ DetailedQuotePageForm {
     }
 
     function updateFundamentals() {
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         var fundataResp = fpCore.getFundamentals(currentSymbol)
         fundataResp.onFinished.connect(function() {
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
             clearFundamentals()
             if (!fundataResp.hasError()) {
                 var fundata = fpType.makeJsonShareFundamentals(fundataResp.payload())
@@ -269,10 +269,10 @@ DetailedQuotePageForm {
         }
 
         var resp = fpCore.getDividends(currentSymbol, "5y")
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         dividendHistoryChart.mySeries.visible = false
         resp.onFinished.connect(function() {
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
             dividendHistoryChart.mySeries.visible = true
             var biannual = chartDataWrapper.loadDividends(resp.payload())
             var annual = chartDataWrapper.convertToAnnualDividends(biannual, 5)
@@ -290,33 +290,21 @@ DetailedQuotePageForm {
         if (currentSymbol !== "") {
             if (!starred) {
                 var addNotifier = watchlistWrapper.addSymbol(currentSymbol)
-                incrementBusyIndicatorVisibility()
+                busyIndicator.incrementVisibility()
                 addNotifier.onFinished.connect(function() {
                     // TODO(seamus): Handle errors
-                    decrementBusyIndicatorVisibility()
+                    busyIndicator.decrementVisibility()
                     updateStarredState()
                 })
             } else {
                 var removeNotifier = watchlistWrapper.removeSymbol(currentSymbol)
-                incrementBusyIndicatorVisibility()
+                busyIndicator.incrementVisibility()
                 removeNotifier.onFinished.connect(function() {
                     // TODO(seamus): Handle errors
-                    decrementBusyIndicatorVisibility()
+                    busyIndicator.decrementVisibility()
                     updateStarredState()
                 })
             }
-        }
-    }
-
-    function incrementBusyIndicatorVisibility() {
-        busyIndicator.visible = true
-        busyIndicatorVisibility = busyIndicatorVisibility + 1
-    }
-
-    function decrementBusyIndicatorVisibility() {
-        busyIndicatorVisibility = busyIndicatorVisibility - 1
-        if (busyIndicatorVisibility == 0) {
-            busyIndicator.visible = false
         }
     }
 
@@ -329,9 +317,9 @@ DetailedQuotePageForm {
         var candlesResp = chartDataWrapper.getCandles(reqArgs)
         var thisRequestId = candlesRequestId + 1
         candlesRequestId = thisRequestId
-        incrementBusyIndicatorVisibility()
+        busyIndicator.incrementVisibility()
         candlesResp.onFinished.connect(function() {
-            decrementBusyIndicatorVisibility()
+            busyIndicator.decrementVisibility()
 
             if (thisRequestId < candlesRequestId) {
                 return
@@ -370,6 +358,10 @@ DetailedQuotePageForm {
                 priceLineChart.xAxis.format = "dd MMM yy"
             }
         })
+    }
+
+    function updateLastUpdateDisplay() {
+        lastUpdatedString = qsTr("Last updated %1").arg(fpLocale.toLocaleDateTimeStringNarrowFormat(new Date))
     }
 
     function onRefreshTriggered() {

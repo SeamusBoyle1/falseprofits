@@ -416,6 +416,26 @@ void FpChartDataWrapper::updatePredictionSeries(QAbstractSeries *predictionSerie
     truePriceSeries_->replace(truePricePoints);
 }
 
+void FpChartDataWrapper::updatePredictionHorizontalLine(
+    QAbstractSeries *predictionHorizontalLine, const FpChartLinePredictionSeriesData &data) const
+{
+    if (predictionHorizontalLine == nullptr) {
+        return;
+    }
+
+    auto predictionHorizontalLine_ = static_cast<QXYSeries *>(predictionHorizontalLine);
+
+    auto lastPredictedPrice = !data.m_yPrediction.isEmpty() ? data.m_yPrediction.last() : 0;
+    QVector<QPointF> predictionPoints(data.m_x.size());
+    for (auto i = 0, total = data.m_x.size(); i < total; ++i) {
+        predictionPoints[i].rx() = data.m_x.at(i);
+        predictionPoints[i].ry() = lastPredictedPrice;
+    }
+
+    // Use replace instead of clear + append, it's optimized for performance
+    predictionHorizontalLine_->replace(predictionPoints);
+}
+
 void FpChartDataWrapper::hackMargin(QAbstractSeries *s) const
 {
     // Source: https://stackoverflow.com/a/39243275
