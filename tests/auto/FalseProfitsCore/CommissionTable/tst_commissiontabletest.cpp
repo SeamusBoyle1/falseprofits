@@ -33,6 +33,9 @@ void CommissionTableTest::testCase1()
 
     comm.sort();
 
+    // Max Quantity
+    QCOMPARE(comm.maxQuantity(), 1000000);
+
     // quantity below max of inserted row
     auto aQty = 20;
     auto aFixed = comm.fixedCommission(aQty);
@@ -92,6 +95,9 @@ void CommissionTableTest::testCase2()
     comm.insertPercent(399, 4);
 
     comm.sort();
+
+    // Max Quantity
+    QCOMPARE(comm.maxQuantity(), 399);
 
     {
         // One below max in fixed row
