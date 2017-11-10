@@ -6,22 +6,15 @@ import com.example.fpx 1.0
 SignInPageForm {
     signal showSignupScreenRequested
 
-    signInButton.onClicked: {
-        busyIndicator.visible = true
-        var resp = fpCore.authenticate(emailField.text, passwordField.text)
-        resp.onFinished.connect(function() {
-            busyIndicator.visible = false
-            if (!resp.hasError()) {
-            } else {
-                errorDialogText.text = resp.errorMessage()
-                errorDialog.open()
-            }
-        })
-    }
+    signInButton.onClicked: doSignIn()
 
     signupPageButton.onClicked: {
         showSignupScreenRequested()
     }
+
+    emailField.onAccepted: doSignIn()
+
+    passwordField.onAccepted: doSignIn()
 
     Dialog {
         id: errorDialog
@@ -40,5 +33,22 @@ SignInPageForm {
             anchors.fill: parent
             wrapMode: Text.WordWrap
         }
+    }
+
+    function doSignIn() {
+        if (!signInButton.enabled) {
+            return
+        }
+
+        busyIndicator.visible = true
+        var resp = fpCore.authenticate(emailField.text, passwordField.text)
+        resp.onFinished.connect(function() {
+            busyIndicator.visible = false
+            if (!resp.hasError()) {
+            } else {
+                errorDialogText.text = resp.errorMessage()
+                errorDialog.open()
+            }
+        })
     }
 }
