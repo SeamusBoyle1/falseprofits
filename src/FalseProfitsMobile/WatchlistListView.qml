@@ -54,8 +54,10 @@ ListView {
             Rectangle {
                 anchors.fill: parent
                 // TODO(seamus): Use FpStyle for color
-                color: deleteLabel.SwipeDelegate.pressed ? Qt.darker("tomato", 1.1) : "tomato"
+                color: deleteLabelMouseArea.pressed ? Qt.darker("tomato", 1.1) : "tomato"
+
                 MouseArea {
+                    id: deleteLabelMouseArea
                     anchors.fill: parent
                     onClicked: {
                         // Optimistic removal
@@ -63,7 +65,6 @@ ListView {
                         listView.model.remove(index)
                         triggerRemoveSymbol(symbol)
                     }
-                    onPressed: mouse.accepted = false
                 }
             }
 
