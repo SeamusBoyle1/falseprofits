@@ -38,6 +38,12 @@ make check
 
 APP_QMLDIR="$SOURCE_DIR/src/FalseProfitsMobile"
 
+# Workaround for macdeployqt missing Controls 1, QTBUG-59054
+APP_BUNDLE="$PWD"/src/FalseProfitsMobile/FalseProfitsMobile.app
+mkdir -p "$APP_BUNDLE"/Contents/Resources/qml/QtQuick
+cp -r "$QTDIR"/qml/QtQuick/Controls "$APP_BUNDLE"/Contents/Resources/qml/QtQuick/
+rm -f "$APP_BUNDLE"/Contents/Resources/qml/QtQuick/Controls/libqtquickcontrolsplugin_debug.dylib
+
 macdeployqt \
     src/FalseProfitsMobile/FalseProfitsMobile.app \
     -qmldir="$APP_QMLDIR" \
