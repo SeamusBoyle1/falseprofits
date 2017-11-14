@@ -64,6 +64,7 @@ Page {
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.topMargin: 8
+            contentWidth: listView.width
 
             LeaderboardListView {
                 id: listView

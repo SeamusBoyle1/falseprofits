@@ -46,6 +46,16 @@ BrokerageCostCalculator::calcBrokerageCost(const BrokerCostCalcArgs &args) const
         args);
 }
 
+int BrokerageCostCalculator::maxBuyQuantity() const
+{
+    return m_buyCommissionTable.maxQuantity();
+}
+
+int BrokerageCostCalculator::maxSellQuantity() const
+{
+    return m_sellCommissionTable.maxQuantity();
+}
+
 void BrokerageCostCalculator::unloadCommissions()
 {
     m_buyCommissionTable.clear();
