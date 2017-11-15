@@ -34,9 +34,8 @@ ListView {
                 columns: 5
 
                 Image {
-                    source: model.gravatarUrl ? model.gravatarUrl + "&size=" +
-                                                (42 * Screen.devicePixelRatio) + "x" +
-                                                (42 * Screen.devicePixelRatio) : ""
+                    source: model.gravatarUrl ? model.gravatarUrl + "&s=" +
+                                                Math.ceil(42 * Screen.devicePixelRatio) : ""
                     Layout.rowSpan: 2
                     Layout.preferredWidth: 42
                     Layout.preferredHeight: 42

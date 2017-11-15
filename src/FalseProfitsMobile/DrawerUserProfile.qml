@@ -37,9 +37,8 @@ Page {
         anchors.rightMargin: FpStyle.screenEdgeRightMargin
 
         Image {
-            source: gravatarUrl ? gravatarUrl + "&size=" +
-                                  (65 * Screen.devicePixelRatio) + "x" +
-                                  (65 * Screen.devicePixelRatio) : ""
+            source: gravatarUrl ? gravatarUrl + "&s=" +
+                                  Math.ceil(65 * Screen.devicePixelRatio) : ""
             Layout.rowSpan: 2
             Layout.preferredWidth: 65
             Layout.preferredHeight: 65
