@@ -36,7 +36,7 @@ public:
 
     // TODO(seamus): Extract reason text
     Q_INVOKABLE
-    virtual QString getHttpStatusReason(int httpStatusCode) const;
+    virtual QString getHttpStatusReason(int httpStatusCode) const = 0;
 
 Q_SIGNALS:
     void finished();
@@ -57,18 +57,27 @@ private:
     QByteArray m_payload;
 };
 
-inline QString BaseResponse::getHttpStatusReason(int httpStatusCode) const
-{
-    Q_UNUSED(httpStatusCode)
-    return QString();
-}
-
 class NewUserResponse : public BaseResponse
 {
     Q_OBJECT
 public:
     NewUserResponse() {}
     virtual ~NewUserResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 201:
+            return "New user successfully created.";
+        case 400: {
+            return "Request failed validation.";
+        }
+        default:
+            break;
+        }
+        return QString();
+    }
 };
 
 class AuthenticateResponse : public BaseResponse
@@ -77,6 +86,20 @@ class AuthenticateResponse : public BaseResponse
 public:
     AuthenticateResponse() {}
     virtual ~AuthenticateResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 400:
+            return "The request failed validation.";
+        case 401:
+            return "Authentication failure.";
+        default:
+            break;
+        }
+        return QString();
+    }
 };
 
 class DeleteUserResponse : public BaseResponse
@@ -85,6 +108,20 @@ class DeleteUserResponse : public BaseResponse
 public:
     DeleteUserResponse() {}
     virtual ~DeleteUserResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 204:
+            return "User successfully deleted";
+        case 401:
+            return "User not authenticated.";
+        default:
+            break;
+        }
+        return QString();
+    }
 };
 
 class GetUserProfileResponse : public BaseResponse
@@ -93,6 +130,18 @@ class GetUserProfileResponse : public BaseResponse
 public:
     GetUserProfileResponse() {}
     virtual ~GetUserProfileResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 401:
+            return "User not authenticated.";
+        default:
+            break;
+        }
+        return QString();
+    }
 };
 
 class EditUserProfileResponse : public BaseResponse
@@ -101,6 +150,24 @@ class EditUserProfileResponse : public BaseResponse
 public:
     EditUserProfileResponse() {}
     virtual ~EditUserProfileResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 204:
+            return "User successfully updated";
+        case 400:
+            return "Invalid request";
+        case 401:
+            return "Authentication failed";
+        case 404:
+            return "User not found";
+        default:
+            break;
+        }
+        return QString();
+    }
 };
 
 class GetCommissionsResponse : public BaseResponse
@@ -109,6 +176,13 @@ class GetCommissionsResponse : public BaseResponse
 public:
     GetCommissionsResponse() {}
     virtual ~GetCommissionsResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        Q_UNUSED(httpStatusCode);
+        // no codes in swagger docs
+        return QString();
+    }
 };
 
 class GetPositionsResponse : public BaseResponse
@@ -117,6 +191,20 @@ class GetPositionsResponse : public BaseResponse
 public:
     GetPositionsResponse() {}
     virtual ~GetPositionsResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 401:
+            return "Authorization failed";
+        case 404:
+            return "Account not found";
+        default:
+            break;
+        }
+        return QString();
+    }
 };
 
 class ResetAccountResponse : public BaseResponse
@@ -125,6 +213,22 @@ class ResetAccountResponse : public BaseResponse
 public:
     ResetAccountResponse() {}
     virtual ~ResetAccountResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 201:
+            return "Account successfully reset.";
+        case 401:
+            return "Authorization failed";
+        case 404:
+            return "Account not found";
+        default:
+            break;
+        }
+        return QString();
+    }
 };
 
 class GetTransactionsResponse : public BaseResponse
@@ -133,6 +237,22 @@ class GetTransactionsResponse : public BaseResponse
 public:
     GetTransactionsResponse() {}
     virtual ~GetTransactionsResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 401:
+            return "User not authenticated";
+        case 403:
+            return "User not authorized";
+        case 404:
+            return "Account not found";
+        default:
+            break;
+        }
+        return QString();
+    }
 };
 
 class GetQuotesResponse : public BaseResponse
@@ -141,6 +261,18 @@ class GetQuotesResponse : public BaseResponse
 public:
     GetQuotesResponse() {}
     virtual ~GetQuotesResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 401:
+            return "User not authenticated.";
+        default:
+            break;
+        }
+        return QString();
+    }
 };
 
 class GetFundamentalsResponse : public BaseResponse
@@ -149,6 +281,13 @@ class GetFundamentalsResponse : public BaseResponse
 public:
     GetFundamentalsResponse() {}
     virtual ~GetFundamentalsResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        Q_UNUSED(httpStatusCode)
+        // no codes in swagger docs
+        return QString();
+    }
 };
 
 class GetDividendsResponse : public BaseResponse
@@ -157,6 +296,13 @@ class GetDividendsResponse : public BaseResponse
 public:
     GetDividendsResponse() {}
     virtual ~GetDividendsResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        Q_UNUSED(httpStatusCode)
+        // no codes in swagger docs
+        return QString();
+    }
 };
 
 class GetCandlesResponse : public BaseResponse
@@ -165,6 +311,20 @@ class GetCandlesResponse : public BaseResponse
 public:
     GetCandlesResponse() {}
     virtual ~GetCandlesResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 401:
+            return "Authorization failed";
+        case 404:
+            return "Share not found.";
+        default:
+            break;
+        }
+        return QString();
+    }
 };
 
 class SymbolSearchResponse : public BaseResponse
@@ -173,6 +333,18 @@ class SymbolSearchResponse : public BaseResponse
 public:
     SymbolSearchResponse() {}
     virtual ~SymbolSearchResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 401:
+            return "User not authenticated.";
+        default:
+            break;
+        }
+        return QString();
+    }
 };
 
 class GetShareDetailsResponse : public BaseResponse
@@ -187,7 +359,10 @@ public:
 
     virtual QString getHttpStatusReason(int httpStatusCode) const override
     {
+        // TODO(seamus): Define enums for errors
         switch (httpStatusCode) {
+        case 401:
+            return "User not authenticated.";
         case 404:
             // Custom error, set locally if the search
             // results don't contain exact symbol match
@@ -251,6 +426,22 @@ class SendOrderResponse : public BaseResponse
 public:
     SendOrderResponse() {}
     virtual ~SendOrderResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 400:
+            return "Invalid order.";
+        case 401:
+            return "Authorization failed";
+        case 404:
+            return "Account or share not found";
+        default:
+            break;
+        }
+        return QString();
+    }
 };
 
 class GetWatchlistResponse : public BaseResponse
@@ -259,6 +450,20 @@ class GetWatchlistResponse : public BaseResponse
 public:
     GetWatchlistResponse() {}
     virtual ~GetWatchlistResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 401:
+            return "Authorization failed";
+        case 404:
+            return "Watchlist not found";
+        default:
+            break;
+        }
+        return QString();
+    }
 };
 
 class AddSymbolToWatchlistResponse : public BaseResponse
@@ -267,6 +472,22 @@ class AddSymbolToWatchlistResponse : public BaseResponse
 public:
     AddSymbolToWatchlistResponse() {}
     virtual ~AddSymbolToWatchlistResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 201:
+            return "Share successfully added to watchlist.";
+        case 400:
+            return "Request failed validation.";
+        case 401:
+            return "Authorization failed";
+        default:
+            break;
+        }
+        return QString();
+    }
 };
 
 class RemoveSymbolFromWatchlistResponse : public BaseResponse
@@ -275,6 +496,22 @@ class RemoveSymbolFromWatchlistResponse : public BaseResponse
 public:
     RemoveSymbolFromWatchlistResponse() {}
     virtual ~RemoveSymbolFromWatchlistResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 201:
+            return "Share successfully removed from watchlist.";
+        case 400:
+            return "Request failed validation.";
+        case 401:
+            return "Authorization failed";
+        default:
+            break;
+        }
+        return QString();
+    }
 };
 
 class GetLeaderboardResponse : public BaseResponse
@@ -283,6 +520,18 @@ class GetLeaderboardResponse : public BaseResponse
 public:
     GetLeaderboardResponse() {}
     virtual ~GetLeaderboardResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 401:
+            return "Authorization failed";
+        default:
+            break;
+        }
+        return QString();
+    }
 };
 
 class GetLeaderboardMeResponse : public BaseResponse
@@ -291,6 +540,18 @@ class GetLeaderboardMeResponse : public BaseResponse
 public:
     GetLeaderboardMeResponse() {}
     virtual ~GetLeaderboardMeResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        // TODO(seamus): Define enums for errors
+        switch (httpStatusCode) {
+        case 401:
+            return "Authorization failed";
+        default:
+            break;
+        }
+        return QString();
+    }
 };
 
 class GetPredictionsResponse : public BaseResponse
@@ -300,6 +561,12 @@ class GetPredictionsResponse : public BaseResponse
 public:
     GetPredictionsResponse() {}
     virtual ~GetPredictionsResponse() {}
+
+    virtual QString getHttpStatusReason(int httpStatusCode) const override
+    {
+        Q_UNUSED(httpStatusCode)
+        return QString();
+    }
 
     QString symbol() const { return m_symbol; }
 
