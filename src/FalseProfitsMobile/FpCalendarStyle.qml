@@ -1,5 +1,5 @@
 import QtQuick 2.2
-import QtQuick.Controls 1.4
+import QtQuick.Controls 2.2
 import QtQuick.Controls.Styles 1.1
 import com.example.fpx 1.0
 
@@ -16,8 +16,13 @@ CalendarStyle {
             height: width
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
-            iconSource: "qrc:/images/" + FpStyle.iconPrimary + "/arrow_back.png"
             onClicked: control.showPreviousMonth()
+
+            // ToolButton, in Controls 2.2, does not have an iconSource property, so we use
+            // contentItem to include an icon instead.
+            contentItem: Image {
+                source: "qrc:/images/" + FpStyle.iconPrimary + "/arrow_back.png"
+            }
         }
         Label {
             id: dateText
@@ -38,8 +43,13 @@ CalendarStyle {
             height: width
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
-            iconSource: "qrc:/images/" + FpStyle.iconPrimary + "/arrow_forward.png"
             onClicked: control.showNextMonth()
+
+            // ToolButton, in Controls 2.2, does not have an iconSource property, so we use
+            // contentItem to include an icon instead.
+            contentItem: Image {
+                source: "qrc:/images/" + FpStyle.iconPrimary + "/arrow_forward.png"
+            }
         }
     }
 }
