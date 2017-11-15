@@ -151,15 +151,6 @@ TransactionsPageForm {
                     font.pixelSize: 14
                     inputMask: "99/99/9999"
 
-                    onEditingFinished: {
-                        var newDate = new Date();
-                        newDate.setDate(text.substr(0, 2));
-                        newDate.setMonth(text.substr(3, 2) - 1);
-                        newDate.setFullYear(text.substr(6, 4));
-                        startCalendar.selectedDate = newDate;
-                        startCalendar.visible = false
-                    }
-
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
@@ -192,15 +183,6 @@ TransactionsPageForm {
                     text: Qt.formatDate(endCalendar.selectedDate, "dd/MM/yyyy")
                     font.pixelSize: 14
                     inputMask: "99/99/9999"
-
-                    onEditingFinished: {
-                        var newDate = new Date();
-                        newDate.setDate(text.substr(0, 2));
-                        newDate.setMonth(text.substr(3, 2) - 1);
-                        newDate.setFullYear(text.substr(6, 4));
-                        endCalendar.selectedDate = newDate;
-                        endCalendar.visible = false
-                    }
 
                     MouseArea {
                         anchors.fill: parent
