@@ -147,7 +147,7 @@ TransactionsPageForm {
 
                 TextField {
                     id: startdateText
-                    text: Qt.formatDate(startCalendar.selectedDate, "dd/MM/yyyy")
+                    text: Qt.formatDate(startCalendar.selectedDate)
                     font.pixelSize: 14
                     inputMask: "99/99/9999"
 
@@ -157,7 +157,6 @@ TransactionsPageForm {
                             startCalendar.visible = true;
                             endCalendar.visible = false
                         }
-
                     }
                 }
             }
@@ -174,13 +173,12 @@ TransactionsPageForm {
                             startCalendar.visible = false;
                             endCalendar.visible = true
                         }
-
                     }
                 }
 
                 TextField {
                     id: endDateText
-                    text: Qt.formatDate(endCalendar.selectedDate, "dd/MM/yyyy")
+                    text: Qt.formatDate(endCalendar.selectedDate)
                     font.pixelSize: 14
                     inputMask: "99/99/9999"
 
