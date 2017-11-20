@@ -147,18 +147,9 @@ TransactionsPageForm {
 
                 TextField {
                     id: startdateText
-                    text: Qt.formatDate(startCalendar.selectedDate, "dd/MM/yyyy")
+                    text: Qt.formatDate(startCalendar.selectedDate)
                     font.pixelSize: 14
                     inputMask: "99/99/9999"
-
-                    onEditingFinished: {
-                        var newDate = new Date();
-                        newDate.setDate(text.substr(0, 2));
-                        newDate.setMonth(text.substr(3, 2) - 1);
-                        newDate.setFullYear(text.substr(6, 4));
-                        startCalendar.selectedDate = newDate;
-                        startCalendar.visible = false
-                    }
 
                     MouseArea {
                         anchors.fill: parent
@@ -166,7 +157,6 @@ TransactionsPageForm {
                             startCalendar.visible = true;
                             endCalendar.visible = false
                         }
-
                     }
                 }
             }
@@ -183,24 +173,14 @@ TransactionsPageForm {
                             startCalendar.visible = false;
                             endCalendar.visible = true
                         }
-
                     }
                 }
 
                 TextField {
                     id: endDateText
-                    text: Qt.formatDate(endCalendar.selectedDate, "dd/MM/yyyy")
+                    text: Qt.formatDate(endCalendar.selectedDate)
                     font.pixelSize: 14
                     inputMask: "99/99/9999"
-
-                    onEditingFinished: {
-                        var newDate = new Date();
-                        newDate.setDate(text.substr(0, 2));
-                        newDate.setMonth(text.substr(3, 2) - 1);
-                        newDate.setFullYear(text.substr(6, 4));
-                        endCalendar.selectedDate = newDate;
-                        endCalendar.visible = false
-                    }
 
                     MouseArea {
                         anchors.fill: parent
