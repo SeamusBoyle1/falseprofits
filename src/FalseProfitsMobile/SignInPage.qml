@@ -46,7 +46,11 @@ SignInPageForm {
             busyIndicator.visible = false
             if (!resp.hasError()) {
             } else {
-                errorDialogText.text = resp.errorMessage()
+                if (resp.httpStatusCode() === 401 /* Authentication failed */) {
+                    errorDialogText.text = qsTr("Your email or password is incorrect.")
+                } else {
+                    errorDialogText.text = resp.errorMessage()
+                }
                 errorDialog.open()
             }
         })
