@@ -128,12 +128,40 @@ Pane {
                 }
             }
 
+            TextField {
+                id: passwordConfirmationField
+                Layout.fillWidth: true
+                placeholderText: qsTr("Confirm your password")
+                selectByMouse: true
+                echoMode: FpStyle.passwordEchoMode
+
+                property bool passwordsMatch: passwordConfirmationField.text == passwordField.text
+
+                Label {
+                    text: qsTr("Confirm your password")
+                    color: passwordConfirmationField.passwordsMatch ? ExtraMaterial.hintTextColor : ExtraMaterial.errorHintTextColor
+                    font.pixelSize: 12
+                    visible: parent.text
+                    anchors.bottom: parent.top
+                }
+
+                Label {
+                    text: qsTr("These passwords don't match. Try again?")
+                    color: ExtraMaterial.errorHintTextColor
+                    font.pixelSize: 12
+                    wrapMode: Text.WordWrap
+                    visible: parent.text.length > 0 && !passwordConfirmationField.passwordsMatch
+                    anchors.top: parent.bottom
+                }
+            }
+
             Button {
                 id: signupButton
                 text: qsTr("Create account")
                 enabled: displayNameField.acceptableInput
                          && emailField.acceptableInput
                          && passwordField.acceptableInput
+                         && passwordConfirmationField.passwordsMatch
                 Layout.fillWidth: true
             }
 
