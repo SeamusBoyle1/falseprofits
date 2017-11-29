@@ -83,9 +83,6 @@ DetailedQuotePageForm {
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
 
-        implicitHeight: 160
-        implicitWidth: parent.width * 0.9
-
         Label {
             id: errorDialogText
             anchors.fill: parent
