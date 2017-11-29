@@ -25,9 +25,6 @@ SignInPageForm {
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
 
-        implicitHeight: 160
-        implicitWidth: parent.width * 0.9
-
         Label {
             id: errorDialogText
             anchors.fill: parent
@@ -46,7 +43,11 @@ SignInPageForm {
             busyIndicator.visible = false
             if (!resp.hasError()) {
             } else {
-                errorDialogText.text = resp.errorMessage()
+                if (resp.httpStatusCode() === 401 /* Authentication failed */) {
+                    errorDialogText.text = qsTr("Your email or password is incorrect.")
+                } else {
+                    errorDialogText.text = resp.errorMessage()
+                }
                 errorDialog.open()
             }
         })
